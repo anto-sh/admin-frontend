@@ -6,6 +6,7 @@
     "esbenp.prettier-vscode",
     "donjayamanne.githistory",
     "mhutchie.git-graph",
-    "eliostruyf.vscode-typescript-exportallmodules"
+    "eliostruyf.vscode-typescript-exportallmodules",
+    "stylelint.vscode-stylelint"
   ]
 }
