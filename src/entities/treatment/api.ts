@@ -1,18 +1,22 @@
 import { apiClient } from '@/shared/api/client'
-import type { TreatmentAddDto, TreatmentDto } from './types'
+import type { AddTreatmentDto, TreatmentDto, UpdateTreatmentBatchDto, UpdateTreatmentDto } from './types'
 import type { ApiResponseDto } from '@/shared/api/types'
 
 export const treatmentApi = {
   async fetchAll(): Promise<ApiResponseDto<TreatmentDto[]>> {
-    const { data } = await apiClient.get('/treatments/')
-    return data
+    const { data: response } = await apiClient.get('/treatments/')
+    return response
   },
-  async add(dto: TreatmentAddDto): Promise<ApiResponseDto<TreatmentDto>> {
-    const { data } = await apiClient.post('/treatments', dto)
-    return data
+  async add(dto: AddTreatmentDto): Promise<ApiResponseDto<TreatmentDto>> {
+    const { data: response } = await apiClient.post('/treatments', dto)
+    return response
   },
-  async update(id: number, dto: TreatmentAddDto): Promise<ApiResponseDto<TreatmentDto>> {
-    const { data } = await apiClient.put(`/treatments/${id}`, dto)
-    return data
+  async update(id: number, dto: UpdateTreatmentDto): Promise<ApiResponseDto<TreatmentDto>> {
+    const { data: response } = await apiClient.put(`/treatments/${id}`, dto)
+    return response
   },
+  async updateBatch(dtoArr: UpdateTreatmentBatchDto[]): Promise<ApiResponseDto<unknown>> {
+    const { data: response } = await apiClient.patch(`/treatments/`, dtoArr)
+    return response
+  }
 }

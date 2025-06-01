@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia'
 import { treatmentApi } from './api'
-import type { TreatmentAddDto, TreatmentDto, TreatmentUpdateDto } from './types'
+import type { AddTreatmentDto, TreatmentDto, UpdateTreatmentDto } from './types'
 import { ref } from 'vue'
 
 export const useTreatmentStore = defineStore('Treatment', () => {
@@ -17,21 +17,17 @@ export const useTreatmentStore = defineStore('Treatment', () => {
     }
   }
 
-  async function addTreatment(dto: TreatmentAddDto) {
+  async function addTreatment(dto: AddTreatmentDto) {
     const res = await treatmentApi.add(dto)
     treatments.value?.push(res.data!)
   }
 
-  async function saveAllTreatments() {
-    const updateDtoArr: { id: number; dtoBody: TreatmentUpdateDto }[] = treatments.value!.map(
-      (t) => {
-        return { id: t.id, dtoBody: { name: t.name } }
-      },
-    )
+  async function updateTreatment(id: number, dto: UpdateTreatmentDto) {
+    await treatmentApi.update(id, dto)
+  }
 
-    const requests = updateDtoArr.map((dto) => treatmentApi.update(dto.id, dto.dtoBody))
-    await Promise.all(requests)
-    loadTreatments()
+  async function updateAllTreatments() {
+    await treatmentApi.updateBatch(treatments.value!)
   }
 
   return {
@@ -39,6 +35,7 @@ export const useTreatmentStore = defineStore('Treatment', () => {
     isLoading,
     loadTreatments,
     addTreatment,
-    saveAllTreatments,
+    updateTreatment,
+    updateAllTreatments,
   }
 })

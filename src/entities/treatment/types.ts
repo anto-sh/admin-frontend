@@ -4,10 +4,15 @@ export interface TreatmentDto {
   name: string
 }
 
-export interface TreatmentAddDto {
+export interface AddTreatmentDto {
   name: string
 }
 
-export interface TreatmentUpdateDto {
+export interface UpdateTreatmentDto {
+  name: string
+}
+
+export interface UpdateTreatmentBatchDto {
+  id: number
   name: string
 }

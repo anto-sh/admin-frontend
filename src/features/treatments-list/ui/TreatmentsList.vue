@@ -19,5 +19,5 @@ onMounted(() => {
   <br />
   <button @click="treatmentStore.addTreatment({ name: newTreatmentName })">Добавить</button>
   <br />
-  <button @click="treatmentStore.saveAllTreatments()">Сохранить все</button>
+  <button @click="treatmentStore.updateAllTreatments()">Сохранить все</button>
 </template>
