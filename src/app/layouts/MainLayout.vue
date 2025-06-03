@@ -13,7 +13,7 @@ provide('pageTitle', pageTitle)
       <MainMenu />
     </aside>
     <main class="main-content">
-      <header>
+      <header class="bg-blue-200/20 p-2 mb-10">
         <h1 class="text-4xl font-bold">{{ pageTitle }}</h1>
       </header>
       <RouterView />
