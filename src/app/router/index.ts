@@ -1,9 +1,15 @@
+import IndexPage from '@/pages/index/IndexPage.vue'
 import TreatmentsPage from '@/pages/treatments/TreatmentsPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
+    {
+      path: '/',
+      name: 'index',
+      component: IndexPage,
+    },
     {
       path: '/treatments',
       name: 'treatments',
