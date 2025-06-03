@@ -19,15 +19,14 @@ export default defineConfig({
       '@shared': path.resolve(__dirname, 'src/shared'),
     },
   },
-  // использовать когда понадобятся переменные и миксины
-  // css: {
-  //   preprocessorOptions: {
-  //     scss: {
-  //       additionalData: `
-  //       @import "@/scss/_variables.scss";
-  //       @import "@/scss/_mixins.scss";
-  //     `,
-  //     },
-  //   },
-  // },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        additionalData: `
+        @use "@/shared/css/_variables.scss" as *;
+        @use "@/shared/css/_mixins.scss" as *;
+      `,
+      },
+    },
+  },
 })
