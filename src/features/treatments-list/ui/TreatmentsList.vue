@@ -1,23 +1,60 @@
 <script setup lang="ts">
-import { useTreatmentStore } from '@/entities/treatment/store'
-import { onMounted, ref } from 'vue'
-const treatmentStore = useTreatmentStore()
+import { Button, InputText, ConfirmPopup } from 'primevue'
+import { useTreatmentsListModel } from '../model/useTreatmentsListModel'
 
-const newTreatmentName = ref('')
-
-onMounted(() => {
-  treatmentStore.loadTreatments()
-})
+const {
+  treatmentStore,
+  newTreatmentName,
+  addTreatment,
+  deleteTreatment,
+  confirmCancelAll,
+  confirmSaveAll,
+} = useTreatmentsListModel()
 </script>
+
 <template>
-  <ul v-if="treatmentStore.treatments?.length">
-    <li v-for="treatment of treatmentStore.treatments" :key="treatment.id">
-      <input type="text" v-model="treatment.name" />
-    </li>
-  </ul>
-  <input type="text" v-model="newTreatmentName" />
-  <br />
-  <button @click="treatmentStore.addTreatment({ name: newTreatmentName })">Добавить</button>
-  <br />
-  <button @click="treatmentStore.updateAllTreatments()">Сохранить все</button>
+  <div v-if="treatmentStore.treatments?.length">
+    <div v-for="item in treatmentStore.treatments" :key="item.id" class="my-1">
+      <InputText v-model="item.name" />
+      <Button
+        icon="pi pi-save"
+        @click="treatmentStore.updateTreatment(item.id, { name: item.name })"
+        class="ml-2"
+      />
+      <Button
+        :disabled="treatmentStore.treatments.length === 1"
+        icon="pi pi-trash"
+        severity="danger"
+        @click="deleteTreatment(item.id)"
+        class="ml-1"
+      />
+    </div>
+    <div class="mt-2">
+      <ConfirmPopup />
+      <Button
+        :disabled="treatmentStore.treatments.length === 1"
+        label="Сохранить всё"
+        icon="pi pi-save"
+        severity="success"
+        @click="confirmSaveAll($event)"
+      />
+      <Button
+        label="Отменить всё"
+        icon="pi pi-times"
+        severity="danger"
+        class="ml-2"
+        @click="confirmCancelAll($event)"
+      />
+    </div>
+    <div class="mt-10">
+      <h3 class="text-xl mb-2">Добавить новый пункт</h3>
+      <InputText v-model="newTreatmentName" placeholder="Новое значение" />
+      <Button
+        label="Добавить"
+        icon="pi pi-plus"
+        class="ml-2"
+        @click="addTreatment({ name: newTreatmentName })"
+      />
+    </div>
+  </div>
 </template>

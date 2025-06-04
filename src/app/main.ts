@@ -2,8 +2,9 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 
 import PrimeVue from 'primevue/config'
-import Ripple from 'primevue/ripple';
+import Ripple from 'primevue/ripple'
 import Aura from '@primeuix/themes/aura'
+import { ConfirmationService } from 'primevue'
 
 import App from './App.vue'
 import router from './router'
@@ -26,8 +27,8 @@ app.use(PrimeVue, {
   },
   ripple: true,
 })
+app.use(ConfirmationService)
 
-app.directive('ripple', Ripple);
-
+app.directive('ripple', Ripple)
 
 app.mount('#app')
