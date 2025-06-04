@@ -4,11 +4,11 @@ import type { AddTreatmentDto, TreatmentDto, UpdateTreatmentDto } from './types'
 import { ref } from 'vue'
 
 export const useTreatmentStore = defineStore('Treatment', () => {
-  const treatments = ref<TreatmentDto[] | undefined>([])
+  const treatments = ref<TreatmentDto[]>([])
 
   async function loadTreatments() {
     const res = await treatmentApi.getAll()
-    treatments.value = res.data
+    if (res.data) treatments.value = res.data
   }
 
   async function addTreatment(dto: AddTreatmentDto) {
@@ -21,7 +21,7 @@ export const useTreatmentStore = defineStore('Treatment', () => {
   }
 
   async function updateAllTreatments() {
-    await treatmentApi.updateBatch(treatments.value!)
+    if (treatments.value.length) await treatmentApi.updateBatch(treatments.value)
   }
 
   async function deleteTreatment(id: number) {
