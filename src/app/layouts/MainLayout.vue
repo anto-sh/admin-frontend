@@ -2,9 +2,13 @@
 import { ref, provide } from 'vue'
 import { RouterView } from 'vue-router'
 import MainMenu from '@/features/main-menu/ui/MainMenu.vue'
+import { useToastWatcher } from '@/shared/composables/useToastWatcher'
+import Toast from 'primevue/toast'
 
 const pageTitle = ref('Админ-панель')
 provide('pageTitle', pageTitle)
+
+useToastWatcher()
 </script>
 
 <template>
@@ -13,6 +17,7 @@ provide('pageTitle', pageTitle)
       <MainMenu />
     </aside>
     <main class="main-content">
+      <Toast />
       <header class="bg-blue-200/20 p-2 mb-10">
         <h1 class="text-4xl font-bold">{{ pageTitle }}</h1>
       </header>
