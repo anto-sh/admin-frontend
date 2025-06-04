@@ -17,7 +17,7 @@ export const useTreatmentStore = defineStore('Treatment', () => {
   }
 
   async function updateTreatment(id: number, dto: UpdateTreatmentDto) {
-    await treatmentApi.update(42142, dto)
+    await treatmentApi.update(id, dto)
   }
 
   async function updateAllTreatments() {
