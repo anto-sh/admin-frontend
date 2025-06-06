@@ -7,13 +7,18 @@ export const menuItems: MenuItem[] = [
     route: '/',
   },
   {
-    label: 'Cloud',
+    label: 'Список "Что лечим"',
+    icon: 'pi pi-cloud-upload',
+    route: '/treatments',
+  },
+  {
+    label: 'Упражнения',
     icon: 'pi pi-cloud',
     items: [
       {
-        label: 'Список "Что лечим"',
+        label: 'Категории упражнений',
         icon: 'pi pi-cloud-upload',
-        route: '/treatments',
+        route: '/exercise-categories',
       },
     ],
   },

@@ -1,3 +1,4 @@
+import ExerciseCategoriesPage from '@/pages/exercises/ExerciseCategoriesPage.vue'
 import IndexPage from '@/pages/index/IndexPage.vue'
 import TreatmentsPage from '@/pages/treatments/TreatmentsPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -14,6 +15,11 @@ const router = createRouter({
       path: '/treatments',
       name: 'treatments',
       component: TreatmentsPage,
+    },
+    {
+      path: '/exercise-categories',
+      name: 'exercise-categories',
+      component: ExerciseCategoriesPage,
     },
     // {
     //   path: '/about',
