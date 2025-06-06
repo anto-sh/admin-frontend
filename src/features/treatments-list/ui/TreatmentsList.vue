@@ -13,10 +13,12 @@ const {
 </script>
 
 <template>
+  <ConfirmPopup class="w-[400px]" />
   <div v-if="treatmentStore.treatments?.length">
     <div v-for="item in treatmentStore.treatments" :key="item.id" class="my-1">
-      <InputText v-model="item.name" />
+      <InputText v-model.trim="item.name" placeholder="Название" />
       <Button
+        :disabled="!item.name"
         icon="pi pi-save"
         @click="treatmentStore.updateTreatment(item.id, { name: item.name })"
         class="ml-2"
@@ -30,7 +32,6 @@ const {
       />
     </div>
     <div class="mt-2">
-      <ConfirmPopup />
       <Button
         :disabled="treatmentStore.treatments.length === 1"
         label="Сохранить всё"
@@ -48,8 +49,9 @@ const {
     </div>
     <div class="mt-10">
       <h3 class="text-xl mb-2">Добавить новый пункт</h3>
-      <InputText v-model="newTreatmentName" placeholder="Новое значение" />
+      <InputText v-model.trim="newTreatmentName" placeholder="Название" />
       <Button
+        :disabled="!newTreatmentName"
         label="Добавить"
         icon="pi pi-plus"
         class="ml-2"

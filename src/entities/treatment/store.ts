@@ -1,17 +1,17 @@
 import { defineStore } from 'pinia'
 import { treatmentApi } from './api'
-import type { AddTreatmentDto, TreatmentDto, UpdateTreatmentDto } from './types'
+import type { CreateTreatmentDto, TreatmentDto, UpdateTreatmentDto } from './types'
 import { ref } from 'vue'
 
 export const useTreatmentStore = defineStore('Treatment', () => {
   const treatments = ref<TreatmentDto[]>([])
 
-  async function loadTreatments() {
+  async function fetchTreatments() {
     const res = await treatmentApi.getAll()
     if (res.data) treatments.value = res.data
   }
 
-  async function addTreatment(dto: AddTreatmentDto) {
+  async function addTreatment(dto: CreateTreatmentDto) {
     const res = await treatmentApi.add(dto)
     if (res.data) treatments.value?.push(res.data)
   }
@@ -31,7 +31,7 @@ export const useTreatmentStore = defineStore('Treatment', () => {
 
   return {
     treatments,
-    loadTreatments,
+    fetchTreatments,
     addTreatment,
     updateTreatment,
     updateAllTreatments,

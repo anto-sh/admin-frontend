@@ -1,18 +1,18 @@
 import { useTreatmentStore } from '@/entities/treatment/store'
 import { onMounted, ref } from 'vue'
-import type { AddTreatmentDto } from '@/entities/treatment/types'
+import type { CreateTreatmentDto } from '@/entities/treatment/types'
 import { useConfirm } from 'primevue/useconfirm'
 
 export function useTreatmentsListModel() {
   const treatmentStore = useTreatmentStore()
   const newTreatmentName = ref('')
-  const confirm = useConfirm()
+  const confirmService = useConfirm()
 
   onMounted(() => {
-    treatmentStore.loadTreatments()
+    treatmentStore.fetchTreatments()
   })
 
-  const addTreatment = (dto: AddTreatmentDto) => {
+  const addTreatment = (dto: CreateTreatmentDto) => {
     treatmentStore.addTreatment(dto)
     newTreatmentName.value = ''
   }
@@ -21,7 +21,7 @@ export function useTreatmentsListModel() {
   }
 
   const confirmCancelAll = (event: MouseEvent) => {
-    confirm.require({
+    confirmService.require({
       target: event.target as HTMLElement,
       message: 'Вы уверены, что хотите отменить все текущие изменения?',
       icon: 'pi pi-exclamation-triangle',
@@ -35,12 +35,12 @@ export function useTreatmentsListModel() {
         severity: 'danger',
       },
       accept: () => {
-        treatmentStore.loadTreatments()
+        treatmentStore.fetchTreatments()
       },
     })
   }
   const confirmSaveAll = (event: MouseEvent) => {
-    confirm.require({
+    confirmService.require({
       target: event.target as HTMLElement,
       message: 'Вы уверены, что хотите сохранить все текущие изменения?',
       icon: 'pi pi-exclamation-triangle',

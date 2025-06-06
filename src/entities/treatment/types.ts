@@ -4,7 +4,7 @@ export interface TreatmentDto {
   name: string
 }
 
-export interface AddTreatmentDto {
+export interface CreateTreatmentDto {
   name: string
 }
 

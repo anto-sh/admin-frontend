@@ -1,6 +1,6 @@
 import { apiClient } from '@/shared/api/client'
 import type {
-  AddTreatmentDto,
+  CreateTreatmentDto,
   TreatmentDto,
   UpdateTreatmentBatchDto,
   UpdateTreatmentDto,
@@ -12,7 +12,7 @@ export const treatmentApi = {
     const { data: response } = await apiClient.get('/treatments/')
     return response
   },
-  async add(dto: AddTreatmentDto): Promise<ApiResponseDto<TreatmentDto>> {
+  async add(dto: CreateTreatmentDto): Promise<ApiResponseDto<TreatmentDto>> {
     const { data: response } = await apiClient.post('/treatments', dto)
     return response
   },
