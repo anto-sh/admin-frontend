@@ -3,29 +3,24 @@ import { Button, InputText, ConfirmPopup } from 'primevue'
 import { useExerciseCategoriesListModel } from '../model/useExerciseCategoriesListModel'
 
 const {
-  exerciseCategoryStore,
+  exerciseCategoryStore: ecStore,
   newExerciseCategory,
   addExerciseCategory,
+  updateExerciseCategory,
   confirmDeleteExerciseCategory,
 } = useExerciseCategoriesListModel()
 </script>
 
 <template>
-  <ConfirmPopup
-    class="w-[400px]"
-    :pt="{
-      message: { style: 'white-space: pre-line;' },
-    }"
-  />
-  <template v-if="exerciseCategoryStore.exerciseCategories?.length">
-    <div v-for="item in exerciseCategoryStore.exerciseCategories" :key="item.id" class="my-1">
+  <template v-if="ecStore.exerciseCategories?.length">
+    <div v-for="item in ecStore.exerciseCategories" :key="item.id" class="my-1">
       <InputText v-model.trim="item.name" placeholder="Название" />
       <InputText v-model.trim="item.url" class="ml-2" placeholder="Url (опционально)" />
       <Button
         :disabled="!item.name"
         icon="pi pi-save"
         @click="
-          exerciseCategoryStore.updateExerciseCategory(item.id, {
+          updateExerciseCategory(item.id, {
             name: item.name,
             url: item.url,
           })
@@ -33,7 +28,7 @@ const {
         class="ml-2"
       />
       <Button
-        :disabled="exerciseCategoryStore.exerciseCategories.length === 1"
+        :disabled="ecStore.exerciseCategories.length === 1"
         icon="pi pi-trash"
         severity="danger"
         @click="confirmDeleteExerciseCategory(item.id, item.exercises?.length, $event)"
@@ -45,7 +40,11 @@ const {
   <div class="mt-10">
     <h3 class="text-xl mb-2">Добавить новую категорию</h3>
     <InputText v-model.trim="newExerciseCategory.name" placeholder="Название" />
-    <InputText v-model.trim="newExerciseCategory.url" class="ml-2" placeholder="Url (опционально)" />
+    <InputText
+      v-model.trim="newExerciseCategory.url"
+      class="ml-2"
+      placeholder="Url (опционально)"
+    />
     <Button
       :disabled="!newExerciseCategory.name"
       label="Добавить"
@@ -54,4 +53,10 @@ const {
       @click="addExerciseCategory(newExerciseCategory)"
     />
   </div>
+  <ConfirmPopup
+    class="w-[400px]"
+    :pt="{
+      message: { style: 'white-space: pre-line;' },
+    }"
+  />
 </template>

@@ -22,6 +22,10 @@ export function useExerciseCategoriesListModel() {
     exerciseCategoryStore.addExerciseCategory(dto)
     newExerciseCategory.value = { ...newExerciseCategoryDefaultValue }
   }
+  const updateExerciseCategory = (id: number, dto: CreateExerciseCategoryDto) => {
+    if (!dto.url) dto.url = slugify(dto.name!)
+    exerciseCategoryStore.updateExerciseCategory(id, dto)
+  }
 
   const confirmDeleteExerciseCategory = (
     id: number,
@@ -53,6 +57,7 @@ export function useExerciseCategoriesListModel() {
     exerciseCategoryStore,
     newExerciseCategory,
     addExerciseCategory,
+    updateExerciseCategory,
     confirmDeleteExerciseCategory,
   }
 }

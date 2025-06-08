@@ -21,6 +21,8 @@ export const useExerciseCategoryStore = defineStore('ExerciseCategory', () => {
   }
 
   async function updateExerciseCategory(id: number, dto: UpdateExerciseCategoryDto) {
+    const updatedEc = exerciseCategories.value.find((ec) => ec.id === id)
+    if (updatedEc) updatedEc.url = dto.url
     await exerciseCategoryApi.update(id, dto)
   }
 
