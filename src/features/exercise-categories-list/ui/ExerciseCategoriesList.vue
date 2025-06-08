@@ -19,8 +19,8 @@ const {
   />
   <template v-if="exerciseCategoryStore.exerciseCategories?.length">
     <div v-for="item in exerciseCategoryStore.exerciseCategories" :key="item.id" class="my-1">
-      <InputText v-model.trim="item.name" />
-      <InputText v-model.trim="item.url" class="ml-2" />
+      <InputText v-model.trim="item.name" placeholder="Название" />
+      <InputText v-model.trim="item.url" class="ml-2" placeholder="Url (опционально)" />
       <Button
         :disabled="!item.name"
         icon="pi pi-save"
@@ -45,7 +45,7 @@ const {
   <div class="mt-10">
     <h3 class="text-xl mb-2">Добавить новую категорию</h3>
     <InputText v-model.trim="newExerciseCategory.name" placeholder="Название" />
-    <InputText v-model.trim="newExerciseCategory.url" class="ml-2" placeholder="Url" />
+    <InputText v-model.trim="newExerciseCategory.url" class="ml-2" placeholder="Url (опционально)" />
     <Button
       :disabled="!newExerciseCategory.name"
       label="Добавить"
