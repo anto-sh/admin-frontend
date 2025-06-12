@@ -46,8 +46,8 @@ useToastWatcher()
 }
 
 .main-content {
+  max-width: 2000px;
   overflow: auto;
   padding: 1rem 2rem;
-  max-width: 2000px;
 }
 </style>

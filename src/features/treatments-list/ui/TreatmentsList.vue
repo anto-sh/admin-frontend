@@ -13,7 +13,6 @@ const {
 </script>
 
 <template>
-  <ConfirmPopup class="w-[400px]" />
   <div v-if="treatmentStore.treatments?.length">
     <div v-for="item in treatmentStore.treatments" :key="item.id" class="my-1">
       <InputText v-model.trim="item.name" placeholder="Название" />
@@ -59,4 +58,5 @@ const {
       />
     </div>
   </div>
+  <ConfirmPopup class="w-[400px]" />
 </template>

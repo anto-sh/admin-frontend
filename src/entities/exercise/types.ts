@@ -4,8 +4,8 @@ import type { OutputData } from '@editorjs/editorjs'
 
 export interface ExerciseDto {
   id: number
-  name?: string
-  categoryId?: number
+  name: string
+  categoryId: number
   contentJson?: OutputData
 }
 

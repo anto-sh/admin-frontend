@@ -7,7 +7,7 @@ export const exerciseApi = {
     const { data: response } = await apiClient.get('/exercises')
     return response
   },
-  async getById(id: number): Promise<ApiResponseDto<ExerciseDto[]>> {
+  async getById(id: number): Promise<ApiResponseDto<ExerciseDto>> {
     const { data: response } = await apiClient.get(`/exercises/${id}`)
     return response
   },
