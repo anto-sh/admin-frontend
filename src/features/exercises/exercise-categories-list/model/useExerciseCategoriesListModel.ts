@@ -14,7 +14,7 @@ export function useExerciseCategoriesListModel() {
   const confirmService = useConfirm()
 
   onMounted(() => {
-    exerciseCategoryStore.fetchExerciseCategories()
+    exerciseCategoryStore.fetchExerciseCategoriesWithExercises()
   })
 
   const addExerciseCategory = (dto: CreateExerciseCategoryDto) => {

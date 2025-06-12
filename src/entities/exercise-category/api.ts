@@ -1,10 +1,18 @@
 import { apiClient } from '@/shared/api/client'
-import type { CreateExerciseCategoryDto, ExerciseCategoryDto, UpdateExerciseCategoryDto } from './types'
+import type {
+  CreateExerciseCategoryDto,
+  ExerciseCategoryDto,
+  UpdateExerciseCategoryDto,
+} from './types'
 import type { ApiResponseDto } from '@/shared/api/types'
 
 export const exerciseCategoryApi = {
-  async getAllWithExercises(): Promise<ApiResponseDto<ExerciseCategoryDto[]>> {
+  async getAll(): Promise<ApiResponseDto<ExerciseCategoryDto[]>> {
     const { data: response } = await apiClient.get('/exercise-categories')
+    return response
+  },
+  async getAllWithExercises(): Promise<ApiResponseDto<ExerciseCategoryDto[]>> {
+    const { data: response } = await apiClient.get('/exercise-categories/with-exercises')
     return response
   },
   async add(dto: CreateExerciseCategoryDto): Promise<ApiResponseDto<ExerciseCategoryDto>> {

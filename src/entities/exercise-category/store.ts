@@ -11,6 +11,11 @@ export const useExerciseCategoryStore = defineStore('ExerciseCategory', () => {
   const exerciseCategories = ref<ExerciseCategoryDto[]>([])
 
   async function fetchExerciseCategories() {
+    const res = await exerciseCategoryApi.getAll()
+    if (res.data) exerciseCategories.value = res.data
+  }
+
+  async function fetchExerciseCategoriesWithExercises() {
     const res = await exerciseCategoryApi.getAllWithExercises()
     if (res.data) exerciseCategories.value = res.data
   }
@@ -34,6 +39,7 @@ export const useExerciseCategoryStore = defineStore('ExerciseCategory', () => {
   return {
     exerciseCategories,
     fetchExerciseCategories,
+    fetchExerciseCategoriesWithExercises,
     addExerciseCategory,
     updateExerciseCategory,
     deleteExerciseCategory,

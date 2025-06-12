@@ -1,4 +1,6 @@
 import ExerciseCategoriesPage from '@/pages/exercises/ExerciseCategoriesPage.vue'
+import ExerciseEditorPage from '@/pages/exercises/ExerciseEditorPage.vue'
+import ExercisesListPage from '@/pages/exercises/ExercisesListPage.vue'
 import IndexPage from '@/pages/index/IndexPage.vue'
 import TreatmentsPage from '@/pages/treatments/TreatmentsPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
@@ -20,6 +22,16 @@ const router = createRouter({
       path: '/exercise-categories',
       name: 'exercise-categories',
       component: ExerciseCategoriesPage,
+    },
+    {
+      path: '/exercises',
+      name: 'exercises',
+      component: ExercisesListPage,
+    },
+    {
+      path: '/exercise-editor/:id?',
+      name: 'exercise-editor',
+      component: ExerciseEditorPage,
     },
     // {
     //   path: '/about',

@@ -17,10 +17,20 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@editorjs/delimiter": "^1.4.2",
     "@editorjs/editorjs": "^2.30.8",
+    "@editorjs/embed": "^2.7.6",
     "@editorjs/header": "^2.8.8",
+    "@editorjs/image": "^2.10.2",
     "@editorjs/list": "^2.0.8",
+    "@editorjs/marker": "^1.4.0",
+    "@editorjs/paragraph": "^2.11.7",
+    "@editorjs/quote": "^2.7.6",
+    "@editorjs/table": "^2.4.5",
+    "@editorjs/underline": "^1.2.1",
+    "@editorjs/warning": "^1.4.1",
     "@primeuix/themes": "^1.1.1",
+    "@weekwood/editorjs-video": "^1.0.2",
     "axios": "^1.9.0",
     "pinia": "^3.0.1",
     "primeicons": "^7.0.0",
@@ -61,6 +71,7 @@
     "vite": "^6.2.4",
     "vite-plugin-vue-devtools": "^7.7.2",
     "vitest": "^3.1.1",
+    "vue-component-type-helpers": "^2.2.10",
     "vue-tsc": "^2.2.8"
   },
   "packageManager": "pnpm@10.11.0+sha512.6540583f41cc5f628eb3d9773ecee802f4f9ef9923cc45b69890fb47991d4b092964694ec3a4f738a420c918a333062c8b925d312f42e4f0c263eb603551f977"

@@ -20,6 +20,11 @@ export const menuItems: MenuItem[] = [
         icon: 'pi pi-cloud-upload',
         route: '/exercise-categories',
       },
+      {
+        label: 'Упражнения',
+        icon: 'pi pi-cloud-upload',
+        route: '/exercises',
+      },
     ],
   },
 ]
