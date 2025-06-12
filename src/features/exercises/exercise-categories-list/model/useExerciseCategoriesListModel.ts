@@ -17,9 +17,9 @@ export function useExerciseCategoriesListModel() {
     exerciseCategoryStore.fetchExerciseCategoriesWithExercises()
   })
 
-  const addExerciseCategory = (dto: CreateExerciseCategoryDto) => {
+  const addExerciseCategory = async (dto: CreateExerciseCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
-    exerciseCategoryStore.addExerciseCategory(dto)
+    await exerciseCategoryStore.addExerciseCategory(dto)
     newExerciseCategory.value = { ...newExerciseCategoryDefaultValue }
   }
   const updateExerciseCategory = (id: number, dto: CreateExerciseCategoryDto) => {
