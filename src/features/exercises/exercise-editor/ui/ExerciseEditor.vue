@@ -49,7 +49,7 @@ defineExpose({ exerciseId, readonly })
       :readonly
     />
 
-    <div class="flex justify-between">
+    <div class="flex justify-between mt-10">
       <Button
         @click="cancelEditor()"
         severity="info"
