@@ -2,6 +2,9 @@ import ExerciseCategoriesPage from '@/pages/exercises/ExerciseCategoriesPage.vue
 import ExerciseEditorPage from '@/pages/exercises/ExerciseEditorPage.vue'
 import ExercisesListPage from '@/pages/exercises/ExercisesListPage.vue'
 import IndexPage from '@/pages/index/IndexPage.vue'
+import ServiceCategoriesPage from '@/pages/services/ServiceCategoriesPage.vue'
+import ServiceEditorPage from '@/pages/services/ServiceEditorPage.vue'
+import ServicesListPage from '@/pages/services/ServicesListPage.vue'
 import TreatmentsPage from '@/pages/treatments/TreatmentsPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
@@ -18,6 +21,7 @@ const router = createRouter({
       name: 'treatments',
       component: TreatmentsPage,
     },
+
     {
       path: '/exercise-categories',
       name: 'exercise-categories',
@@ -33,14 +37,22 @@ const router = createRouter({
       name: 'exercise-editor',
       component: ExerciseEditorPage,
     },
-    // {
-    //   path: '/about',
-    //   name: 'about',
-    //   // route level code-splitting
-    //   // this generates a separate chunk (About.[hash].js) for this route
-    //   // which is lazy-loaded when the route is visited.
-    //   component: () => import('../views/AboutView.vue'),
-    // },
+
+    {
+      path: '/service-categories',
+      name: 'service-categories',
+      component: ServiceCategoriesPage,
+    },
+    {
+      path: '/services',
+      name: 'services',
+      component: ServicesListPage,
+    },
+    {
+      path: '/service-editor/:id?',
+      name: 'service-editor',
+      component: ServiceEditorPage,
+    },
   ],
 })
 

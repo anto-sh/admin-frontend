@@ -1,5 +1,6 @@
 import type { MenuItem } from 'primevue/menuitem'
 
+//TODO: подумать насчет верного места для этого списка
 export const menuItems: MenuItem[] = [
   {
     label: 'Главная',
@@ -24,6 +25,22 @@ export const menuItems: MenuItem[] = [
         label: 'Упражнения',
         icon: 'pi pi-cloud-upload',
         route: '/exercises',
+      },
+    ],
+  },
+  {
+    label: 'Услуги',
+    icon: 'pi pi-cloud',
+    items: [
+      {
+        label: 'Категории услуг',
+        icon: 'pi pi-cloud-upload',
+        route: '/service-categories',
+      },
+      {
+        label: 'Услуги',
+        icon: 'pi pi-cloud-upload',
+        route: '/services',
       },
     ],
   },
