@@ -6,3 +6,15 @@ export interface ApiResponseDto<T = unknown> {
   data?: T // Основные данные ответа
   timestamp?: string // Дата формирования ответа
 }
+
+export interface ImageUploadResponseDto {
+  success: number
+  file: FileDataDto
+}
+export interface FileDataDto {
+  url: string
+  originalname: string
+  mimetype: string
+  size: number
+  extension: string
+}
