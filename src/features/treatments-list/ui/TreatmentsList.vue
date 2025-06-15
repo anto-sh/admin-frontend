@@ -13,24 +13,26 @@ const {
 </script>
 
 <template>
-  <div v-if="treatmentStore.treatments?.length">
-    <div v-for="item in treatmentStore.treatments" :key="item.id" class="my-1">
-      <InputText v-model.trim="item.name" placeholder="Название" />
+  <div v-if="treatmentStore.treatments?.length" class="w-1/2 min-w-120 space-y-2">
+    <div
+      v-for="item in treatmentStore.treatments"
+      :key="item.id"
+      class="flex items-center gap-2"
+    >
+      <InputText v-model.trim="item.name" class="w-full" placeholder="Название" />
       <Button
         :disabled="!item.name"
         icon="pi pi-save"
         @click="treatmentStore.updateTreatment(item.id, { name: item.name })"
-        class="ml-2"
       />
       <Button
         :disabled="treatmentStore.treatments.length === 1"
         icon="pi pi-trash"
         severity="danger"
         @click="deleteTreatment(item.id)"
-        class="ml-1"
       />
     </div>
-    <div class="mt-2">
+    <div class="flex gap-2 mt-6">
       <Button
         :disabled="treatmentStore.treatments.length === 1"
         label="Сохранить всё"
@@ -39,21 +41,21 @@ const {
         @click="confirmSaveAll($event)"
       />
       <Button
-        label="Отменить всё"
+        label="Сбросить изменения"
         icon="pi pi-times"
-        severity="danger"
-        class="ml-2"
+        severity="secondary"
         @click="confirmCancelAll($event)"
       />
     </div>
-    <div class="mt-10">
-      <h3 class="text-xl mb-2">Добавить новый пункт</h3>
-      <InputText v-model.trim="newTreatmentName" placeholder="Название" />
+  </div>
+  <div class="w-1/2 min-w-120 mt-10">
+    <h3 class="text-xl mb-2">Добавить новый пункт</h3>
+    <div class="flex gap-2">
+      <InputText v-model.trim="newTreatmentName" class="w-full" placeholder="Название" />
       <Button
         :disabled="!newTreatmentName"
         label="Добавить"
         icon="pi pi-plus"
-        class="ml-2"
         @click="addTreatment({ name: newTreatmentName })"
       />
     </div>

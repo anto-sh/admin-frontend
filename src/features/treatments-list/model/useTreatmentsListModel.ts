@@ -42,7 +42,7 @@ export function useTreatmentsListModel() {
   const confirmSaveAll = (event: MouseEvent) => {
     confirmService.require({
       target: event.target as HTMLElement,
-      message: 'Вы уверены, что хотите сохранить все текущие изменения?',
+      message: 'Сохранить все текущие изменения?',
       icon: 'pi pi-exclamation-triangle',
       rejectProps: {
         label: 'Нет',

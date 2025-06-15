@@ -44,6 +44,9 @@ defineExpose({ serviceId, readonly })
     </FloatLabel>
     <FloatLabel>
       <InputNumber
+        currency="RUB"
+        locale="ru-RU"
+        :minFractionDigits="0"
         :disabled="readonly"
         id="price"
         v-model="formData.price"
