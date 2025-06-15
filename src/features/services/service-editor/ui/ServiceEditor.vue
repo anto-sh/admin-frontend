@@ -26,9 +26,33 @@ defineExpose({ serviceId, readonly })
 
 <template>
   <form @submit.prevent class="mt-4 space-y-8">
-    <FloatLabel class="mb-6">
+    <FloatLabel>
       <InputText :disabled="readonly" id="name" v-model.trim="formData.name" class="w-full" />
       <label for="name">Название услуги</label>
+    </FloatLabel>
+    <FloatLabel>
+      <Select
+        :disabled="readonly"
+        id="category"
+        v-model="formData.categoryId"
+        :options="categoriesSelectList"
+        optionLabel="name"
+        optionValue="id"
+        class="w-full"
+      />
+      <label for="category">Категория</label>
+    </FloatLabel>
+    <FloatLabel>
+      <InputNumber
+        :disabled="readonly"
+        id="price"
+        v-model="formData.price"
+        class="w-full"
+        type="number"
+        :min="0"
+        :step="1"
+      />
+      <label for="price">Стоимость</label>
     </FloatLabel>
     <div class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
       <FileUpload
@@ -55,30 +79,6 @@ defineExpose({ serviceId, readonly })
       preview
       class="mb-10"
     />
-    <FloatLabel>
-      <Select
-        :disabled="readonly"
-        id="category"
-        v-model="formData.categoryId"
-        :options="categoriesSelectList"
-        optionLabel="name"
-        optionValue="id"
-        class="w-full"
-      />
-      <label for="category">Категория</label>
-    </FloatLabel>
-    <FloatLabel>
-      <InputNumber
-        :disabled="readonly"
-        id="price"
-        v-model="formData.price"
-        class="w-full"
-        type="number"
-        :min="0"
-        :step="1"
-      />
-      <label for="price">Стоимость</label>
-    </FloatLabel>
 
     <p class="text-xl mb-2">Список входящих в услугу процедур</p>
     <div

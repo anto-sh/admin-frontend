@@ -3,7 +3,7 @@ import ExerciseEditor from '@/features/exercises/exercise-editor/ui/ExerciseEdit
 </script>
 
 <template>
-  <ExerciseEditor ref="exerciseEditorRef" />
+  <ExerciseEditor />
 </template>
 
 <style lang="scss" scoped></style>
