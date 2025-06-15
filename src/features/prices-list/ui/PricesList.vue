@@ -32,7 +32,6 @@ const { priceStore, newPrice, addPrice, deletePrice, confirmCancelAll, confirmSa
         icon="pi pi-trash"
         severity="danger"
         @click="deletePrice(price.id)"
-        outlined
       />
     </div>
 
