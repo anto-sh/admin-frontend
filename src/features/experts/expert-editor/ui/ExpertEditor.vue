@@ -63,7 +63,7 @@ defineExpose({ expertId, readonly })
         customUpload
         auto
         accept="image/*"
-        :maxFileSize="10e30"
+        :maxFileSize="200 * 1024 * 1024"
         :chooseLabel="
           formData.imageUrl ? 'Выбрать другое фото специалиста' : 'Выбрать фото специалиста'
         "
