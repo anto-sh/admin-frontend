@@ -21,7 +21,7 @@ export const treatmentApi = {
     return response
   },
   async updateBatch(dtoArr: UpdateTreatmentBatchDto[]): Promise<ApiResponseDto<never>> {
-    const { data: response } = await apiClient.patch(`/treatments/`, dtoArr)
+    const { data: response } = await apiClient.patch(`/treatments/batch`, dtoArr)
     return response
   },
   async delete(id: number): Promise<ApiResponseDto<never>> {
