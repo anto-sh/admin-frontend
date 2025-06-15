@@ -44,4 +44,9 @@ export const menuItems: MenuItem[] = [
       },
     ],
   },
+  {
+    label: 'Специалисты',
+    icon: 'pi pi-cloud-upload',
+    route: '/experts',
+  },
 ]
