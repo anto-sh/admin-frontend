@@ -1,4 +1,4 @@
-import { ref, onMounted, onBeforeUnmount, computed } from 'vue'
+import { ref, onMounted, onBeforeUnmount, computed, toRaw } from 'vue'
 import EditorJS, { type OutputData } from '@editorjs/editorjs'
 import { useToastStore } from '@/shared/store/useToastStore'
 // Editor.js tools
@@ -64,7 +64,7 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
   // TODO: вынести бы куда
   const editorJsConfig = computed(() => ({
     holder: 'editorjs',
-    data: initialData.value,
+    data: toRaw(initialData.value),
     readOnly: readonly.value || false,
     i18n,
     tools: {
