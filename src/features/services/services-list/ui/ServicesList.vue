@@ -46,9 +46,9 @@ const {
         </AccordionHeader>
         <AccordionContent>
           <ul v-if="sc.services?.length">
-            <li v-for="service in sc.services" :key="service.id" class="service-list-item">
-              <span class="service-list-item__name">{{ service.name }}</span>
-              <span class="service-list-item__actions">
+            <li v-for="service in sc.services" :key="service.id" class="accordion-entity-list-item">
+              <span class="accordion-entity-list-item__name">{{ service.name }}</span>
+              <span class="accordion-entity-list-item__actions">
                 <Button
                   @click="goToServiceView(service.id)"
                   variant="text"
@@ -83,30 +83,4 @@ const {
   />
 </template>
 
-<style scoped lang="scss">
-.service-list-item {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.5rem;
-  border-bottom: 1px solid var(--p-surface-200);
-  transition: 0.3s background-color;
-
-  &:hover {
-    background-color: var(--p-surface-800);
-  }
-
-  &__name {
-    flex: 1 1 auto;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
-  &__actions {
-    display: flex;
-    gap: 0.5rem;
-  }
-}
-</style>
+<style scoped lang="scss"></style>
