@@ -31,10 +31,10 @@ export const i18n = {
     },
     tools: {
       image: {
-        Stretch: 'Растянуть',
+        'Stretch image': 'Растянуть',
         'With border': 'С рамкой',
         'With background': 'С фоном',
-        'Add a caption': 'Добавить подпись',
+        'With caption': 'Добавить подпись',
         'Select an Image': 'Выберите изображение',
         Upload: 'Загрузить',
         'Paste a link to an image': 'Вставьте ссылку на изображение',
