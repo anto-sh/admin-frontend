@@ -4,6 +4,7 @@ import ExercisesListPage from '@/pages/exercises/ExercisesListPage.vue'
 import ExpertEditorPage from '@/pages/experts/ExpertEditorPage.vue'
 import ExpertsListPage from '@/pages/experts/ExpertsListPage.vue'
 import IndexPage from '@/pages/index/IndexPage.vue'
+import PricesListPage from '@/pages/prices/PricesListPage.vue'
 import ServiceCategoriesPage from '@/pages/services/ServiceCategoriesPage.vue'
 import ServiceEditorPage from '@/pages/services/ServiceEditorPage.vue'
 import ServicesListPage from '@/pages/services/ServicesListPage.vue'
@@ -64,6 +65,11 @@ const router = createRouter({
       path: '/expert-editor/:id?',
       name: 'expert-editor',
       component: ExpertEditorPage,
+    },
+    {
+      path: '/prices',
+      name: 'prices',
+      component: PricesListPage,
     },
   ],
 })

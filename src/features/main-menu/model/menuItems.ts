@@ -13,6 +13,11 @@ export const menuItems: MenuItem[] = [
     route: '/treatments',
   },
   {
+    label: 'Специалисты',
+    icon: 'pi pi-cloud-upload',
+    route: '/experts',
+  },
+  {
     label: 'Упражнения',
     icon: 'pi pi-cloud',
     items: [
@@ -45,8 +50,8 @@ export const menuItems: MenuItem[] = [
     ],
   },
   {
-    label: 'Специалисты',
+    label: 'Цены',
     icon: 'pi pi-cloud-upload',
-    route: '/experts',
+    route: '/prices',
   },
 ]
