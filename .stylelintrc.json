@@ -11,7 +11,8 @@
         "ignoreAtRules": ["tailwind"]
       }
     ],
-    "scss/dollar-variable-pattern": "^_?[a-z]+[a-z0-9-]*$"
+    "scss/dollar-variable-pattern": "^_?[a-z]+[a-z0-9-]*$",
+    "no-empty-source": null
   },
   "ignoreFiles": ["**/node_modules/**", "**/dist/**", "**/vendor/**"]
 }
