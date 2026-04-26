@@ -3,7 +3,6 @@ import { watch } from 'vue'
 import { useToastStore } from '../store/useToastStore'
 
 // инициализация системы уведомлений и наблюдателя для этой системы
-// использовать только в script setup
 export const useToastWatcher = () => {
   const toastService = useToast()
   const toastStore = useToastStore()
