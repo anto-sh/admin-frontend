@@ -1,8 +1,7 @@
 import { vi, describe, it, expect, beforeEach } from 'vitest'
 import { setActivePinia, createPinia } from 'pinia'
-import { usePriceStore } from '@/entities/price/store' // реальный стор
+import { usePriceStore } from '@/entities/price/store'
 
-// Мокаем api модуль, используя алиас
 vi.mock('@/entities/price/api', () => ({
   priceApi: {
     getAll: vi.fn(),
@@ -14,7 +13,6 @@ vi.mock('@/entities/price/api', () => ({
   },
 }))
 
-// Теперь можно импортировать замоканный объект, чтобы настраивать поведение
 import { priceApi } from '@/entities/price/api'
 
 describe('Price Store', () => {
@@ -46,7 +44,6 @@ describe('Price Store', () => {
         price: 4215261,
       },
     ]
-    // Настраиваем мок конкретного метода
     vi.mocked(priceApi.getAll).mockResolvedValue({
       status: 'success',
       code: 200,
