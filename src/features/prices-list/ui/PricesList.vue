@@ -21,6 +21,7 @@ const { priceStore, newPrice, addPrice, deletePrice, confirmCancelAll, confirmSa
         :min="0"
         :step="1"
         :minFractionDigits="0"
+        :max="10_000_000"
       />
       <Button
         :disabled="!price.name"
