@@ -90,7 +90,7 @@ defineExpose({ expertId, readonly })
     <div class="flex justify-between mt-10">
       <Button
         @click="cancelEditor()"
-        severity="info"
+        severity="secondary"
         label="Назад"
         icon="pi pi-arrow-left"
         size="large"

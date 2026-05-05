@@ -37,13 +37,13 @@ const {
         :disabled="treatmentStore.treatments.length === 1"
         label="Сохранить всё"
         icon="pi pi-save"
-        severity="success"
+        severity="primary"
         @click="confirmSaveAll($event)"
       />
       <Button
         label="Сбросить изменения"
         icon="pi pi-times"
-        severity="secondary"
+        severity="danger"
         @click="confirmCancelAll($event)"
       />
     </div>

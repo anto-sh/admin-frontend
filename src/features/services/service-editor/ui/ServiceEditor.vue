@@ -122,7 +122,7 @@ defineExpose({ serviceId, readonly })
         <Button
           v-if="serviceId"
           @click="confirmDeleteService($event)"
-          severity="danger"
+          severity="secondary"
           label="Удалить"
           icon="pi pi-trash"
           size="large"

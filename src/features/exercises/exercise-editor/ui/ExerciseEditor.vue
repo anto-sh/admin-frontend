@@ -61,7 +61,7 @@ defineExpose({ exerciseId, readonly })
         <Button
           v-if="exerciseId"
           @click="confirmDeleteExercise($event)"
-          severity="danger"
+          severity="secondary"
           label="Удалить"
           icon="pi pi-trash"
           size="large"
