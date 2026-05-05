@@ -56,10 +56,10 @@ declare module '@editorjs/image' {
   export default Image
 }
 
-declare module '@weekwood/editorjs-video' {
+declare module 'editorjs-upload-video-tool' {
   import { BlockToolConstructable } from '@editorjs/editorjs'
-  const VideoTool: BlockToolConstructable
-  export default VideoTool
+  const UploadVideo: BlockToolConstructable
+  export default UploadVideo
 }
 
 // InlineTools

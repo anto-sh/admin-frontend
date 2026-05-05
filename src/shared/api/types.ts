@@ -11,6 +11,12 @@ export interface ImageUploadResponseDto {
   success: number
   file: FileDataDto
 }
+
+export interface VideoUploadResponseDto {
+  success: number
+  file: FileDataDto
+}
+
 export interface FileDataDto {
   url: string
   originalname: string

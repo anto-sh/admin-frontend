@@ -27,6 +27,10 @@ defineExpose({
 
 .editorjs-container {
   &--dark {
+    *::selection {
+      background-color: var(--p-surface-700) !important;
+    }
+
     background: var(--p-surface-ground);
     color: var(--p-text-color);
 
@@ -110,9 +114,10 @@ defineExpose({
       }
 
       &-item:not(.ce-popover-item--confirmation) {
-        color: var(--p-text-color);
-        background: transparent;
-
+        &:not(.ce-popover-item--active) {
+          color: var(--p-text-color);
+          background: transparent;
+        }
         &:hover {
           background: var(--p-surface-800);
           color: var(--p-highlight-color);
@@ -168,6 +173,11 @@ defineExpose({
       color: var(--p-text-color);
     }
 
+    .cdx-warning::before {
+      background-color: var(--p-danger-background);
+      border-radius: 3px;
+    }
+
     // Table tool
     .tc-wrap,
     .tc-table,
@@ -177,6 +187,14 @@ defineExpose({
     .tc-add-column,
     .tc-add-row {
       border-color: var(--p-surface-700);
+      background-color: transparent !important;
+    }
+
+    .tc-table--heading .tc-row:first-child {
+      &,
+      &::after {
+        border-bottom: 2px solid var(--p-surface-600);
+      }
     }
 
     .tc-cell--selected {
@@ -202,9 +220,13 @@ defineExpose({
           color: var(--p-highlight-color);
         }
       }
+      &--showed {
+        z-index: 3;
+      }
     }
 
     .tc-popover {
+      z-index: 999;
       background-color: var(--p-surface-900);
       border-color: var(--p-surface-700);
       &__item {
@@ -216,6 +238,11 @@ defineExpose({
           background-color: var(--p-surface-800);
         }
       }
+    }
+
+    // text
+    .cdx-marker {
+      color: var(--p-text-color);
     }
   }
 }

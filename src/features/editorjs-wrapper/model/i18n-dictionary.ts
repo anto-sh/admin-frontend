@@ -2,6 +2,8 @@
 // словарь i18n для русификации editor.js
 // мало информации касательно подбора ключей перевода
 // поэтому перевод неполный и местами бесполезный
+
+// Один из хороших источников - https://github.com/codex-team/editor.js/blob/4ea9eb389847181ceb757735f8bd45cc8c2f1673/src/components/i18n/locales/en/messages.json
 export const i18n = {
   messages: {
     toolNames: {
@@ -15,6 +17,7 @@ export const i18n = {
       Quote: 'Цитата',
       Table: 'Таблица',
       Image: 'Изображение',
+      'Upload Video': 'Видео',
       Marker: 'Маркер',
       Delimiter: 'Разделитель',
       Embed: 'Встраивание',
@@ -23,13 +26,14 @@ export const i18n = {
       Bold: 'Толстый',
       Italic: 'Курсив',
       Link: 'Ссылка',
-      'Convert to': 'Конвертировать в',
+      'Convert to': 'Преобразовать в',
       'Nothing found': 'Ничего не найдено',
       'Move up': 'Переместить вверх',
       'Move down': 'Переместить вниз',
       Delete: 'Удалить',
     },
     tools: {
+      video: {},
       image: {
         'Stretch image': 'Растянуть',
         'With border': 'С рамкой',
@@ -46,16 +50,21 @@ export const i18n = {
         'Enter a header': 'Введите заголовок',
         Heading: 'Заголовок',
         Level: 'Уровень',
+        'Heading 1': 'Заголовок 1',
+        'Heading 2': 'Заголовок 2',
+        'Heading 3': 'Заголовок 3',
+        'Heading 4': 'Заголовок 4',
+        'Heading 5': 'Заголовок 5',
+        'Heading 6': 'Заголовок 6',
       },
       list: {
         Ordered: 'Нумерованный',
         Unordered: 'Маркированный',
-        'Add to-do': 'Добавить задачу',
+        Checklist: 'Контрольный',
       },
       quote: {
-        Quote: 'Цитата',
-        'Enter a quote': 'Введите цитату',
-        Author: 'Автор',
+        'Align Left': 'Выровнять по левому краю',
+        'Align Center': 'Выровнять по центру',
       },
       table: {
         'Add column to left': 'Добавить столбец слева',
@@ -68,6 +77,7 @@ export const i18n = {
         'Without headings': 'Без заголовков',
         Stretch: 'Растянуть',
         Collapse: 'Сжать',
+        Heading: 'Заголовок',
       },
       marker: {
         Marker: 'Маркер',
@@ -91,12 +101,25 @@ export const i18n = {
       paragraph: {
         Paragraph: 'Параграф',
       },
+      link: {
+        'Add a link': 'Вставьте ссылку',
+      },
     },
     ui: {
       blockTunes: {
         toggler: {
           'Click to tune': 'Нажмите, чтобы настроить',
-          'or drag to move': 'или перетащите для перемещения',
+          'or drag to move': 'или перетащите',
+        },
+        delete: {
+          Delete: 'Удалить',
+          'Click to delete': 'Нажмите, чтобы удалить',
+        },
+        moveUp: {
+          'Move up': 'Выше',
+        },
+        moveDown: {
+          'Move down': 'Ниже',
         },
       },
       toolbar: {
@@ -113,6 +136,7 @@ export const i18n = {
         Filter: 'Поиск',
         inlineToolbar: {
           'Add link': 'Добавить ссылку',
+          'Convert to': 'Преобразовать в',
         },
         'Nothing found': 'Ничего не найдено',
         'Move up': 'Переместить вверх',
@@ -128,6 +152,18 @@ export const i18n = {
       placeholders: {
         text: 'Введите текст...',
         heading: 'Заголовок',
+      },
+    },
+    blockTunes: {
+      delete: {
+        Delete: 'Удалить',
+        'Click to delete': 'Нажмите, чтобы удалить',
+      },
+      moveUp: {
+        'Move up': 'Выше',
+      },
+      moveDown: {
+        'Move down': 'Ниже',
       },
     },
   },

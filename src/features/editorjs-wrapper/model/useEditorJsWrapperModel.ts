@@ -1,6 +1,7 @@
 import { ref, onMounted, onBeforeUnmount, computed, toRaw } from 'vue'
 import EditorJS, { type OutputData } from '@editorjs/editorjs'
 import { useToastStore } from '@/shared/store/useToastStore'
+import { videoApi } from '@/shared/api/video'
 // Editor.js tools
 import Header from '@editorjs/header'
 import List from '@editorjs/list'
@@ -13,6 +14,7 @@ import Embed from '@editorjs/embed'
 import Warning from '@editorjs/warning'
 import Underline from '@editorjs/underline'
 import Paragraph from '@editorjs/paragraph'
+import UploadVideo from 'editorjs-upload-video-tool'
 import { i18n } from './i18n-dictionary'
 
 export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyProp?: boolean) {
@@ -59,6 +61,21 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
         `Не удалось сохранить контент Editor.js \n Сообщение: ${(error as Error).message}`,
       )
     }
+  }
+
+  async function uploadVideo(file: File) {
+    const { file: resFile } = await videoApi.upload(file)
+    return resFile
+  }
+
+  function videoErrorHandler(e: Error) {
+    addToast({
+      severity: 'error',
+      summary: 'Ошибка инструмента "Видео" редактора',
+      detail: `${e.name} \n Сообщение: ${e.message}`,
+      life: 20e3,
+    })
+    throw new Error(`${e.name} \n Сообщение: ${e.message}`)
   }
 
   // TODO: вынести бы куда
@@ -145,6 +162,18 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
           field: 'image',
           captionPlaceholder: 'Подпись к изображению',
           buttonContent: 'Загрузить изображение',
+        },
+      },
+      video: {
+        class: UploadVideo,
+        config: {
+          uploader: uploadVideo,
+          errorHandler: videoErrorHandler,
+          uploadButtonText: 'Загрузить видео',
+          changeVideoButtonText: 'Загрузить другое видео',
+          videoCaptionPlaceholder: 'Подпись к видео',
+          uploaderReturnNoUrlText: 'Функция-загрузчик не вернула адрес видео',
+          uploadFailedText: 'Ошибка при загрузке',
         },
       },
     },
