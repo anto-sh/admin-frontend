@@ -12,7 +12,7 @@ export const serviceCategoryApi = {
     return response
   },
   async getAllWithServices(): Promise<ApiResponseDto<ServiceCategoryDto[]>> {
-    const { data: response } = await apiClient.get('/service-categories/with-services')
+    const { data: response } = await apiClient.get('/service-categories/with-entities')
     return response
   },
   async add(dto: CreateServiceCategoryDto): Promise<ApiResponseDto<ServiceCategoryDto>> {

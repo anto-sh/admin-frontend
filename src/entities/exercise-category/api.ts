@@ -12,7 +12,7 @@ export const exerciseCategoryApi = {
     return response
   },
   async getAllWithExercises(): Promise<ApiResponseDto<ExerciseCategoryDto[]>> {
-    const { data: response } = await apiClient.get('/exercise-categories/with-exercises')
+    const { data: response } = await apiClient.get('/exercise-categories/with-entities')
     return response
   },
   async add(dto: CreateExerciseCategoryDto): Promise<ApiResponseDto<ExerciseCategoryDto>> {

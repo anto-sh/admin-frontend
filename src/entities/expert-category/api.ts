@@ -9,7 +9,7 @@ export const expertCategoryApi = {
     return response
   },
   async getAllWithExperts(): Promise<ApiResponseDto<ExpertCategoryDto[]>> {
-    const { data: response } = await apiClient.get('/expert-categories/with-experts')
+    const { data: response } = await apiClient.get('/expert-categories/with-entities')
     return response
   },
 }
