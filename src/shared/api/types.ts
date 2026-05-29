@@ -14,3 +14,22 @@ export interface FileDataDto {
   size: number
   extension: string
 }
+
+/* ──────────────────── ENTITIES API FABRIC ─────────────────── */
+
+export interface entityApiFabricOptions {
+  type: 'entity' | 'category'
+  url: string
+}
+
+export type EntityApi<TResponseDto, TCreateDto, TUpdateDto> = {
+  //common
+  getAll(): Promise<ApiResponseDto<TResponseDto[]>>
+  add(dto: TCreateDto): Promise<ApiResponseDto<TResponseDto>>
+  update(id: number, dto: TUpdateDto): Promise<ApiResponseDto<never>>
+  delete(id: number): Promise<ApiResponseDto<never>>
+
+  //specific
+  getById?(id: number): Promise<ApiResponseDto<TResponseDto>>
+  getAllWithEntities?(): Promise<ApiResponseDto<TResponseDto[]>>
+}
