@@ -16,6 +16,7 @@ import Underline from '@editorjs/underline'
 import Paragraph from '@editorjs/paragraph'
 import UploadVideo from 'editorjs-upload-video-tool'
 import { i18n } from './i18n-dictionary'
+import { imageApi } from '@/shared/api/image'
 
 export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyProp?: boolean) {
   const { addToast } = useToastStore()
@@ -61,6 +62,11 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
         `Не удалось сохранить контент Editor.js \n Сообщение: ${(error as Error).message}`,
       )
     }
+  }
+
+  async function uploadImage(file: File) {
+    const { data } = await imageApi.upload(file)
+    return { success: 1, file: { url: data?.url } }
   }
 
   async function uploadVideo(file: File) {
@@ -155,9 +161,8 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
           features: {
             caption: 'optional',
           },
-          endpoints: {
-            // TODO: можно написать кастомный метод, чтобы не в обход apiClient было
-            byFile: import.meta.env.VITE_API_URL + import.meta.env.VITE_API_IMAGE_UPLOAD_ENDPOINT,
+          uploader: {
+            uploadByFile: uploadImage,
           },
           field: 'image',
           captionPlaceholder: 'Подпись к изображению',
