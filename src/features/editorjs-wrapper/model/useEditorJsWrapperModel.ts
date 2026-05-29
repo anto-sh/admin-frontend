@@ -64,8 +64,8 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
   }
 
   async function uploadVideo(file: File) {
-    const { file: resFile } = await videoApi.upload(file)
-    return resFile
+    const { data } = await videoApi.upload(file)
+    return data
   }
 
   function videoErrorHandler(e: Error) {

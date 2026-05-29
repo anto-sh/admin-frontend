@@ -1,8 +1,8 @@
 import { apiClient } from './client'
-import type { ImageUploadResponseDto } from './types'
+import type { ApiResponseDto, FileDataDto } from './types'
 
 export const imageApi = {
-  async upload(image: File): Promise<ImageUploadResponseDto> {
+  async upload(image: File): Promise<ApiResponseDto<FileDataDto>> {
     const formData = new FormData()
     formData.append('image', image)
 

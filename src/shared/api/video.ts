@@ -1,8 +1,8 @@
 import { apiClient } from './client'
-import type { VideoUploadResponseDto } from './types'
+import type { ApiResponseDto, FileDataDto } from './types'
 
 export const videoApi = {
-  async upload(video: File): Promise<VideoUploadResponseDto> {
+  async upload(video: File): Promise<ApiResponseDto<FileDataDto>> {
     const formData = new FormData()
     formData.append('video', video)
 

@@ -52,8 +52,8 @@ export function useExpertEditorModel() {
   })
 
   const uploadExpertImage = async (event: FileUploadSelectEvent) => {
-    const response = await imageApi.upload(event.files[0])
-    formData.value.imageUrl = response.file.url
+    const { data: fileData } = await imageApi.upload(event.files[0])
+    formData.value.imageUrl = fileData?.url || ''
   }
 
   const saveExpert = async () => {

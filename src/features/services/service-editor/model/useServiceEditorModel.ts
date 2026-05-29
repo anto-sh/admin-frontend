@@ -50,8 +50,8 @@ export function useServiceEditorModel() {
     (formData.value.procedures = formData.value.procedures.filter((p, i) => i !== index))
 
   const uploadServiceImage = async (event: FileUploadSelectEvent) => {
-    const response = await imageApi.upload(event.files[0])
-    formData.value.imageUrl = response.file.url
+    const { data: fileData } = await imageApi.upload(event.files[0])
+    formData.value.imageUrl = fileData?.url || ''
   }
 
   const saveService = async () => {

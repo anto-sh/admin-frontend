@@ -1,3 +1,4 @@
+// TODO: будто бы нам не нужны тут заголовки и статус-код
 export interface ApiResponseDto<T = unknown> {
   status: 'success' | 'error'
   code: number // HTTP статус-код
@@ -5,16 +6,6 @@ export interface ApiResponseDto<T = unknown> {
   message: string
   data?: T // Основные данные ответа
   timestamp?: string // Дата формирования ответа
-}
-
-export interface ImageUploadResponseDto {
-  success: number
-  file: FileDataDto
-}
-
-export interface VideoUploadResponseDto {
-  success: number
-  file: FileDataDto
 }
 
 export interface FileDataDto {
