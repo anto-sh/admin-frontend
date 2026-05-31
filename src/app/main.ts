@@ -8,7 +8,7 @@ import { ConfirmationService } from 'primevue'
 import ToastService from 'primevue/toastservice'
 
 import App from './App.vue'
-import router from './router'
+import { router } from './router'
 
 import '@/index.scss'
 
