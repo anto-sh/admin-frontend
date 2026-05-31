@@ -1,8 +1,15 @@
 import { apiClient } from './client'
-import type { ApiResponseDto, EntityApi, entityApiFabricOptions } from './types'
+import type { ApiResponseDto, EntityApi, CreateEntityApiOptions } from './types'
 
-export default function entityApiFabric<TResponseDto, TCreateDto, TUpdateDto>(
-  options: entityApiFabricOptions,
+export function createEntityApi<TResponseDto, TCreateDto, TUpdateDto>(
+  options: CreateEntityApiOptions<'entity'>,
+): Required<Omit<EntityApi<TResponseDto, TCreateDto, TUpdateDto>, 'getAllWithEntities'>>
+export function createEntityApi<TResponseDto, TCreateDto, TUpdateDto>(
+  options: CreateEntityApiOptions<'category'>,
+): Required<Omit<EntityApi<TResponseDto, TCreateDto, TUpdateDto>, 'getById'>>
+
+export function createEntityApi<TResponseDto, TCreateDto, TUpdateDto>(
+  options: CreateEntityApiOptions,
 ) {
   const baseCrudMethods = {
     getAll(): Promise<ApiResponseDto<TResponseDto[]>> {

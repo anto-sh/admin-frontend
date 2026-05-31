@@ -15,14 +15,14 @@ export interface FileDataDto {
   extension: string
 }
 
-/* ──────────────────── ENTITIES API FABRIC ─────────────────── */
+/* ──────────────────── ENTITIES API FACTORY ─────────────────── */
 
-export interface entityApiFabricOptions {
-  type: 'entity' | 'category'
+export interface CreateEntityApiOptions<T extends 'entity' | 'category' = 'entity' | 'category'> {
+  type: T
   url: string
 }
 
-export type EntityApi<TResponseDto, TCreateDto, TUpdateDto> = {
+export interface EntityApi<TResponseDto, TCreateDto, TUpdateDto> {
   //common
   getAll(): Promise<ApiResponseDto<TResponseDto[]>>
   add(dto: TCreateDto): Promise<ApiResponseDto<TResponseDto>>
