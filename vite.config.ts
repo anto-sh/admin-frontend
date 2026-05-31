@@ -53,5 +53,12 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+
+    /* ─────────────────────────── TESTS ────────────────────────── */
+    test: {
+      environment: 'jsdom',
+      exclude: ['e2e/**'],
+      root: fileURLToPath(new URL('./src', import.meta.url)),
+    },
   }
 })
