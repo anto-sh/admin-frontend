@@ -4,7 +4,7 @@ export interface ApiResponseDto<T = unknown> {
   code: number // HTTP статус-код
   message: string
   data?: T // Основные данные ответа
-  timestamp?: string // Дата формирования ответа
+  timestamp: string // Дата формирования ответа
 }
 
 export interface FileDataDto {
@@ -13,23 +13,4 @@ export interface FileDataDto {
   mimetype: string
   size: number
   extension: string
-}
-
-/* ──────────────────── ENTITIES API FACTORY ─────────────────── */
-
-export interface CreateEntityApiOptions<T extends 'entity' | 'category' = 'entity' | 'category'> {
-  type: T
-  url: string
-}
-
-export interface EntityApi<TResponseDto, TCreateDto, TUpdateDto> {
-  //common
-  getAll(): Promise<ApiResponseDto<TResponseDto[]>>
-  add(dto: TCreateDto): Promise<ApiResponseDto<TResponseDto>>
-  update(id: number, dto: TUpdateDto): Promise<ApiResponseDto<never>>
-  delete(id: number): Promise<ApiResponseDto<never>>
-
-  //specific
-  getById?(id: number): Promise<ApiResponseDto<TResponseDto>>
-  getAllWithEntities?(): Promise<ApiResponseDto<TResponseDto[]>>
 }
