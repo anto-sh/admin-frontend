@@ -1,31 +1,40 @@
-import { usePriceStore } from '@/entities/price/store'
-import { onMounted, ref } from 'vue'
+import { usePriceModel } from '@/entities/price/model'
+import { onMounted, ref, watch } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
-import type { CreatePriceDto } from '@/entities/price/types'
+import type { PriceDto } from '@/entities/price/types'
 
 export function usePricesListModel() {
-  const newPriceDefaultValue = { name: '', price: null }
-  const newPrice = ref<{ name: string; price: number | null }>({ ...newPriceDefaultValue })
   const confirmService = useConfirm()
-  const priceStore = usePriceStore()
+  const priceModel = usePriceModel()
+
+  const newPriceDefaultValue = { name: '', price: 0 }
+  const newPrice = ref<{ name: string; price: number }>({ ...newPriceDefaultValue })
+
+  const priceEntities = ref<PriceDto[]>()
 
   onMounted(() => {
-    priceStore.fetchPrices()
+    priceModel.fetchAll()
   })
 
+  watch(
+    priceModel.entities,
+    () => (priceEntities.value = JSON.parse(JSON.stringify(priceModel.entities.value))),
+    { deep: true, immediate: true },
+  )
+
   const addPrice = () => {
-    priceStore.addPrice(newPrice.value as CreatePriceDto)
+    priceModel.add(newPrice.value)
     newPrice.value = { ...newPriceDefaultValue }
   }
 
   const deletePrice = (id: number) => {
-    priceStore.deletePrice(id)
+    priceModel.delete(id)
   }
 
   const confirmCancelAll = (event: MouseEvent) => {
     confirmService.require({
       target: event.target as HTMLElement,
-      message: 'Вы уверены, что хотите отменить все текущие изменения цен?',
+      message: 'Отменить все текущие изменения цен?',
       icon: 'pi pi-exclamation-triangle',
       rejectProps: {
         label: 'Нет',
@@ -37,7 +46,7 @@ export function usePricesListModel() {
         severity: 'danger',
       },
       accept: () => {
-        priceStore.fetchPrices()
+        priceModel.fetchAll()
       },
     })
   }
@@ -56,15 +65,16 @@ export function usePricesListModel() {
         label: 'Да',
       },
       accept: () => {
-        priceStore.updatePricesBatch(priceStore.prices)
+        if (priceEntities.value) priceModel.updateBatch(priceEntities.value)
       },
     })
   }
 
   return {
-    priceStore,
+    priceEntities,
     newPrice,
     addPrice,
+    updatePrice: priceModel.update,
     deletePrice,
     confirmCancelAll,
     confirmSaveAll,
