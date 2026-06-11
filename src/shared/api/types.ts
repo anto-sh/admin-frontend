@@ -13,3 +13,10 @@ export interface FileDataDto {
   extension: string
 }
 
+export interface ValidationError {
+  target: Record<string, unknown>
+  value: unknown
+  property: string
+  children: unknown[]
+  constraints: Record<string, string>
+}
