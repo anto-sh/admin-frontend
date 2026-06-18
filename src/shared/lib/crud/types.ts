@@ -7,6 +7,7 @@ export interface CreateCrudApiOptions<T = 'entity' | 'category'> {
   url: string
 }
 
+// TODO: Тип мусорный, если не использовать его для создания других
 export interface CrudApi<TResponseDto, TCreateDto, TUpdateDto> {
   //base
   url: string
@@ -43,6 +44,7 @@ export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
 }
 
 /* ───────────────── CRUD COMPOSABLE FACTORY ───────────────── */
+// TODO: Тип мусорный, если не использовать его для создания других
 export type CrudComposable<TResponseDto, TCreateDto, TUpdateDto> = () => {
   //base
   isLoading: Ref<boolean>
