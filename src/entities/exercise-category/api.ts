@@ -4,26 +4,26 @@ import type {
   ExerciseCategoryDto,
   UpdateExerciseCategoryDto,
 } from './types'
-import type { ApiResponseDto } from '@/shared/api/types'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 
 export const exerciseCategoryApi = {
-  async getAll(): Promise<ApiResponseDto<ExerciseCategoryDto[]>> {
+  async getAll(): Promise<ApiResponse<ExerciseCategoryDto[]>> {
     const { data: response } = await apiClient.get('/exercise-categories')
     return response
   },
-  async getAllWithExercises(): Promise<ApiResponseDto<ExerciseCategoryDto[]>> {
+  async getAllWithExercises(): Promise<ApiResponse<ExerciseCategoryDto[]>> {
     const { data: response } = await apiClient.get('/exercise-categories/with-entities')
     return response
   },
-  async add(dto: CreateExerciseCategoryDto): Promise<ApiResponseDto<ExerciseCategoryDto>> {
+  async add(dto: CreateExerciseCategoryDto): Promise<ApiResponse<ExerciseCategoryDto>> {
     const { data: response } = await apiClient.post('/exercise-categories', dto)
     return response
   },
-  async update(id: number, dto: UpdateExerciseCategoryDto): Promise<ApiResponseDto<never>> {
+  async update(id: number, dto: UpdateExerciseCategoryDto): Promise<ApiResponse<never>> {
     const { data: response } = await apiClient.put(`/exercise-categories/${id}`, dto)
     return response
   },
-  async delete(id: number): Promise<ApiResponseDto<never>> {
+  async delete(id: number): Promise<ApiResponse<never>> {
     const { data: response } = await apiClient.delete(`/exercise-categories/${id}`)
     return response
   },

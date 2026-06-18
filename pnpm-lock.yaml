@@ -9,8 +9,8 @@ importers:
   .:
     dependencies:
       '@anto-sh/admin-network-shared':
-        specifier: ^1.0.1
-        version: 1.0.1
+        specifier: ^1.0.9
+        version: 1.0.9(typescript@5.8.3)
       '@editorjs/delimiter':
         specifier: ^1.4.2
         version: 1.4.2
@@ -184,8 +184,10 @@ packages:
   '@antfu/utils@0.7.10':
     resolution: {integrity: sha512-+562v9k4aI80m1+VuMHehNJWLOFjBnXn3tdOitzD0il5b7smkSBal4+a3oKiQTbrwMmN/TBUMDvbdoWDehgOww==}
 
-  '@anto-sh/admin-network-shared@1.0.1':
-    resolution: {integrity: sha512-HXgIGzPrxPBL5t1OZkWcOsxa2PDjnIxGz32HNuEH318EF9FttOAZb6iRQjcMUxnsAxuYp7NsJRPI2N75bkn+Pw==}
+  '@anto-sh/admin-network-shared@1.0.9':
+    resolution: {integrity: sha512-A34BxfD1c99wNmKUd5UA3dq8ue5GJIzO/7wHcyHKl7+ntWFNWcpAuUrXrxkRLi5R60HX2BKAxB1nIRqYn2HMrQ==}
+    peerDependencies:
+      typescript: ^5.0.0
 
   '@asamuzakjp/css-color@3.2.0':
     resolution: {integrity: sha512-K1A6z8tS3XsmCMM86xoWdn7Fkdn9m6RSVtocUrJYIwZnFVkng/PvkEoWtOWmP+Scc6saYWHWZYbndEEXxl24jw==}
@@ -2297,13 +2299,13 @@ packages:
   muggle-string@0.4.1:
     resolution: {integrity: sha512-VNTrAak/KhO2i8dqqnqnAHOa3cYBwXEZe9h+D5h/1ZqFSTEFHdM65lR7RoIqq3tBBYavsOXV84NoHXZ0AkPyqQ==}
 
-  nanoid@3.3.12:
-    resolution: {integrity: sha512-ZB9RH/39qpq5Vu6Y+NmUaFhQR6pp+M2Xt76XBnEwDaGcVAqhlvxrl3B2bKS5D3NH3QR76v3aSrKaF/Kiy7lEtQ==}
+  nanoid@3.3.13:
+    resolution: {integrity: sha512-sPdqC6ByMVVGvF1ynvvMo0/o+oD1VX7DaHhijt1bFgjvBkHBib4t49GoNDhf2NDta4oeUNlaGbSt5K7qjZ955Q==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@5.1.11:
-    resolution: {integrity: sha512-v+KEsUv2ps74PaSKv0gHTxTCgMXOIfBEbaqa6w6ISIGC7ZsvHN4N9oJ8d4cmf0n5oTzQz2SLmThbQWhjd/8eKg==}
+  nanoid@5.1.14:
+    resolution: {integrity: sha512-5c8l8kVzqpnDPaicbEop/fV0Q1w16FmbWtVhMqugTozAwYdlIQojWH5a/M7UfziFmGdQRrUdV+EPzc9Xng3VAQ==}
     engines: {node: ^18 || >=20}
     hasBin: true
 
@@ -3066,7 +3068,9 @@ snapshots:
 
   '@antfu/utils@0.7.10': {}
 
-  '@anto-sh/admin-network-shared@1.0.1': {}
+  '@anto-sh/admin-network-shared@1.0.9(typescript@5.8.3)':
+    dependencies:
+      typescript: 5.8.3
 
   '@asamuzakjp/css-color@3.2.0':
     dependencies:
@@ -4105,7 +4109,7 @@ snapshots:
       '@vue/devtools-kit': 7.7.9
       '@vue/devtools-shared': 7.7.9
       mitt: 3.0.1
-      nanoid: 5.1.11
+      nanoid: 5.1.14
       pathe: 2.0.3
       vite-hot-client: 2.2.0(vite@6.4.3(@types/node@22.19.21)(jiti@2.7.0)(lightningcss@1.32.0)(sass@1.101.0)(terser@5.46.2))
       vue: 3.5.38(typescript@5.8.3)
@@ -5136,9 +5140,9 @@ snapshots:
 
   muggle-string@0.4.1: {}
 
-  nanoid@3.3.12: {}
+  nanoid@3.3.13: {}
 
-  nanoid@5.1.11: {}
+  nanoid@5.1.14: {}
 
   natural-compare@1.4.0: {}
 
@@ -5282,7 +5286,7 @@ snapshots:
 
   postcss@8.5.15:
     dependencies:
-      nanoid: 3.3.12
+      nanoid: 3.3.13
       picocolors: 1.1.1
       source-map-js: 1.2.1
 

@@ -1,4 +1,4 @@
-import type { ApiResponseDto } from '@/shared/api/types'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 import type { Ref, UnwrapRef } from 'vue'
 
 /* ──────────────────── CRUD API FACTORY ─────────────────── */
@@ -11,36 +11,36 @@ export interface CreateCrudApiOptions<T = 'entity' | 'category'> {
 export interface CrudApi<TResponseDto, TCreateDto, TUpdateDto> {
   //base
   url: string
-  getAll(): Promise<ApiResponseDto<TResponseDto[]>>
-  add(dto: TCreateDto): Promise<ApiResponseDto<TResponseDto>>
-  update(id: number, dto: TUpdateDto): Promise<ApiResponseDto<never>>
-  delete(id: number): Promise<ApiResponseDto<never>>
+  getAll(): Promise<ApiResponse<TResponseDto[]>>
+  add(dto: TCreateDto): Promise<ApiResponse<TResponseDto>>
+  update(id: number, dto: TUpdateDto): Promise<ApiResponse<never>>
+  delete(id: number): Promise<ApiResponse<never>>
 
   //specific
-  getById?(id: number): Promise<ApiResponseDto<TResponseDto>>
-  getAllWithEntities?(): Promise<ApiResponseDto<TResponseDto[]>>
+  getById?(id: number): Promise<ApiResponse<TResponseDto>>
+  getAllWithEntities?(): Promise<ApiResponse<TResponseDto[]>>
 }
 
 export interface EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
   //base
   url: string
-  getAll(): Promise<ApiResponseDto<TResponseDto[]>>
-  add(dto: TCreateDto): Promise<ApiResponseDto<TResponseDto>>
-  update(id: number, dto: TUpdateDto): Promise<ApiResponseDto<never>>
-  delete(id: number): Promise<ApiResponseDto<never>>
+  getAll(): Promise<ApiResponse<TResponseDto[]>>
+  add(dto: TCreateDto): Promise<ApiResponse<TResponseDto>>
+  update(id: number, dto: TUpdateDto): Promise<ApiResponse<never>>
+  delete(id: number): Promise<ApiResponse<never>>
   //specific
-  getById(id: number): Promise<ApiResponseDto<TResponseDto>>
+  getById(id: number): Promise<ApiResponse<TResponseDto>>
 }
 
 export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
   //base
   url: string
-  getAll(): Promise<ApiResponseDto<TResponseDto[]>>
-  add(dto: TCreateDto): Promise<ApiResponseDto<TResponseDto>>
-  update(id: number, dto: TUpdateDto): Promise<ApiResponseDto<never>>
-  delete(id: number): Promise<ApiResponseDto<never>>
+  getAll(): Promise<ApiResponse<TResponseDto[]>>
+  add(dto: TCreateDto): Promise<ApiResponse<TResponseDto>>
+  update(id: number, dto: TUpdateDto): Promise<ApiResponse<never>>
+  delete(id: number): Promise<ApiResponse<never>>
   //specific
-  getAllWithEntities(): Promise<ApiResponseDto<TResponseDto[]>>
+  getAllWithEntities(): Promise<ApiResponse<TResponseDto[]>>
 }
 
 /* ───────────────── CRUD COMPOSABLE FACTORY ───────────────── */

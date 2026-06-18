@@ -1,5 +1,5 @@
 import type { PriceDto, CreatePriceDto, UpdatePriceDto, UpdatePriceBatchDto } from './types'
-import type { ApiResponseDto } from '@/shared/api/types'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 import { createCrudApi } from '@/shared/lib/crud/createCrudApi'
 import { apiClient } from '@/shared/api/client'
 
@@ -10,7 +10,7 @@ const priceApiBase = createCrudApi<PriceDto, CreatePriceDto, UpdatePriceDto>({
 
 export const priceApi = {
   ...priceApiBase,
-  async updateBatch(dtoArr: UpdatePriceBatchDto[]): Promise<ApiResponseDto<never>> {
+  async updateBatch(dtoArr: UpdatePriceBatchDto[]): Promise<ApiResponse<never>> {
     return apiClient.patch(`${priceApiBase.url}/batch`, dtoArr).then((res) => res.data)
   },
 }

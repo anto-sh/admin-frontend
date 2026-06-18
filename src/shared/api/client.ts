@@ -1,6 +1,7 @@
 import axios, { AxiosError } from 'axios'
-import type { ApiResponseDto, ValidationError } from './types'
+import type { ValidationError } from './types'
 import { useToastStore } from '../store/useToastStore'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 
 const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
@@ -13,7 +14,7 @@ const apiClient = axios.create({
 apiClient.interceptors.response.use(
   (response) => {
     const { addToast } = useToastStore()
-    const data = response.data as ApiResponseDto
+    const data = response.data as ApiResponse
 
     if (data.message && data.status === 'success')
       addToast({
@@ -25,7 +26,7 @@ apiClient.interceptors.response.use(
 
     return response
   },
-  (error: AxiosError<ApiResponseDto<{ errors: ValidationError[] } | undefined>>) => {
+  (error: AxiosError<ApiResponse<{ errors: ValidationError[] } | undefined>>) => {
     const { addToast } = useToastStore()
 
     const errorRes = error.response

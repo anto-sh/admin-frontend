@@ -4,26 +4,26 @@ import type {
   ServiceCategoryDto,
   UpdateServiceCategoryDto,
 } from './types'
-import type { ApiResponseDto } from '@/shared/api/types'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 
 export const serviceCategoryApi = {
-  async getAll(): Promise<ApiResponseDto<ServiceCategoryDto[]>> {
+  async getAll(): Promise<ApiResponse<ServiceCategoryDto[]>> {
     const { data: response } = await apiClient.get('/service-categories')
     return response
   },
-  async getAllWithServices(): Promise<ApiResponseDto<ServiceCategoryDto[]>> {
+  async getAllWithServices(): Promise<ApiResponse<ServiceCategoryDto[]>> {
     const { data: response } = await apiClient.get('/service-categories/with-entities')
     return response
   },
-  async add(dto: CreateServiceCategoryDto): Promise<ApiResponseDto<ServiceCategoryDto>> {
+  async add(dto: CreateServiceCategoryDto): Promise<ApiResponse<ServiceCategoryDto>> {
     const { data: response } = await apiClient.post('/service-categories', dto)
     return response
   },
-  async update(id: number, dto: UpdateServiceCategoryDto): Promise<ApiResponseDto<never>> {
+  async update(id: number, dto: UpdateServiceCategoryDto): Promise<ApiResponse<never>> {
     const { data: response } = await apiClient.put(`/service-categories/${id}`, dto)
     return response
   },
-  async delete(id: number): Promise<ApiResponseDto<never>> {
+  async delete(id: number): Promise<ApiResponse<never>> {
     const { data: response } = await apiClient.delete(`/service-categories/${id}`)
     return response
   },

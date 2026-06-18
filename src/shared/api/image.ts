@@ -1,8 +1,9 @@
 import { apiClient } from './client'
-import type { ApiResponseDto, FileDataDto } from './types'
+import type {  FileDataDto } from './types'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 
 export const imageApi = {
-  async upload(image: File): Promise<ApiResponseDto<FileDataDto>> {
+  async upload(image: File): Promise<ApiResponse<FileDataDto>> {
     const formData = new FormData()
     formData.append('image', image)
 
