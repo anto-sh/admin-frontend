@@ -6,7 +6,7 @@ import type { OutputData } from '@editorjs/editorjs'
 import { useRoute, useRouter } from 'vue-router'
 import type { EditorJsWrapperExposed } from '@/features/editorjs-wrapper/types'
 import type { ComponentPublicInstance } from 'vue'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useExerciseEditorModel() {
   const exerciseCategoryStore = useExerciseCategoryStore()
@@ -18,7 +18,7 @@ export function useExerciseEditorModel() {
   const editorjsRef = useTemplateRef<EditorJsWrapperExposed & ComponentPublicInstance>('editorjs')
 
   const exerciseId = parseInt(route.params.id as string)
-  const readonly = route.query.readonly === StringBoolean.True
+  const readonly = route.query.readonly === STRING_BOOLEAN.True
   const formData = ref({
     name: '',
     categoryId: parseInt(route.query.categoryId as string) as number | undefined,

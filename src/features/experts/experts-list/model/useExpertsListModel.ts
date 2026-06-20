@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { useConfirm } from 'primevue'
 import { useExpertStore } from '@/entities/expert/store'
 import { useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useExpertsListModel() {
   const expertCategoryStore = useExpertCategoryStore()
@@ -54,7 +54,7 @@ export function useExpertsListModel() {
     router.push({
       name: 'expert-editor',
       params: { id },
-      query: { readonly: StringBoolean.True },
+      query: { readonly: STRING_BOOLEAN.True },
     })
   }
 

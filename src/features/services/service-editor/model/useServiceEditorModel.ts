@@ -3,7 +3,7 @@ import { useServiceStore } from '@/entities/service/store'
 import { computed, onMounted, ref } from 'vue'
 import { useConfirm, type FileUploadSelectEvent } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 import { imageApi } from '@/shared/api/image'
 
 export function useServiceEditorModel() {
@@ -14,7 +14,7 @@ export function useServiceEditorModel() {
   const route = useRoute()
 
   const serviceId = parseInt(route.params.id as string)
-  const readonly = route.query.readonly === StringBoolean.True
+  const readonly = route.query.readonly === STRING_BOOLEAN.True
   const formData = ref({
     name: '',
     imageUrl: '',

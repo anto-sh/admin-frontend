@@ -3,7 +3,7 @@ import { onMounted } from 'vue'
 import { useConfirm } from 'primevue'
 import { useExerciseStore } from '@/entities/exercise/store'
 import { useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useExercisesListModel() {
   const exerciseCategoryStore = useExerciseCategoryStore()
@@ -54,7 +54,7 @@ export function useExercisesListModel() {
     router.push({
       name: 'exercise-editor',
       params: { id },
-      query: { readonly: StringBoolean.True },
+      query: { readonly: STRING_BOOLEAN.True },
     })
   }
 

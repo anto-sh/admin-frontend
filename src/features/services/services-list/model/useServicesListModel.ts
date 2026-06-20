@@ -3,7 +3,7 @@ import { useServiceStore } from '@/entities/service/store'
 import { onMounted } from 'vue'
 import { useConfirm } from 'primevue'
 import { useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useServicesListModel() {
   const serviceCategoryStore = useServiceCategoryStore()
@@ -54,7 +54,7 @@ export function useServicesListModel() {
     router.push({
       name: 'service-editor',
       params: { id },
-      query: { readonly: StringBoolean.True },
+      query: { readonly: STRING_BOOLEAN.True },
     })
   }
 
