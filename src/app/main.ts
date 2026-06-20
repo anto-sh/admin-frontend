@@ -10,10 +10,13 @@ import ToastService from 'primevue/toastservice'
 import App from './App.vue'
 import { router } from './router'
 
+import i18n from '@/shared/lib/i18n/index.ts'
+
 import '@/index.scss'
 
 const app = createApp(App)
 
+app.use(i18n)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
