@@ -3,7 +3,6 @@ import type {
   EntityCrudApi,
   CategoryCrudApi,
   CategoryCrudComposable,
-  CrudComposable,
   EntityCrudComposable,
 } from './types'
 
@@ -71,31 +70,29 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
       },
     }
 
-    const specificMethods: Pick<
-      ReturnType<CrudComposable<TResponseDto, TCreateDto, TUpdateDto>>,
-      'fetchById' | 'fetchAllWithEntities'
-    > = {}
-
-    if (isCrudForEntity)
-      specificMethods.fetchById = async (id: number) => {
-        isLoading.value = true
-        try {
-          const { data } = await crudApi.getById(id)
-          if (data) return data
-        } finally {
-          isLoading.value = false
+    const specificMethods = isCrudForEntity
+      ? {
+          async fetchById(id: number) {
+            isLoading.value = true
+            try {
+              const { data } = await crudApi.getById(id)
+              if (data) return data
+            } finally {
+              isLoading.value = false
+            }
+          },
         }
-      }
-    else
-      specificMethods.fetchAllWithEntities = async () => {
-        isLoading.value = true
-        try {
-          const { data } = await crudApi.getAllWithEntities()
-          if (data) items.value = data
-        } finally {
-          isLoading.value = false
+      : {
+          async fetchAllWithEntities() {
+            isLoading.value = true
+            try {
+              const { data } = await crudApi.getAllWithEntities()
+              if (data) items.value = data
+            } finally {
+              isLoading.value = false
+            }
+          },
         }
-      }
 
     return {
       [isCrudForEntity ? 'entities' : 'categories']: readonly(items),

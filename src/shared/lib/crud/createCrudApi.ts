@@ -1,5 +1,5 @@
 import type { ApiResponse } from '@anto-sh/admin-network-shared'
-import type { CrudApi, CreateCrudApiOptions, CategoryCrudApi, EntityCrudApi } from './types'
+import type { CreateCrudApiOptions, CategoryCrudApi, EntityCrudApi } from './types'
 import { apiClient } from '@/shared/api/client'
 
 /**
@@ -35,19 +35,18 @@ export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(options: Cre
     },
   }
 
-  const specificMethods: Pick<
-    CrudApi<TResponseDto, TCreateDto, TUpdateDto>,
-    'getById' | 'getAllWithEntities'
-  > = {}
-
-  if (options.type === 'entity')
-    specificMethods.getById = (id: number): Promise<ApiResponse<TResponseDto>> => {
-      return apiClient.get(`${options.url}/${id}`).then((res) => res.data)
-    }
-  else
-    specificMethods.getAllWithEntities = (): Promise<ApiResponse<TResponseDto[]>> => {
-      return apiClient.get(`${options.url}/with-entities}`).then((res) => res.data)
-    }
+  const specificMethods =
+    options.type === 'entity'
+      ? {
+          getById(id: number): Promise<ApiResponse<TResponseDto>> {
+            return apiClient.get(`${options.url}/${id}`).then((res) => res.data)
+          },
+        }
+      : {
+          getAllWithEntities(): Promise<ApiResponse<TResponseDto[]>> {
+            return apiClient.get(`${options.url}/with-entities}`).then((res) => res.data)
+          },
+        }
 
   return {
     url: options.url,
