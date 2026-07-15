@@ -1,18 +1,22 @@
-import { useExerciseCategoryStore } from '@/entities/exercise-category/store'
-import { onMounted } from 'vue'
+import { useExerciseCategoryModel } from '@/entities/exercise-category/model'
+import { computed, onMounted } from 'vue'
 import { useConfirm } from 'primevue'
-import { useExerciseStore } from '@/entities/exercise/store'
+import { useExerciseModel } from '@/entities/exercise/model'
 import { useRouter } from 'vue-router'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useExercisesListModel() {
-  const exerciseCategoryStore = useExerciseCategoryStore()
-  const exerciseStore = useExerciseStore()
+  const exerciseCategoryModel = useExerciseCategoryModel()
+  const exerciseModel = useExerciseModel()
   const confirmService = useConfirm()
   const router = useRouter()
 
+  const isLoading = computed(
+    () => exerciseModel.isLoading.value || exerciseCategoryModel.isLoading.value,
+  )
+
   onMounted(() => {
-    exerciseCategoryStore.fetchExerciseCategoriesWithExercises()
+    exerciseCategoryModel.fetchAllWithEntities()
   })
 
   const confirmDeleteExercise = (id: number, event: MouseEvent) => {
@@ -30,8 +34,8 @@ export function useExercisesListModel() {
         severity: 'danger',
       },
       accept: async () => {
-        await exerciseStore.deleteExercise(id)
-        exerciseCategoryStore.fetchExerciseCategoriesWithExercises()
+        await exerciseModel.delete(id)
+        exerciseCategoryModel.fetchAllWithEntities()
       },
     })
   }
@@ -59,7 +63,8 @@ export function useExercisesListModel() {
   }
 
   return {
-    exerciseCategoryStore,
+    categoriesWithExercises: exerciseCategoryModel.categories,
+    isLoading,
     confirmDeleteExercise,
     goToExerciseCreate,
     goToExerciseEdit,

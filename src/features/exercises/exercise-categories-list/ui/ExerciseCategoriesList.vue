@@ -3,7 +3,7 @@ import { Button, InputText, ConfirmPopup } from 'primevue'
 import { useExerciseCategoriesListModel } from '../model/useExerciseCategoriesListModel'
 
 const {
-  exerciseCategoryStore: ecStore,
+  categoriesWithExercises,
   newExerciseCategory,
   addExerciseCategory,
   updateExerciseCategory,
@@ -12,8 +12,8 @@ const {
 </script>
 
 <template>
-  <template v-if="ecStore.exerciseCategories?.length">
-    <div v-for="item in ecStore.exerciseCategories" :key="item.id" class="my-1">
+  <form v-if="categoriesWithExercises.length" @submit.prevent>
+    <div v-for="item in categoriesWithExercises" :key="item.id" class="my-1">
       <InputText v-model.trim="item.name" placeholder="Название" />
       <InputText v-model.trim="item.url" class="ml-2" placeholder="Url (опционально)" />
       <Button
@@ -28,7 +28,7 @@ const {
         class="ml-2"
       />
       <Button
-        :disabled="ecStore.exerciseCategories.length === 1"
+        :disabled="categoriesWithExercises.length === 1"
         icon="pi pi-trash"
         severity="danger"
         @click="confirmDeleteExerciseCategory(item.id, item.exercises?.length, $event)"
@@ -36,8 +36,9 @@ const {
       />
       <span class="ml-4 text-gray-400">Упражнений: {{ item.exercises?.length || 0 }}</span>
     </div>
-  </template>
-  <div class="mt-10">
+  </form>
+
+  <form @submit.prevent class="mt-10">
     <h3 class="text-xl mb-2">Добавить новую категорию</h3>
     <InputText v-model.trim="newExerciseCategory.name" placeholder="Название" />
     <InputText
@@ -52,7 +53,8 @@ const {
       class="ml-2"
       @click="addExerciseCategory(newExerciseCategory)"
     />
-  </div>
+  </form>
+
   <ConfirmPopup
     class="w-[400px]"
     :pt="{

@@ -1,7 +1,7 @@
-import { useExerciseCategoryStore } from '@/entities/exercise-category/store'
+import { useExerciseCategoryModel } from '@/entities/exercise-category/model'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useConfirm } from 'primevue'
-import { useExerciseStore } from '@/entities/exercise/store'
+import { useExerciseModel } from '@/entities/exercise/model'
 import type { OutputData } from '@editorjs/editorjs'
 import { useRoute, useRouter } from 'vue-router'
 import type { EditorJsWrapperExposed } from '@/features/editorjs-wrapper/types'
@@ -9,8 +9,8 @@ import type { ComponentPublicInstance } from 'vue'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useExerciseEditorModel() {
-  const exerciseCategoryStore = useExerciseCategoryStore()
-  const exerciseStore = useExerciseStore()
+  const exerciseCategoryModel = useExerciseCategoryModel()
+  const exerciseModel = useExerciseModel()
   const confirmService = useConfirm()
   const router = useRouter()
   const route = useRoute()
@@ -26,17 +26,19 @@ export function useExerciseEditorModel() {
   })
   const isShowEditorJs = ref(false)
 
-  const categoriesSelectList = computed(() =>
-    exerciseCategoryStore.exerciseCategories.map((ec) => ({
+  const categoriesSelectOptions = computed(() =>
+    exerciseCategoryModel.categories.value.map((ec) => ({
       id: ec.id,
       name: ec.name,
     })),
   )
 
   onMounted(async () => {
-    await exerciseCategoryStore.fetchExerciseCategories()
+    await exerciseCategoryModel.fetchAll()
+
     if (exerciseId) {
-      const { data } = await exerciseStore.fetchExerciseById(exerciseId)
+      const data = await exerciseModel.fetchById(exerciseId)
+
       if (data)
         formData.value = {
           name: data.name,
@@ -50,11 +52,11 @@ export function useExerciseEditorModel() {
   const saveExercise = async () => {
     const editorjsContent = await editorjsRef.value?.saveAndGetEditorJsContent()
     formData.value.contentJson = editorjsContent
-    if (exerciseId) await exerciseStore.updateExercise(exerciseId, formData.value)
-    else await exerciseStore.addExercise(formData.value)
-    router.push({
-      name: 'exercises',
-    })
+
+    if (exerciseId) await exerciseModel.update(exerciseId, formData.value)
+    else await exerciseModel.add(formData.value)
+
+    cancelEditor()
   }
 
   const cancelEditor = () => {
@@ -78,10 +80,8 @@ export function useExerciseEditorModel() {
         severity: 'danger',
       },
       accept: async () => {
-        await exerciseStore.deleteExercise(exerciseId)
-        router.push({
-          name: 'exercises',
-        })
+        await exerciseModel.delete(exerciseId)
+        cancelEditor()
       },
     })
   }
@@ -90,7 +90,7 @@ export function useExerciseEditorModel() {
     exerciseId,
     readonly,
     formData,
-    categoriesSelectList,
+    categoriesSelectOptions,
     isShowEditorJs,
     saveExercise,
     cancelEditor,

@@ -21,6 +21,7 @@ if (expertId) {
   if (readonly) usePageTitle(`Просмотр специалиста #${expertId}`)
   else usePageTitle(`Редактирование специалиста #${expertId}`)
 } else usePageTitle('Добавление нового специалиста')
+
 defineExpose({ expertId, readonly })
 </script>
 

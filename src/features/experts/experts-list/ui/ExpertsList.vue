@@ -39,6 +39,7 @@ const {
             label="Добавить специалиста в категорию"
           />
         </AccordionHeader>
+
         <AccordionContent>
           <ul v-if="ec.experts?.length">
             <li v-for="expert in ec.experts" :key="expert.id" class="accordion-entity-list-item">
@@ -70,6 +71,7 @@ const {
       </AccordionPanel>
     </Accordion>
   </template>
+
   <ConfirmPopup
     class="w-[200px]"
     :pt="{
