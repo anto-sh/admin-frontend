@@ -7,10 +7,7 @@ const props = defineProps<{
   readonly?: boolean
 }>()
 
-const { isDark, saveAndGetEditorJsContent } = useEditorJsWrapperModel(
-  props.initialData,
-  props.readonly,
-)
+const { saveAndGetEditorJsContent } = useEditorJsWrapperModel(props.initialData, props.readonly)
 
 defineExpose({
   saveAndGetEditorJsContent,
@@ -18,12 +15,12 @@ defineExpose({
 </script>
 
 <template>
-  <div id="editorjs" class="editorjs-container" :class="isDark ? 'editorjs-container--dark' : ''" />
+  <div id="editorjs" class="editorjs-container" :class="'editorjs-container--dark'" />
 </template>
 
 <style lang="scss">
 // TODO: проинспектировать решение, возможно упростить, убрать лишнее
-// темизация editor.js для темной темы
+// стилизация editor.js под темную тему
 
 .editorjs-container {
   &--dark {

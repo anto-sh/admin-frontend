@@ -25,10 +25,6 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
 
   const editorInstance = ref<EditorJS | null>(null)
 
-  // Некоторый хак, вычисляющий установлена ли сейчас темная тема в primeVue
-  // Необходимо для темизации editor.js
-  const isDark = computed(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
-
   onMounted(() => {
     editorInstance.value = new EditorJS(editorJsConfig.value)
   })
@@ -184,7 +180,6 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
     },
   }))
   return {
-    isDark,
     saveAndGetEditorJsContent,
   }
 }
