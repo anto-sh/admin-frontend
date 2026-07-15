@@ -2,7 +2,7 @@ import type { ApiResponse } from '@anto-sh/admin-network-shared'
 import type { Ref, UnwrapRef } from 'vue'
 
 /* ──────────────────── CRUD API FACTORY ─────────────────── */
-export interface CreateCrudApiOptions<T = 'entity' | 'category'> {
+export interface CreateCrudApiOptions<T extends 'entity' | 'category' = 'entity' | 'category'> {
   type: T
   url: string
 }

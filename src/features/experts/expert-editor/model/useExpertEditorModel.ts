@@ -1,7 +1,7 @@
-import { useExpertCategoryStore } from '@/entities/expert-category/store'
+import { useExpertCategoryModel } from '@/entities/expert-category/model'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
 import { useConfirm, type FileUploadSelectEvent } from 'primevue'
-import { useExpertStore } from '@/entities/expert/store'
+import { useExpertModel } from '@/entities/expert/model'
 import type { OutputData } from '@editorjs/editorjs'
 import { useRoute, useRouter } from 'vue-router'
 import type { EditorJsWrapperExposed } from '@/features/editorjs-wrapper/types'
@@ -10,8 +10,8 @@ import { STRING_BOOLEAN } from '@/shared/enums/common'
 import { imageApi } from '@/shared/api/image'
 
 export function useExpertEditorModel() {
-  const expertCategoryStore = useExpertCategoryStore()
-  const expertStore = useExpertStore()
+  const expertCategoryModel = useExpertCategoryModel()
+  const expertModel = useExpertModel()
   const confirmService = useConfirm()
   const router = useRouter()
   const route = useRoute()
@@ -28,17 +28,19 @@ export function useExpertEditorModel() {
   })
   const isShowEditorJs = ref(false)
 
-  const categoriesSelectList = computed(() =>
-    expertCategoryStore.expertCategories.map((ec) => ({
+  const categoriesSelectOptions = computed(() =>
+    expertCategoryModel.categories.value.map((ec) => ({
       id: ec.id,
       name: ec.name,
     })),
   )
 
   onMounted(async () => {
-    await expertCategoryStore.fetchExpertCategories()
+    await expertCategoryModel.fetchAll()
+
     if (expertId) {
-      const { data } = await expertStore.fetchExpertById(expertId)
+      const data = await expertModel.fetchById(expertId)
+
       if (data)
         formData.value = {
           fullName: data.fullName,
@@ -53,17 +55,18 @@ export function useExpertEditorModel() {
 
   const uploadExpertImage = async (event: FileUploadSelectEvent) => {
     const { data: fileData } = await imageApi.upload(event.files[0])
+
     formData.value.imageUrl = fileData?.url || ''
   }
 
   const saveExpert = async () => {
     const editorjsContent = await editorjsRef.value?.saveAndGetEditorJsContent()
     formData.value.contentJson = editorjsContent
-    if (expertId) await expertStore.updateExpert(expertId, formData.value)
-    else await expertStore.addExpert(formData.value)
-    router.push({
-      name: 'experts',
-    })
+
+    if (expertId) await expertModel.update(expertId, formData.value)
+    else await expertModel.add(formData.value)
+
+    cancelEditor()
   }
 
   const cancelEditor = () => {
@@ -87,10 +90,8 @@ export function useExpertEditorModel() {
         severity: 'danger',
       },
       accept: async () => {
-        await expertStore.deleteExpert(expertId)
-        router.push({
-          name: 'experts',
-        })
+        await expertModel.delete(expertId)
+        cancelEditor()
       },
     })
   }
@@ -99,8 +100,9 @@ export function useExpertEditorModel() {
     expertId,
     readonly,
     formData,
-    categoriesSelectList,
+    categoriesSelectOptions,
     isShowEditorJs,
+
     uploadExpertImage,
     saveExpert,
     cancelEditor,

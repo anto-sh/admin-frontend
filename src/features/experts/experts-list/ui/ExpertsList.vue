@@ -8,7 +8,7 @@ import ConfirmPopup from 'primevue/confirmpopup'
 import { useExpertsListModel } from '../model/useExpertsListModel'
 
 const {
-  expertCategoryStore: ecStore,
+  categoriesWithExperts,
   confirmDeleteExpert,
   goToExpertCreate,
   goToExpertEdit,
@@ -23,14 +23,9 @@ const {
     size="large"
     icon="pi pi-plus"
   />
-  <template v-if="ecStore.expertCategories?.length">
+  <template v-if="categoriesWithExperts.length">
     <Accordion :value="['0']" multiple class="mt-10">
-      <AccordionPanel
-        v-for="ec in ecStore.expertCategories"
-        :key="ec.id"
-        :value="ec.id"
-        class="my-3"
-      >
+      <AccordionPanel v-for="ec in categoriesWithExperts" :key="ec.id" :value="ec.id" class="my-3">
         <AccordionHeader>
           <div>
             <span class="text-2xl">{{ ec.name }}</span>

@@ -10,7 +10,7 @@ import type {
  * Фабрика для создания базовых store-like CRUD composables.
  * Изначально для слоя бизнес-сущностей (entities) в качестве model для работы с локальным состоянием.
  * @param { EntityCrudApi | CategoryCrudApi } crudApi - CRUD API-клиент
- * @return { EntityCrudComposable | CategoryCrudComposable } - CRUD Composable
+ * @return { EntityCrudComposable | CategoryCrudComposable } CRUD Composable
  */
 
 export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
@@ -122,6 +122,8 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
 
     return {
       [isCrudForEntity ? 'entities' : 'categories']: readonly(items),
+      // When using this model, consider isLoading to be a read-only property
+      // It is not "physically" read-only, as it needs to be modified when extending baseCrud with custom methods
       isLoading: isLoading,
       ...baseCrudMethods,
       ...specificMethods,
