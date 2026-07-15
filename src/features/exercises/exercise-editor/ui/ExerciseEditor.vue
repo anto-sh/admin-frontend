@@ -80,6 +80,7 @@ defineExpose({ exerciseId, readonly })
       </div>
     </div>
   </form>
+
   <ConfirmPopup
     class="w-[200px]"
     :pt="{

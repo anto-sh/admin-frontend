@@ -1,12 +1,12 @@
 <script setup lang="ts">
 // TODO: подумать над выделением в общий компонент вместе с ExerciseCategoriesList
-// этот компонент один в один совпадает с компонентов категорий упражнений
+// этот компонент один в один совпадает с компонентом категорий упражнений
 
 import { Button, InputText, ConfirmPopup } from 'primevue'
 import { useServiceCategoriesListModel } from '../model/useServiceCategoriesListModel'
 
 const {
-  serviceCategoryStore: scStore,
+  categoriesWithServices,
   newServiceCategory,
   addServiceCategory,
   updateServiceCategory,
@@ -15,8 +15,8 @@ const {
 </script>
 
 <template>
-  <template v-if="scStore.serviceCategories?.length">
-    <div v-for="item in scStore.serviceCategories" :key="item.id" class="my-1">
+  <form v-if="categoriesWithServices.length" @submit.prevent>
+    <div v-for="item in categoriesWithServices" :key="item.id" class="my-1">
       <InputText v-model.trim="item.name" placeholder="Название" />
       <InputText v-model.trim="item.url" class="ml-2" placeholder="Url (опционально)" />
       <Button
@@ -31,7 +31,7 @@ const {
         class="ml-2"
       />
       <Button
-        :disabled="scStore.serviceCategories.length === 1"
+        :disabled="categoriesWithServices.length === 1"
         icon="pi pi-trash"
         severity="danger"
         @click="confirmDeleteServiceCategory(item.id, item.services?.length, $event)"
@@ -39,8 +39,9 @@ const {
       />
       <span class="ml-4 text-gray-400">Услуг: {{ item.services?.length || 0 }}</span>
     </div>
-  </template>
-  <div class="mt-10">
+  </form>
+
+  <form class="mt-10" @submit.prevent>
     <h3 class="text-xl mb-2">Добавить новую категорию</h3>
     <InputText v-model.trim="newServiceCategory.name" placeholder="Название" />
     <InputText v-model.trim="newServiceCategory.url" class="ml-2" placeholder="Url (опционально)" />
@@ -51,7 +52,8 @@ const {
       class="ml-2"
       @click="addServiceCategory(newServiceCategory)"
     />
-  </div>
+  </form>
+
   <ConfirmPopup
     class="w-[400px]"
     :pt="{
