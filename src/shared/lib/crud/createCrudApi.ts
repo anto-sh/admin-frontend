@@ -45,7 +45,7 @@ export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(options: Cre
         }
       : {
           getAllWithEntities(): Promise<ApiResponse<TResponseDto[]>> {
-            return apiClient.get(`${options.url}/with-entities}`).then((res) => res.data)
+            return apiClient.get(`${options.url}/with-entities`).then((res) => res.data)
           },
         }
 
