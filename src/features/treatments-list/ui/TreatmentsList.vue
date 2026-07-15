@@ -3,9 +3,11 @@ import { Button, InputText, ConfirmPopup } from 'primevue'
 import { useTreatmentsListModel } from '../model/useTreatmentsListModel'
 
 const {
-  treatmentStore,
+  treatmentEntities,
   newTreatmentName,
+  isLoading,
   addTreatment,
+  updateTreatment,
   deleteTreatment,
   confirmCancelAll,
   confirmSaveAll,
@@ -13,20 +15,16 @@ const {
 </script>
 
 <template>
-  <div v-if="treatmentStore.treatments?.length" class="w-1/2 min-w-120 space-y-2">
-    <div
-      v-for="item in treatmentStore.treatments"
-      :key="item.id"
-      class="flex items-center gap-2"
-    >
+  <form v-if="treatmentEntities?.length" @submit.prevent class="w-1/2 min-w-120 space-y-2">
+    <div v-for="item in treatmentEntities" :key="item.id" class="flex items-center gap-2">
       <InputText v-model.trim="item.name" class="w-full" placeholder="Название" />
       <Button
         :disabled="!item.name"
         icon="pi pi-save"
-        @click="treatmentStore.updateTreatment(item.id, { name: item.name })"
+        @click="updateTreatment(item.id, { name: item.name })"
       />
       <Button
-        :disabled="treatmentStore.treatments.length === 1"
+        :disabled="treatmentEntities.length === 1"
         icon="pi pi-trash"
         severity="danger"
         @click="deleteTreatment(item.id)"
@@ -34,7 +32,7 @@ const {
     </div>
     <div class="flex gap-2 mt-6">
       <Button
-        :disabled="treatmentStore.treatments.length === 1"
+        :disabled="treatmentEntities.length === 1"
         label="Сохранить всё"
         icon="pi pi-save"
         severity="primary"
@@ -47,18 +45,19 @@ const {
         @click="confirmCancelAll($event)"
       />
     </div>
-  </div>
-  <div class="w-1/2 min-w-120 mt-10">
+  </form>
+  <form @submit.prevent class="w-1/2 min-w-120 mt-10">
     <h3 class="text-xl mb-2">Добавить новый пункт</h3>
     <div class="flex gap-2">
       <InputText v-model.trim="newTreatmentName" class="w-full" placeholder="Название" />
       <Button
-        :disabled="!newTreatmentName"
+        :disabled="!newTreatmentName || isLoading"
+        :loading="isLoading"
         label="Добавить"
         icon="pi pi-plus"
         @click="addTreatment({ name: newTreatmentName })"
       />
     </div>
-  </div>
+  </form>
   <ConfirmPopup class="w-[400px]" />
 </template>

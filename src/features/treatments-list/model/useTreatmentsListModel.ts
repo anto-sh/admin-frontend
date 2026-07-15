@@ -1,23 +1,42 @@
-import { useTreatmentStore } from '@/entities/treatment/store'
-import { onMounted, ref } from 'vue'
-import type { CreateTreatmentDto } from '@/entities/treatment/types'
+import { useTreatmentModel } from '@/entities/treatment/model'
+import { onMounted, ref, toRaw, watch } from 'vue'
+import type {
+  CreateTreatmentDto,
+  TreatmentDto,
+  UpdateTreatmentDto,
+} from '@/entities/treatment/types'
 import { useConfirm } from 'primevue/useconfirm'
 
 export function useTreatmentsListModel() {
-  const treatmentStore = useTreatmentStore()
+  const treatmentModel = useTreatmentModel()
   const newTreatmentName = ref('')
   const confirmService = useConfirm()
 
+  const treatmentEntities = ref<TreatmentDto[]>()
+
   onMounted(() => {
-    treatmentStore.fetchTreatments()
+    treatmentModel.fetchAll()
   })
 
-  const addTreatment = (dto: CreateTreatmentDto) => {
-    treatmentStore.addTreatment(dto)
+  watch(
+    treatmentModel.entities,
+    () => (treatmentEntities.value = structuredClone(toRaw(treatmentModel.entities.value))),
+    { deep: true },
+  )
+
+  const addTreatment = async (dto: CreateTreatmentDto) => {
+    await treatmentModel.add(dto)
     newTreatmentName.value = ''
+    treatmentModel.fetchAll()
   }
-  const deleteTreatment = (id: number) => {
-    treatmentStore.deleteTreatment(id)
+  const deleteTreatment = async (id: number) => {
+    await treatmentModel.delete(id)
+    treatmentModel.fetchAll()
+  }
+
+  const updateTreatment = async (id: number, dto: UpdateTreatmentDto) => {
+    await treatmentModel.update(id, dto)
+    treatmentModel.fetchAll()
   }
 
   const confirmCancelAll = (event: MouseEvent) => {
@@ -35,7 +54,7 @@ export function useTreatmentsListModel() {
         severity: 'danger',
       },
       accept: () => {
-        treatmentStore.fetchTreatments()
+        treatmentModel.fetchAll()
       },
     })
   }
@@ -52,15 +71,20 @@ export function useTreatmentsListModel() {
       acceptProps: {
         label: 'Да',
       },
-      accept: () => {
-        treatmentStore.updateAllTreatments()
+      accept: async () => {
+        if (treatmentEntities.value) {
+          await treatmentModel.updateBatch(treatmentEntities.value)
+          treatmentModel.fetchAll()
+        }
       },
     })
   }
   return {
-    treatmentStore,
+    treatmentEntities,
     newTreatmentName,
+    isLoading: treatmentModel.isLoading,
     addTreatment,
+    updateTreatment,
     deleteTreatment,
     confirmCancelAll,
     confirmSaveAll,

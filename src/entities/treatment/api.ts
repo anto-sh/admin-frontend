@@ -6,26 +6,18 @@ import type {
   UpdateTreatmentDto,
 } from './types'
 import type { ApiResponse } from '@anto-sh/admin-network-shared'
+import { createCrudApi } from '@/shared/lib/crud'
+
+export const treatmentApiBase = createCrudApi<TreatmentDto, CreateTreatmentDto, UpdateTreatmentDto>(
+  {
+    type: 'entity',
+    url: '/treatments',
+  },
+)
 
 export const treatmentApi = {
-  async getAll(): Promise<ApiResponse<TreatmentDto[]>> {
-    const { data: response } = await apiClient.get('/treatments/')
-    return response
-  },
-  async add(dto: CreateTreatmentDto): Promise<ApiResponse<TreatmentDto>> {
-    const { data: response } = await apiClient.post('/treatments', dto)
-    return response
-  },
-  async update(id: number, dto: UpdateTreatmentDto): Promise<ApiResponse<never>> {
-    const { data: response } = await apiClient.put(`/treatments/${id}`, dto)
-    return response
-  },
+  ...treatmentApiBase,
   async updateBatch(dtoArr: UpdateTreatmentBatchDto[]): Promise<ApiResponse<never>> {
-    const { data: response } = await apiClient.patch(`/treatments/batch`, dtoArr)
-    return response
-  },
-  async delete(id: number): Promise<ApiResponse<never>> {
-    const { data: response } = await apiClient.delete(`/treatments/${id}`)
-    return response
+    return apiClient.patch(`${treatmentApiBase.url}/batch`, dtoArr).then((res) => res.data)
   },
 }
