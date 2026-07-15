@@ -11,7 +11,6 @@ export const usePriceModel = () => {
     priceBase.isLoading.value = true
     try {
       await priceApi.updateBatch(dtoArr)
-      await priceBase.fetchAll()
     } finally {
       priceBase.isLoading.value = false
     }

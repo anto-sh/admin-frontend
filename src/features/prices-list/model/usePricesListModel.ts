@@ -1,7 +1,7 @@
 import { usePriceModel } from '@/entities/price/model'
-import { onMounted, ref, watch } from 'vue'
+import { onMounted, ref, watch, toRaw } from 'vue'
 import { useConfirm } from 'primevue/useconfirm'
-import type { PriceDto } from '@/entities/price/types'
+import type { PriceDto, UpdatePriceDto } from '@/entities/price/types'
 
 export function usePricesListModel() {
   const confirmService = useConfirm()
@@ -18,17 +18,27 @@ export function usePricesListModel() {
 
   watch(
     priceModel.entities,
-    () => (priceEntities.value = JSON.parse(JSON.stringify(priceModel.entities.value))),
-    { deep: true, immediate: true },
+    () => {
+      console.log('changed')
+      priceEntities.value = structuredClone(toRaw(priceModel.entities.value))
+    },
+    { deep: true },
   )
 
-  const addPrice = () => {
-    priceModel.add(newPrice.value)
+  const addPrice = async () => {
+    await priceModel.add(newPrice.value)
     newPrice.value = { ...newPriceDefaultValue }
+    priceModel.fetchAll()
   }
 
-  const deletePrice = (id: number) => {
-    priceModel.delete(id)
+  const deletePrice = async (id: number) => {
+    await priceModel.delete(id)
+    priceModel.fetchAll()
+  }
+
+  const updatePrice = async (id: number, dto: UpdatePriceDto) => {
+    await priceModel.update(id, dto)
+    priceModel.fetchAll()
   }
 
   const confirmCancelAll = (event: MouseEvent) => {
@@ -64,8 +74,11 @@ export function usePricesListModel() {
       acceptProps: {
         label: 'Да',
       },
-      accept: () => {
-        if (priceEntities.value) priceModel.updateBatch(priceEntities.value)
+      accept: async () => {
+        if (priceEntities.value) {
+          await priceModel.updateBatch(priceEntities.value)
+          priceModel.fetchAll()
+        }
       },
     })
   }
@@ -73,8 +86,9 @@ export function usePricesListModel() {
   return {
     priceEntities,
     newPrice,
+    isLoading: priceModel.isLoading,
     addPrice,
-    updatePrice: priceModel.update,
+    updatePrice,
     deletePrice,
     confirmCancelAll,
     confirmSaveAll,

@@ -5,7 +5,7 @@ import { apiClient } from '@/shared/api/client'
 
 const priceApiBase = createCrudApi<PriceDto, CreatePriceDto, UpdatePriceDto>({
   type: 'entity',
-  url: 'prices',
+  url: '/prices',
 })
 
 export const priceApi = {

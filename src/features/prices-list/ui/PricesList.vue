@@ -6,6 +6,7 @@ import { usePricesListModel } from '../model/usePricesListModel'
 const {
   priceEntities,
   newPrice,
+  isLoading,
   addPrice,
   updatePrice,
   deletePrice,
@@ -15,8 +16,8 @@ const {
 </script>
 
 <template>
-  <div v-if="priceEntities?.length" class="w-2/3 min-w-150 space-y-2">
-    <div v-for="price in priceEntities" :key="price.id" class="flex items-center gap-2">
+  <form v-if="priceEntities?.length" @submit.prevent class="w-2/3 min-w-150 space-y-2">
+    <div v-for="price of priceEntities" :key="price.id" class="flex items-center gap-2">
       <InputText v-model.trim="price.name" placeholder="Название" class="flex-2" />
       <InputNumber
         v-model="price.price"
@@ -31,7 +32,7 @@ const {
         :max="10_000_000"
       />
       <Button
-        :disabled="!price.name"
+        :disabled="!price.name || price.price == null"
         icon="pi pi-save"
         @click="updatePrice(price.id, { name: price.name, price: price.price })"
       />
@@ -58,14 +59,16 @@ const {
         @click="confirmCancelAll($event)"
       />
     </div>
-  </div>
-  <div class="w-2/3 min-w-150 mt-10">
+  </form>
+  <form @submit.prevent class="w-2/3 min-w-150 mt-10">
     <h3 class="text-xl mb-2">Добавить новую цену</h3>
     <div class="flex gap-2">
       <InputText v-model.trim="newPrice.name" placeholder="Название" class="flex-3" />
-      <!-- InputNumber работает с модификатором .lazy для v-model и поэтому значение обновляется только на блюре
-      в нашем случае такая обработка сделает UX менее приятным
-      поэтому пишем кастомный обработчик на событие input -->
+      <!--
+      InputNumber почему-то работает только с модификатором .lazy для v-model, поэтому значение обновляется на блюре,
+      в нашем случае такая обработка сделает UX менее приятным из-за атрибута disabled у кнопки добавления,
+      поэтому пишем кастомный обработчик на событие input
+      -->
       <InputNumber
         :modelValue="newPrice.price"
         class="flex-1"
@@ -82,11 +85,12 @@ const {
       <Button
         label="Добавить"
         icon="pi pi-plus"
-        :disabled="!newPrice.name || newPrice.price == null"
+        :disabled="!newPrice.name || newPrice.price == null || isLoading"
+        :loading="isLoading"
         @click="addPrice()"
       />
     </div>
-  </div>
+  </form>
 
   <ConfirmPopup class="w-[400px]" />
 </template>
