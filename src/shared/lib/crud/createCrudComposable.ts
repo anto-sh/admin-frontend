@@ -1,4 +1,4 @@
-import { readonly, ref, type Ref } from 'vue'
+import { customRef, readonly, ref, toRaw, type Ref } from 'vue'
 import type {
   EntityCrudApi,
   CategoryCrudApi,
@@ -8,8 +8,9 @@ import type {
 
 /**
  * Фабрика для создания базовых store-like CRUD composables.
- * Изначально для слоя бизнес-сущностей (entities) в качестве model.
- * @param { CrudComposable } crudApi - CRUD API-клиент
+ * Изначально для слоя бизнес-сущностей (entities) в качестве model для работы с локальным состоянием.
+ * @param { EntityCrudApi | CategoryCrudApi } crudApi - CRUD API-клиент
+ * @return { EntityCrudComposable | CategoryCrudComposable } - CRUD Composable
  */
 
 export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
@@ -26,11 +27,34 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
     | CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
 ) {
   const isCrudForEntity = 'getById' in crudApi
+
   return () => {
     const items: Ref<TResponseDto[]> = ref([]) as Ref<TResponseDto[]>
 
-    // IT'S READONLY IN OTHER LAYERS
-    const isLoading = ref(false)
+    // debouncing customRef
+    const isLoading = customRef((track, trigger) => {
+      let value = false
+      let isLoadingTimeout: number
+      return {
+        get() {
+          track()
+          return value
+        },
+        // only set to false is debounced to prevent flashing
+        set(newValue: boolean) {
+          if (!newValue) {
+            clearTimeout(isLoadingTimeout)
+            isLoadingTimeout = setTimeout(() => {
+              value = newValue
+              trigger()
+            }, 200)
+          } else {
+            value = newValue
+            trigger()
+          }
+        },
+      }
+    })
 
     const baseCrudMethods = {
       async fetchAll() {
@@ -63,7 +87,9 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
         isLoading.value = true
         try {
           await crudApi.delete(id)
-          items.value = items.value.filter((i) => i.id !== id)
+          items.value = toRaw(items.value).filter((i) => {
+            return i.id !== id
+          })
         } finally {
           isLoading.value = false
         }
@@ -96,8 +122,7 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
 
     return {
       [isCrudForEntity ? 'entities' : 'categories']: readonly(items),
-      // IT'S READONLY IN OTHER LAYERS
-      isLoading,
+      isLoading: isLoading,
       ...baseCrudMethods,
       ...specificMethods,
     }
