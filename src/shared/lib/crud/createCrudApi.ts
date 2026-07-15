@@ -9,6 +9,7 @@ import { apiClient } from '@/shared/api/client'
  * @param { CreateCrudApiOptions } options - Определяющие параметры
  * @param { "entity" | "category" } options.type "entity" | "category" - Влияет на наличие специфичных методов
  * @param { string } options.url - Адрес эндпоинта в формате '/endpoint-url'
+ * @returns { EntityCrudApi | CategoryCrudApi } - CRUD API
  */
 
 export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(
