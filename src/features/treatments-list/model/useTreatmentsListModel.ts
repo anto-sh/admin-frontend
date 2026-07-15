@@ -12,7 +12,7 @@ export function useTreatmentsListModel() {
   const newTreatmentName = ref('')
   const confirmService = useConfirm()
 
-  const treatmentEntities = ref<TreatmentDto[]>()
+  const treatmentEntities = ref<TreatmentDto[]>([])
 
   onMounted(() => {
     treatmentModel.fetchAll()

@@ -10,7 +10,7 @@ export function usePricesListModel() {
   const newPriceDefaultValue = { name: '', price: 0 }
   const newPrice = ref<{ name: string; price: number }>({ ...newPriceDefaultValue })
 
-  const priceEntities = ref<PriceDto[]>()
+  const priceEntities = ref<PriceDto[]>([])
 
   onMounted(() => {
     priceModel.fetchAll()
@@ -19,7 +19,6 @@ export function usePricesListModel() {
   watch(
     priceModel.entities,
     () => {
-      console.log('changed')
       priceEntities.value = structuredClone(toRaw(priceModel.entities.value))
     },
     { deep: true },

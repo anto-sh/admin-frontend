@@ -1,6 +1,9 @@
 import { useExerciseCategoryModel } from '@/entities/exercise-category/model'
-import { onMounted, ref } from 'vue'
-import type { CreateExerciseCategoryDto } from '@/entities/exercise-category/types'
+import { onMounted, ref, toRaw, watch } from 'vue'
+import type {
+  CreateExerciseCategoryDto,
+  ExerciseCategoryDto,
+} from '@/entities/exercise-category/types'
 import { slugify } from 'transliteration'
 import { useConfirm } from 'primevue'
 
@@ -13,9 +16,19 @@ export function useExerciseCategoriesListModel() {
   const newExerciseCategory = ref<CreateExerciseCategoryDto>({ ...newExerciseCategoryDefaultValue })
   const confirmService = useConfirm()
 
+  const categoriesWithExercises = ref<ExerciseCategoryDto[]>([])
+
   onMounted(() => {
     exerciseCategoryModel.fetchAllWithEntities()
   })
+
+  watch(
+    exerciseCategoryModel.categories,
+    () => {
+      categoriesWithExercises.value = structuredClone(toRaw(exerciseCategoryModel.categories.value))
+    },
+    { deep: true },
+  )
 
   const addExerciseCategory = async (dto: CreateExerciseCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
@@ -59,7 +72,7 @@ export function useExerciseCategoriesListModel() {
   }
 
   return {
-    categoriesWithExercises: exerciseCategoryModel.categories,
+    categoriesWithExercises,
     newExerciseCategory,
     addExerciseCategory,
     updateExerciseCategory,

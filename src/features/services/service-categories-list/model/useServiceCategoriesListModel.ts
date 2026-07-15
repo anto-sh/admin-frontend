@@ -1,6 +1,9 @@
 import { useServiceCategoryModel } from '@/entities/service-category/model'
-import { onMounted, ref } from 'vue'
-import type { CreateServiceCategoryDto } from '@/entities/service-category/types'
+import { onMounted, ref, toRaw, watch } from 'vue'
+import type {
+  CreateServiceCategoryDto,
+  ServiceCategoryDto,
+} from '@/entities/service-category/types'
 import { slugify } from 'transliteration'
 import { useConfirm } from 'primevue'
 
@@ -13,9 +16,19 @@ export function useServiceCategoriesListModel() {
   const newServiceCategory = ref<CreateServiceCategoryDto>({ ...newServiceCategoryDefaultValue })
   const confirmService = useConfirm()
 
+  const categoriesWithServices = ref<ServiceCategoryDto[]>([])
+
   onMounted(() => {
     serviceCategoryModel.fetchAllWithEntities()
   })
+
+  watch(
+    serviceCategoryModel.categories,
+    () => {
+      categoriesWithServices.value = structuredClone(toRaw(serviceCategoryModel.categories.value))
+    },
+    { deep: true },
+  )
 
   const addServiceCategory = async (dto: CreateServiceCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
@@ -58,7 +71,7 @@ export function useServiceCategoriesListModel() {
   }
 
   return {
-    categoriesWithServices: serviceCategoryModel.categories,
+    categoriesWithServices,
     newServiceCategory,
     addServiceCategory,
     updateServiceCategory,

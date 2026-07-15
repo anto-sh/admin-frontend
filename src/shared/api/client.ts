@@ -42,8 +42,6 @@ apiClient.interceptors.response.use(
     const statusCode = errorRes?.status
     const resData = errorRes?.data
 
-    console.log(errorRes)
-
     const resMessageCompiled = $t(
       i18nDictPrefix + (resData?.message?.code || 'commonErrors.unknown'),
       { ...resData?.message?.params },

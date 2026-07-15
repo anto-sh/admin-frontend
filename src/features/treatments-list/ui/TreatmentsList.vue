@@ -15,7 +15,7 @@ const {
 </script>
 
 <template>
-  <form v-if="treatmentEntities?.length" @submit.prevent class="w-1/2 min-w-120 space-y-2">
+  <form v-if="treatmentEntities.length" @submit.prevent class="w-1/2 min-w-120 space-y-2">
     <div v-for="item in treatmentEntities" :key="item.id" class="flex items-center gap-2">
       <InputText v-model.trim="item.name" class="w-full" placeholder="Название" />
       <Button
