@@ -1,8 +1,12 @@
-import axios, { type AxiosInstance } from 'axios'
-import type { ApiResponseDto } from './types'
+import axios, { AxiosError, type AxiosResponse } from 'axios'
+import type { ValidationError } from './types'
 import { useToastStore } from '../store/useToastStore'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
+import i18n from '@/shared/lib/i18n'
 
-const apiClient: AxiosInstance = axios.create({
+const $t = i18n.global.t
+
+const apiClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL,
   headers: {
     'Content-Type': 'application/json',
@@ -10,38 +14,60 @@ const apiClient: AxiosInstance = axios.create({
   },
 })
 
+const i18nDictPrefix = 'networkMessages.'
+
 apiClient.interceptors.response.use(
-  (response) => {
+  (response: AxiosResponse<ApiResponse>) => {
     const { addToast } = useToastStore()
-    const data = response.data as ApiResponseDto
-    if (data.message && data.status === 'success')
+    const resData = response.data
+
+    if (resData.message && resData.status === 'success') {
+      const resMessageCompiled = $t(i18nDictPrefix + (resData?.message?.code || 'common.success'), {
+        ...resData.message?.params,
+      })
       addToast({
         severity: 'success',
-        summary: 'Ура победа!',
-        detail: data.message,
+        summary: $t('networkMessages.common.successSummary'),
+        detail: resMessageCompiled,
         life: 4e3,
       })
+    }
+
     return response
   },
-  (error) => {
+  (error: AxiosError<ApiResponse<{ errors: ValidationError[] } | undefined>>) => {
     const { addToast } = useToastStore()
-    const errorRes: ApiResponseDto | undefined = error.response.data
-    if (axios.isAxiosError(error)) {
-      addToast({
-        severity: 'error',
-        summary: 'Ошибка запроса',
-        detail: `Код: ${error.response?.status} \n Ошибка: ${error.message} \n Сообщение: ${errorRes?.message}`,
-        life: 20e3,
-      })
-    } else {
-      addToast({
-        severity: 'error',
-        summary: 'Неизвестная ошибка',
-        detail: error,
-        life: 20e3,
-      })
+
+    const errorRes = error.response
+    const statusCode = errorRes?.status
+    const resData = errorRes?.data
+
+    const resMessageCompiled = $t(
+      i18nDictPrefix + (resData?.message?.code || 'commonErrors.unknown'),
+      { ...resData?.message?.params },
+    )
+    addToast({
+      severity: 'error',
+      summary: $t('networkMessages.commonErrors.summary'),
+      detail: $t('networkMessages.complexErrorMessage', {
+        message: resMessageCompiled,
+        statusCode,
+        statusText: errorRes?.statusText,
+      }),
+      life: 20e3,
+    })
+
+    switch (statusCode) {
+      case 401:
+        // заглушка пока нет авторизации
+        break
+      case 422:
+        // заглушка пока нет валидации
+        // const validationErrors = errorRes?.data?.data?.errors
+        break
     }
-    // Пробрасываем ошибку дальше, если нужно обработать в конкретном месте
+
+    // Пробрасываем ошибку дальше, на случай, если нужно обработать в конкретном месте
     return Promise.reject(error)
   },
 )

@@ -1,8 +1,9 @@
 import { apiClient } from './client'
-import type { VideoUploadResponseDto } from './types'
+import type {  FileDataDto } from './types'
+import type { ApiResponse } from '@anto-sh/admin-network-shared'
 
 export const videoApi = {
-  async upload(video: File): Promise<VideoUploadResponseDto> {
+  async upload(video: File): Promise<ApiResponse<FileDataDto>> {
     const formData = new FormData()
     formData.append('video', video)
 

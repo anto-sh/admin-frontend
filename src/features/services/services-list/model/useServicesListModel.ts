@@ -1,18 +1,22 @@
-import { useServiceCategoryStore } from '@/entities/service-category/store'
-import { useServiceStore } from '@/entities/service/store'
-import { onMounted } from 'vue'
+import { useServiceCategoryModel } from '@/entities/service-category/model'
+import { useServiceModel } from '@/entities/service/model'
+import { computed, onMounted } from 'vue'
 import { useConfirm } from 'primevue'
 import { useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useServicesListModel() {
-  const serviceCategoryStore = useServiceCategoryStore()
-  const serviceStore = useServiceStore()
+  const serviceCategoryModel = useServiceCategoryModel()
+  const serviceModel = useServiceModel()
   const confirmService = useConfirm()
   const router = useRouter()
 
+  const isLoading = computed(
+    () => serviceModel.isLoading.value || serviceCategoryModel.isLoading.value,
+  )
+
   onMounted(() => {
-    serviceCategoryStore.fetchServiceCategoriesWithServices()
+    serviceCategoryModel.fetchAllWithEntities()
   })
 
   const confirmDeleteService = (id: number, event: MouseEvent) => {
@@ -30,8 +34,8 @@ export function useServicesListModel() {
         severity: 'danger',
       },
       accept: async () => {
-        await serviceStore.deleteService(id)
-        serviceCategoryStore.fetchServiceCategoriesWithServices()
+        await serviceModel.delete(id)
+        serviceCategoryModel.fetchAllWithEntities()
       },
     })
   }
@@ -54,12 +58,14 @@ export function useServicesListModel() {
     router.push({
       name: 'service-editor',
       params: { id },
-      query: { readonly: StringBoolean.True },
+      query: { readonly: STRING_BOOLEAN.True },
     })
   }
 
   return {
-    serviceCategoryStore,
+    categoriesWithServices: serviceCategoryModel.categories,
+    isLoading,
+    serviceCategoryModel,
     confirmDeleteService,
     goToServiceCreate,
     goToServiceEdit,

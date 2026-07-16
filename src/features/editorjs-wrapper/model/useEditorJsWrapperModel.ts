@@ -16,6 +16,7 @@ import Underline from '@editorjs/underline'
 import Paragraph from '@editorjs/paragraph'
 import UploadVideo from 'editorjs-upload-video-tool'
 import { i18n } from './i18n-dictionary'
+import { imageApi } from '@/shared/api/image'
 
 export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyProp?: boolean) {
   const { addToast } = useToastStore()
@@ -23,10 +24,6 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
   const readonly = ref(readonlyProp)
 
   const editorInstance = ref<EditorJS | null>(null)
-
-  // Некоторый хак, вычисляющий установлена ли сейчас темная тема в primeVue
-  // Необходимо для темизации editor.js
-  const isDark = computed(() => window.matchMedia('(prefers-color-scheme: dark)').matches)
 
   onMounted(() => {
     editorInstance.value = new EditorJS(editorJsConfig.value)
@@ -63,9 +60,14 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
     }
   }
 
+  async function uploadImage(file: File) {
+    const { data } = await imageApi.upload(file)
+    return { success: 1, file: { url: data?.url } }
+  }
+
   async function uploadVideo(file: File) {
-    const { file: resFile } = await videoApi.upload(file)
-    return resFile
+    const { data } = await videoApi.upload(file)
+    return data
   }
 
   function videoErrorHandler(e: Error) {
@@ -155,9 +157,8 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
           features: {
             caption: 'optional',
           },
-          endpoints: {
-            // TODO: можно написать кастомный метод, чтобы не в обход apiClient было
-            byFile: import.meta.env.VITE_API_URL + import.meta.env.VITE_API_IMAGE_UPLOAD_ENDPOINT,
+          uploader: {
+            uploadByFile: uploadImage,
           },
           field: 'image',
           captionPlaceholder: 'Подпись к изображению',
@@ -179,7 +180,6 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
     },
   }))
   return {
-    isDark,
     saveAndGetEditorJsContent,
   }
 }

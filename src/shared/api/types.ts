@@ -1,26 +1,15 @@
-export interface ApiResponseDto<T = unknown> {
-  status: 'success' | 'error'
-  code: number // HTTP статус-код
-  headers?: Record<string, string> // Дополнительные заголовки
-  message: string
-  data?: T // Основные данные ответа
-  timestamp?: string // Дата формирования ответа
-}
-
-export interface ImageUploadResponseDto {
-  success: number
-  file: FileDataDto
-}
-
-export interface VideoUploadResponseDto {
-  success: number
-  file: FileDataDto
-}
-
 export interface FileDataDto {
   url: string
   originalname: string
   mimetype: string
   size: number
   extension: string
+}
+
+export interface ValidationError {
+  target: Record<string, unknown>
+  value: unknown
+  property: string
+  children: unknown[]
+  constraints: Record<string, string>
 }

@@ -1,18 +1,22 @@
-import { useExpertCategoryStore } from '@/entities/expert-category/store'
-import { onMounted } from 'vue'
+import { useExpertCategoryModel } from '@/entities/expert-category/model'
+import { computed, onMounted } from 'vue'
 import { useConfirm } from 'primevue'
-import { useExpertStore } from '@/entities/expert/store'
+import { useExpertModel } from '@/entities/expert/model'
 import { useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useExpertsListModel() {
-  const expertCategoryStore = useExpertCategoryStore()
-  const expertStore = useExpertStore()
+  const expertCategoryModel = useExpertCategoryModel()
+  const expertModel = useExpertModel()
   const confirmService = useConfirm()
   const router = useRouter()
 
+  const isLoading = computed(
+    () => expertCategoryModel.isLoading.value || expertCategoryModel.isLoading.value,
+  )
+
   onMounted(() => {
-    expertCategoryStore.fetchExpertCategoriesWithExperts()
+    expertCategoryModel.fetchAllWithEntities()
   })
 
   const confirmDeleteExpert = (id: number, event: MouseEvent) => {
@@ -30,8 +34,8 @@ export function useExpertsListModel() {
         severity: 'danger',
       },
       accept: async () => {
-        await expertStore.deleteExpert(id)
-        expertCategoryStore.fetchExpertCategoriesWithExperts()
+        await expertModel.delete(id)
+        expertCategoryModel.fetchAllWithEntities()
       },
     })
   }
@@ -54,12 +58,13 @@ export function useExpertsListModel() {
     router.push({
       name: 'expert-editor',
       params: { id },
-      query: { readonly: StringBoolean.True },
+      query: { readonly: STRING_BOOLEAN.True },
     })
   }
 
   return {
-    expertCategoryStore,
+    categoriesWithExperts: expertCategoryModel.categories,
+    isLoading,
     confirmDeleteExpert,
     goToExpertCreate,
     goToExpertEdit,
