@@ -27,7 +27,7 @@ export function useExerciseCategoriesListModel() {
     () => {
       categoriesWithExercises.value = structuredClone(toRaw(exerciseCategoryModel.categories.value))
     },
-    { deep: true },
+    {deep: false}
   )
 
   const addExerciseCategory = async (dto: CreateExerciseCategoryDto) => {

@@ -27,7 +27,7 @@ export function useServiceCategoriesListModel() {
     () => {
       categoriesWithServices.value = structuredClone(toRaw(serviceCategoryModel.categories.value))
     },
-    { deep: true },
+    { deep: false },
   )
 
   const addServiceCategory = async (dto: CreateServiceCategoryDto) => {
