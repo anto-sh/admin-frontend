@@ -9,7 +9,7 @@ const {
   exerciseId,
   readonly,
   formData,
-  categoriesSelectList,
+  categoriesSelectOptions,
   isShowEditorJs,
   saveExercise,
   cancelEditor,
@@ -21,6 +21,7 @@ if (exerciseId) {
   if (readonly) usePageTitle(`Просмотр упражнения #${exerciseId}`)
   else usePageTitle(`Редактирование упражнения #${exerciseId}`)
 } else usePageTitle('Добавление нового упражнения')
+
 defineExpose({ exerciseId, readonly })
 </script>
 
@@ -30,18 +31,20 @@ defineExpose({ exerciseId, readonly })
       <InputText :disabled="readonly" id="name" v-model.trim="formData.name" class="w-full" />
       <label for="name">Название упражнения</label>
     </FloatLabel>
+
     <FloatLabel>
       <Select
         :disabled="readonly"
         id="category"
         v-model="formData.categoryId"
-        :options="categoriesSelectList"
+        :options="categoriesSelectOptions"
         optionLabel="name"
         optionValue="id"
         class="w-full"
       />
       <label for="category">Категория</label>
     </FloatLabel>
+
     <EditorJsWrapper
       v-if="isShowEditorJs"
       ref="editorjs"
@@ -77,6 +80,7 @@ defineExpose({ exerciseId, readonly })
       </div>
     </div>
   </form>
+
   <ConfirmPopup
     class="w-[200px]"
     :pt="{

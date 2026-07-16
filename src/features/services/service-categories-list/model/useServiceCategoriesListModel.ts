@@ -1,11 +1,14 @@
-import { useServiceCategoryStore } from '@/entities/service-category/store'
-import { onMounted, ref } from 'vue'
-import type { CreateServiceCategoryDto } from '@/entities/service-category/types'
+import { useServiceCategoryModel } from '@/entities/service-category/model'
+import { onMounted, ref, toRaw, watch } from 'vue'
+import type {
+  CreateServiceCategoryDto,
+  ServiceCategoryDto,
+} from '@/entities/service-category/types'
 import { slugify } from 'transliteration'
 import { useConfirm } from 'primevue'
 
 export function useServiceCategoriesListModel() {
-  const serviceCategoryStore = useServiceCategoryStore()
+  const serviceCategoryModel = useServiceCategoryModel()
   const newServiceCategoryDefaultValue = {
     name: '',
     url: '',
@@ -13,21 +16,33 @@ export function useServiceCategoriesListModel() {
   const newServiceCategory = ref<CreateServiceCategoryDto>({ ...newServiceCategoryDefaultValue })
   const confirmService = useConfirm()
 
+  const categoriesWithServices = ref<ServiceCategoryDto[]>([])
+
   onMounted(() => {
-    serviceCategoryStore.fetchServiceCategoriesWithServices()
+    serviceCategoryModel.fetchAllWithEntities()
   })
+
+  watch(
+    serviceCategoryModel.categories,
+    () => {
+      categoriesWithServices.value = structuredClone(toRaw(serviceCategoryModel.categories.value))
+    },
+    { deep: false },
+  )
 
   const addServiceCategory = async (dto: CreateServiceCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
-    await serviceCategoryStore.addServiceCategory(dto)
+    await serviceCategoryModel.add(dto)
     newServiceCategory.value = { ...newServiceCategoryDefaultValue }
+    serviceCategoryModel.fetchAllWithEntities()
   }
-  const updateServiceCategory = (id: number, dto: CreateServiceCategoryDto) => {
+  const updateServiceCategory = async (id: number, dto: CreateServiceCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
-    serviceCategoryStore.updateServiceCategory(id, dto)
+    await serviceCategoryModel.update(id, dto)
+    serviceCategoryModel.fetchAllWithEntities()
   }
 
-  const confirmDeleteServiceCategory = (
+  const confirmDeleteServiceCategory = async (
     id: number,
     relatedServicesLength: number | undefined,
     event: MouseEvent,
@@ -35,7 +50,9 @@ export function useServiceCategoriesListModel() {
     if (relatedServicesLength)
       confirmService.require({
         target: event.target as HTMLElement,
-        message: `При удалении категории удалятся и все входящие в неё услуги.\n Сейчас в этой категории ${relatedServicesLength} услуг.\n Вы уверены в удалении этой категории?`,
+        message: `При удалении категории удалятся и все входящие в неё услуги.
+                  \n Сейчас в этой категории ${relatedServicesLength} услуг.
+                  \n Вы уверены в удалении этой категории?`,
         icon: 'pi pi-exclamation-triangle',
         rejectProps: {
           label: 'Нет',
@@ -46,15 +63,15 @@ export function useServiceCategoriesListModel() {
           label: 'Да',
           severity: 'danger',
         },
-        accept: () => {
-          serviceCategoryStore.deleteServiceCategory(id)
+        accept: async () => {
+          await serviceCategoryModel.delete(id)
         },
       })
-    else serviceCategoryStore.deleteServiceCategory(id)
+    else await serviceCategoryModel.delete(id)
   }
 
   return {
-    serviceCategoryStore,
+    categoriesWithServices,
     newServiceCategory,
     addServiceCategory,
     updateServiceCategory,

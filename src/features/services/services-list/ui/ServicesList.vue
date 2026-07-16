@@ -8,7 +8,7 @@ import ConfirmPopup from 'primevue/confirmpopup'
 import { useServicesListModel } from '../model/useServicesListModel'
 
 const {
-  serviceCategoryStore: scStore,
+  categoriesWithServices,
   confirmDeleteService,
   goToServiceCreate,
   goToServiceEdit,
@@ -23,14 +23,9 @@ const {
     size="large"
     icon="pi pi-plus"
   />
-  <template v-if="scStore.serviceCategories?.length">
+  <template v-if="categoriesWithServices.length">
     <Accordion :value="['0']" multiple class="mt-10">
-      <AccordionPanel
-        v-for="sc in scStore.serviceCategories"
-        :key="sc.id"
-        :value="sc.id"
-        class="my-3"
-      >
+      <AccordionPanel v-for="sc in categoriesWithServices" :key="sc.id" :value="sc.id" class="my-3">
         <AccordionHeader>
           <div>
             <span class="text-2xl">{{ sc.name }}</span>
@@ -44,6 +39,7 @@ const {
             label="Добавить услугу в категорию"
           />
         </AccordionHeader>
+
         <AccordionContent>
           <ul v-if="sc.services?.length">
             <li v-for="service in sc.services" :key="service.id" class="accordion-entity-list-item">
@@ -75,6 +71,7 @@ const {
       </AccordionPanel>
     </Accordion>
   </template>
+
   <ConfirmPopup
     class="w-[200px]"
     :pt="{

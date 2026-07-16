@@ -8,7 +8,7 @@ const {
   serviceId,
   readonly,
   formData,
-  categoriesSelectList,
+  categoriesSelectOptions,
   addNewProcedure,
   removeProcedure,
   uploadServiceImage,
@@ -21,6 +21,7 @@ if (serviceId) {
   if (readonly) usePageTitle(`Просмотр услуги #${serviceId}`)
   else usePageTitle(`Редактирование услуги #${serviceId}`)
 } else usePageTitle('Добавление новой услуги')
+
 defineExpose({ serviceId, readonly })
 </script>
 
@@ -30,18 +31,20 @@ defineExpose({ serviceId, readonly })
       <InputText :disabled="readonly" id="name" v-model.trim="formData.name" class="w-full" />
       <label for="name">Название услуги</label>
     </FloatLabel>
+
     <FloatLabel>
       <Select
         :disabled="readonly"
         id="category"
         v-model="formData.categoryId"
-        :options="categoriesSelectList"
+        :options="categoriesSelectOptions"
         optionLabel="name"
         optionValue="id"
         class="w-full"
       />
       <label for="category">Категория</label>
     </FloatLabel>
+
     <FloatLabel>
       <InputNumber
         currency="RUB"
@@ -57,6 +60,7 @@ defineExpose({ serviceId, readonly })
       />
       <label for="price">Стоимость</label>
     </FloatLabel>
+
     <div class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
       <FileUpload
         mode="basic"
@@ -74,6 +78,7 @@ defineExpose({ serviceId, readonly })
         class="mb-0"
       />
     </div>
+
     <Image
       v-if="formData.imageUrl"
       :src="formData.imageUrl"
@@ -138,6 +143,7 @@ defineExpose({ serviceId, readonly })
       </div>
     </div>
   </form>
+
   <ConfirmPopup
     class="w-[200px]"
     :pt="{

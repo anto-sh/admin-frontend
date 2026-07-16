@@ -1,15 +1,10 @@
-// api/expert-category/api.ts
-import { apiClient } from '@/shared/api/client'
+import { createCrudApi } from '@/shared/lib/crud'
 import type { ExpertCategoryDto } from './types'
-import type { ApiResponseDto } from '@/shared/api/types'
 
-export const expertCategoryApi = {
-  async getAll(): Promise<ApiResponseDto<ExpertCategoryDto[]>> {
-    const { data: response } = await apiClient.get('/expert-categories')
-    return response
-  },
-  async getAllWithExperts(): Promise<ApiResponseDto<ExpertCategoryDto[]>> {
-    const { data: response } = await apiClient.get('/expert-categories/with-experts')
-    return response
-  },
-}
+// TODO: тут возможность нарушить контракт - можно обратиться к эндпоинтам, которых нет
+// надо бы подумать, что с этим можно сделать и нужно ли что-то делать
+// так-то мы в итоге ограничиваем в model доступные методы
+export const expertCategoryApi = createCrudApi<ExpertCategoryDto, unknown, unknown>({
+  type: 'category',
+  url: '/expert-categories',
+})

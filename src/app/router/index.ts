@@ -11,7 +11,7 @@ import ServicesListPage from '@/pages/services/ServicesListPage.vue'
 import TreatmentsPage from '@/pages/treatments/TreatmentsPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
-const router = createRouter({
+export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
   routes: [
     {
@@ -73,5 +73,3 @@ const router = createRouter({
     },
   ],
 })
-
-export default router

@@ -1,13 +1,13 @@
 // Цены
 export interface PriceDto {
   id: number
-  name: string
-  price: number
+  name?: string
+  price?: number
 }
 
 export interface CreatePriceDto {
   name: string
-  price: number
+  price?: number
 }
 
 export interface UpdatePriceDto {

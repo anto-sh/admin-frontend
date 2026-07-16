@@ -1,20 +1,20 @@
-import { useServiceCategoryStore } from '@/entities/service-category/store'
-import { useServiceStore } from '@/entities/service/store'
+import { useServiceCategoryModel } from '@/entities/service-category/model'
+import { useServiceModel } from '@/entities/service/model'
 import { computed, onMounted, ref } from 'vue'
 import { useConfirm, type FileUploadSelectEvent } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
-import { StringBoolean } from '@/shared/enums/common'
+import { STRING_BOOLEAN } from '@/shared/enums/common'
 import { imageApi } from '@/shared/api/image'
 
 export function useServiceEditorModel() {
-  const serviceCategoryStore = useServiceCategoryStore()
-  const serviceStore = useServiceStore()
+  const serviceCategoryModel = useServiceCategoryModel()
+  const serviceModel = useServiceModel()
   const confirmService = useConfirm()
   const router = useRouter()
   const route = useRoute()
 
   const serviceId = parseInt(route.params.id as string)
-  const readonly = route.query.readonly === StringBoolean.True
+  const readonly = route.query.readonly === STRING_BOOLEAN.True
   const formData = ref({
     name: '',
     imageUrl: '',
@@ -23,17 +23,17 @@ export function useServiceEditorModel() {
     categoryId: parseInt(route.query.categoryId as string) as number | undefined,
   })
 
-  const categoriesSelectList = computed(() =>
-    serviceCategoryStore.serviceCategories.map((sc) => ({
+  const categoriesSelectOptions = computed(() =>
+    serviceCategoryModel.categories.value.map((sc) => ({
       id: sc.id,
       name: sc.name,
     })),
   )
 
   onMounted(async () => {
-    await serviceCategoryStore.fetchServiceCategories()
+    await serviceCategoryModel.fetchAll()
     if (serviceId) {
-      const { data } = await serviceStore.fetchServiceById(serviceId)
+      const data = await serviceModel.fetchById(serviceId)
       if (data)
         formData.value = {
           name: data.name,
@@ -46,20 +46,19 @@ export function useServiceEditorModel() {
   })
 
   const addNewProcedure = () => formData.value.procedures.push('')
+
   const removeProcedure = (index: number) =>
     (formData.value.procedures = formData.value.procedures.filter((p, i) => i !== index))
 
   const uploadServiceImage = async (event: FileUploadSelectEvent) => {
-    const response = await imageApi.upload(event.files[0])
-    formData.value.imageUrl = response.file.url
+    const { data: fileData } = await imageApi.upload(event.files[0])
+    formData.value.imageUrl = fileData?.url || ''
   }
 
   const saveService = async () => {
-    if (serviceId) await serviceStore.updateService(serviceId, formData.value)
-    else await serviceStore.addService(formData.value)
-    router.push({
-      name: 'services',
-    })
+    if (serviceId) await serviceModel.update(serviceId, formData.value)
+    else await serviceModel.add(formData.value)
+    cancelEditor()
   }
 
   const cancelEditor = () => {
@@ -83,10 +82,8 @@ export function useServiceEditorModel() {
         severity: 'danger',
       },
       accept: async () => {
-        await serviceStore.deleteService(serviceId)
-        router.push({
-          name: 'services',
-        })
+        await serviceModel.delete(serviceId)
+        cancelEditor()
       },
     })
   }
@@ -95,7 +92,7 @@ export function useServiceEditorModel() {
     serviceId,
     readonly,
     formData,
-    categoriesSelectList,
+    categoriesSelectOptions,
     addNewProcedure,
     removeProcedure,
     uploadServiceImage,

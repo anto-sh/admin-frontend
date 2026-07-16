@@ -8,7 +8,7 @@ import ConfirmPopup from 'primevue/confirmpopup'
 import { useExercisesListModel } from '../model/useExercisesListModel'
 
 const {
-  exerciseCategoryStore: ecStore,
+  categoriesWithExercises,
   confirmDeleteExercise,
   goToExerciseCreate,
   goToExerciseEdit,
@@ -23,10 +23,10 @@ const {
     size="large"
     icon="pi pi-plus"
   />
-  <template v-if="ecStore.exerciseCategories?.length">
+  <template v-if="categoriesWithExercises.length">
     <Accordion :value="['0']" multiple class="mt-10">
       <AccordionPanel
-        v-for="ec in ecStore.exerciseCategories"
+        v-for="ec in categoriesWithExercises"
         :key="ec.id"
         :value="ec.id"
         class="my-3"
@@ -44,6 +44,7 @@ const {
             label="Добавить упражнение в категорию"
           />
         </AccordionHeader>
+
         <AccordionContent>
           <ul v-if="ec.exercises?.length">
             <li
@@ -79,6 +80,7 @@ const {
       </AccordionPanel>
     </Accordion>
   </template>
+
   <ConfirmPopup
     class="w-[200px]"
     :pt="{

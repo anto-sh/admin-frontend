@@ -9,7 +9,7 @@ const {
   expertId,
   readonly,
   formData,
-  categoriesSelectList,
+  categoriesSelectOptions,
   isShowEditorJs,
   uploadExpertImage,
   saveExpert,
@@ -21,6 +21,7 @@ if (expertId) {
   if (readonly) usePageTitle(`Просмотр специалиста #${expertId}`)
   else usePageTitle(`Редактирование специалиста #${expertId}`)
 } else usePageTitle('Добавление нового специалиста')
+
 defineExpose({ expertId, readonly })
 </script>
 
@@ -35,6 +36,7 @@ defineExpose({ expertId, readonly })
       />
       <label for="fullName">ФИО специалиста</label>
     </FloatLabel>
+
     <FloatLabel>
       <InputText
         :disabled="readonly"
@@ -44,18 +46,20 @@ defineExpose({ expertId, readonly })
       />
       <label for="description">Описание</label>
     </FloatLabel>
+
     <FloatLabel>
       <Select
         :disabled="readonly"
         id="category"
         v-model="formData.categoryId"
-        :options="categoriesSelectList"
+        :options="categoriesSelectOptions"
         optionLabel="name"
         optionValue="id"
         class="w-full"
       />
       <label for="category">Категория</label>
     </FloatLabel>
+
     <div class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
       <FileUpload
         mode="basic"
