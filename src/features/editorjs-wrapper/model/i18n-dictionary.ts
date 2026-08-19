@@ -33,7 +33,12 @@ export const i18n = {
       Delete: 'Удалить',
     },
     tools: {
-      video: {},
+      video: {
+        'Stretch video': 'Растянуть',
+        'With border': 'С рамкой',
+        'With background': 'С фоном',
+        'With caption': 'Добавить подпись',
+      },
       image: {
         'Stretch image': 'Растянуть',
         'With border': 'С рамкой',
