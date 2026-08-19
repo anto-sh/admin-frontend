@@ -77,7 +77,7 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
       detail: `${e.name} \n Сообщение: ${e.message}`,
       life: 20e3,
     })
-    throw new Error(`${e.name} \n Сообщение: ${e.message}`)
+    throw e
   }
 
   // TODO: вынести бы куда
