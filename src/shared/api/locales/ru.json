@@ -6,7 +6,7 @@
       "successSummary": "Ура победа!"
     },
     "commonErrors": {
-      "unknown": "Низвестная ошибка",
+      "unknown": "Неизвестная ошибка",
       "validation": "Ошибки валидации",
       "notFound": "Не найдено",
       "summary": "Ошибка запроса"
