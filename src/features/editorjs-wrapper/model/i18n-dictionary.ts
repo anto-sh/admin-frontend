@@ -38,6 +38,7 @@ export const i18n = {
         'With border': 'С рамкой',
         'With background': 'С фоном',
         'With caption': 'Добавить подпись',
+        'Validation error': 'Ошибка валидации',
       },
       image: {
         'Stretch image': 'Растянуть',
