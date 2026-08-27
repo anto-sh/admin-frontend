@@ -14,7 +14,7 @@ import Embed from '@editorjs/embed'
 import Warning from '@editorjs/warning'
 import Underline from '@editorjs/underline'
 import Paragraph from '@editorjs/paragraph'
-import UploadVideo from 'editorjs-upload-video-tool'
+import UploadVideo, { type UploadVideoToolConfig } from 'editorjs-upload-video-tool'
 import { i18n } from './i18n-dictionary'
 import { imageApi } from '@/shared/api/image'
 
@@ -170,12 +170,18 @@ export function useEditorJsWrapperModel(initialDataProp?: OutputData, readonlyPr
         config: {
           uploader: uploadVideo,
           errorHandler: videoErrorHandler,
-          uploadButtonText: 'Загрузить видео',
-          changeVideoButtonText: 'Загрузить другое видео',
-          videoCaptionPlaceholder: 'Подпись к видео',
-          uploaderReturnNoUrlText: 'Функция-загрузчик не вернула адрес видео',
-          uploadFailedText: 'Ошибка при загрузке',
-        },
+          maxFileSize: 8 * 1024 * 1024 * 20,
+          videoAcceptFormats: ['video/webm', 'video/mp4'],
+          texts: {
+            uploadButtonText: 'Загрузить видео',
+            changeVideoButtonText: 'Загрузить другое видео',
+            videoCaptionPlaceholder: 'Подпись к видео',
+            uploaderReturnNoUrlText: 'Функция-загрузчик не вернула адрес видео',
+            uploadFailedText: 'Ошибка при загрузке',
+            wrongFileTypeText: 'Неверный тип файла',
+            fileTooLargeText: 'Файл слишком велик',
+          },
+        } as UploadVideoToolConfig,
       },
     },
   }))
