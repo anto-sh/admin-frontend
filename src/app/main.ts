@@ -13,6 +13,7 @@ import { router } from './router'
 import i18n from '@/shared/lib/i18n/index.ts'
 
 import '@/index.scss'
+import { isAbortRequestError } from '@/shared/lib/network-utils/isAbortRequestError.ts'
 
 const app = createApp(App)
 
@@ -37,3 +38,11 @@ app.use(ToastService)
 app.directive('ripple', Ripple)
 
 app.mount('#app')
+
+// global error handler to filter some meaningless errors
+window.addEventListener('unhandledrejection', (event) => {
+  if (isAbortRequestError(event.reason)) {
+    event.preventDefault()
+    console.debug('Запрос был отменён, ошибка проигнорирована')
+  }
+})

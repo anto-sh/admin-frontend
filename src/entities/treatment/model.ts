@@ -10,7 +10,7 @@ export const useTreatmentModel = () => {
   async function updateBatch(dtoArr: UpdateTreatmentBatchDto[]) {
     treatmentBase.isLoading.value = true
     try {
-      await treatmentApi.updateBatch(dtoArr)
+      await treatmentApi.updateBatch(dtoArr, treatmentBase.abortSignal)
     } finally {
       treatmentBase.isLoading.value = false
     }

@@ -17,7 +17,14 @@ export const treatmentApiBase = createCrudApi<TreatmentDto, CreateTreatmentDto, 
 
 export const treatmentApi = {
   ...treatmentApiBase,
-  async updateBatch(dtoArr: UpdateTreatmentBatchDto[]): Promise<ApiResponse<never>> {
-    return apiClient.patch(`${treatmentApiBase.url}/batch`, dtoArr).then((res) => res.data)
+  async updateBatch(
+    dtoArr: UpdateTreatmentBatchDto[],
+    abortSignal?: AbortSignal,
+  ): Promise<ApiResponse<never>> {
+    return apiClient
+      .patch(`${treatmentApiBase.url}/batch`, dtoArr, {
+        signal: abortSignal,
+      })
+      .then((res) => res.data)
   },
 }

@@ -9,25 +9,26 @@ export interface CreateCrudApiOptions<T extends 'entity' | 'category' = 'entity'
 
 export interface BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
   url: string
-  getAll(): Promise<ApiResponse<TResponseDto[]>>
-  add(dto: TCreateDto): Promise<ApiResponse<TResponseDto>>
-  update(id: number, dto: TUpdateDto): Promise<ApiResponse<never>>
-  delete(id: number): Promise<ApiResponse<never>>
+  getAll(abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto[]>>
+  add(dto: TCreateDto, abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto>>
+  update(id: number, dto: TUpdateDto, abortSignal: AbortSignal): Promise<ApiResponse<never>>
+  delete(id: number, abortSignal: AbortSignal): Promise<ApiResponse<never>>
 }
 
 export interface EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>
   extends BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
-  getById(id: number): Promise<ApiResponse<TResponseDto>>
+  getById(id: number, abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto>>
 }
 
 export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>
   extends BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
-  getAllWithEntities(): Promise<ApiResponse<TResponseDto[]>>
+  getAllWithEntities(abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto[]>>
 }
 
 /* ───────────────── CRUD COMPOSABLE FACTORY ───────────────── */
 export interface BaseCrud<TCreateDto, TUpdateDto> {
   isLoading: Ref<boolean>
+  abortSignal: AbortSignal
   fetchAll(): Promise<void>
   add(dto: TCreateDto): Promise<void>
   update(id: number, dto: TUpdateDto): Promise<void>
