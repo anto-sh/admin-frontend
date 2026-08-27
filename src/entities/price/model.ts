@@ -10,7 +10,7 @@ export const usePriceModel = () => {
   async function updateBatch(dtoArr: UpdatePriceBatchDto[]) {
     priceBase.isLoading.value = true
     try {
-      await priceApi.updateBatch(dtoArr)
+      await priceApi.updateBatch(dtoArr, priceBase.abortSignal)
     } finally {
       priceBase.isLoading.value = false
     }

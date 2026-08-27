@@ -3,6 +3,7 @@ import type { ValidationError } from './types'
 import { useToastStore } from '../store/useToastStore'
 import type { ApiResponse } from '@anto-sh/admin-network-shared'
 import i18n from '@/shared/lib/i18n'
+import { isAbortRequestError } from '../lib/network-utils/isAbortRequestError'
 
 const $t = i18n.global.t
 
@@ -36,6 +37,8 @@ apiClient.interceptors.response.use(
     return response
   },
   (error: AxiosError<ApiResponse<{ errors: ValidationError[] } | undefined>>) => {
+    if (isAbortRequestError(error)) return Promise.reject(error)
+
     const { addToast } = useToastStore()
 
     const errorRes = error.response

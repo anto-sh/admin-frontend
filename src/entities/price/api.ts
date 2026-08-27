@@ -10,7 +10,12 @@ const priceApiBase = createCrudApi<PriceDto, CreatePriceDto, UpdatePriceDto>({
 
 export const priceApi = {
   ...priceApiBase,
-  async updateBatch(dtoArr: UpdatePriceBatchDto[]): Promise<ApiResponse<never>> {
-    return apiClient.patch(`${priceApiBase.url}/batch`, dtoArr).then((res) => res.data)
+  async updateBatch(
+    dtoArr: UpdatePriceBatchDto[],
+    abortSignal?: AbortSignal,
+  ): Promise<ApiResponse<never>> {
+    return apiClient
+      .patch(`${priceApiBase.url}/batch`, dtoArr, { signal: abortSignal })
+      .then((res) => res.data)
   },
 }

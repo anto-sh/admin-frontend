@@ -1,5 +1,5 @@
 import { apiClient } from './client'
-import type {  FileDataDto } from './types'
+import type { FileDataDto } from './types'
 import type { ApiResponse } from '@anto-sh/admin-network-shared'
 
 export const imageApi = {
