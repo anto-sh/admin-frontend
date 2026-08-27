@@ -43,6 +43,6 @@ app.mount('#app')
 window.addEventListener('unhandledrejection', (event) => {
   if (isAbortRequestError(event.reason)) {
     event.preventDefault()
-    console.debug('Запрос был отменён, ошибка проигнорирована')
+    console.debug('Request was cancelled, error is ignored')
   }
 })
