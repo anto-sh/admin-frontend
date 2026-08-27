@@ -55,3 +55,9 @@ In most cases, data must be refetched after every state-changing call, as data f
 In forms that allow editing multiple entities and provide both a bulk save and a per-entity save, the UI must warn that unsaved changes to other entities will be lost if a single entity is saved individually.
 
 To avoid visual flicker caused by rapid successive toggles inside individual async operations, the reactive `isLoading` flag is setted through a debounced `customRef` set function.
+
+## 4. Request cancellation
+
+All CRUD API methods accept an optional `AbortSignal`, which is passed as an argument directly to axios method on call.
+Each `createCrudComposable` instance creates its own `AbortController` and passes its signal to every API call; the controller is aborted in `onUnmounted` in this composable.
+Cancellation errors are filtered in the Axios interceptor (no toast, no propagation) and additionally suppressed globally via `unhandledrejection` to prevent console noise.
