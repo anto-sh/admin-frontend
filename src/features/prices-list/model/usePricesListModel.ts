@@ -17,7 +17,7 @@ export function usePricesListModel() {
   })
 
   watch(
-    priceModel.entities,
+    () => priceModel.entities,
     () => {
       priceEntities.value = structuredClone(toRaw(priceModel.entities.value))
     },
