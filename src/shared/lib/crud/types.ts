@@ -1,5 +1,6 @@
 import type { ApiResponse } from '@anto-sh/admin-network-shared'
 import type { Ref, UnwrapRef } from 'vue'
+import type { usePendingRequestCounter } from '../network-utils/usePendingRequestCounter'
 
 /* ──────────────────── CRUD API FACTORY ─────────────────── */
 export interface CreateCrudApiOptions<T extends 'entity' | 'category' = 'entity' | 'category'> {
@@ -29,6 +30,7 @@ export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>
 export interface BaseCrud<TCreateDto, TUpdateDto> {
   isLoading: Ref<boolean>
   abortSignal: AbortSignal
+  pendingRequestCounter: ReturnType<typeof usePendingRequestCounter>
   fetchAll(): Promise<void>
   add(dto: TCreateDto): Promise<void>
   update(id: number, dto: TUpdateDto): Promise<void>
