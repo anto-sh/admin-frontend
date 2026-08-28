@@ -23,11 +23,10 @@ export function useExerciseCategoriesListModel() {
   })
 
   watch(
-    exerciseCategoryModel.categories,
+    () => exerciseCategoryModel.categories,
     () => {
       categoriesWithExercises.value = structuredClone(toRaw(exerciseCategoryModel.categories.value))
     },
-    {deep: false}
   )
 
   const addExerciseCategory = async (dto: CreateExerciseCategoryDto) => {
