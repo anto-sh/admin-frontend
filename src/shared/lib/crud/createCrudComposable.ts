@@ -1,10 +1,11 @@
-import { customRef, onUnmounted, readonly, ref, toRaw, type Ref } from 'vue'
+import { onBeforeUnmount, readonly, ref, toRaw, type Ref } from 'vue'
 import type {
   EntityCrudApi,
   CategoryCrudApi,
   CategoryCrudComposable,
   EntityCrudComposable,
 } from './types'
+import { usePendingRequestCounter } from '../network-utils/usePendingRequestCounter'
 
 /**
  * Фабрика для создания базовых store-like CRUD composables.
@@ -15,16 +16,19 @@ import type {
 
 export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
   crudApi: EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
+  useGlobalLoadingIndication?: boolean,
 ): EntityCrudComposable<TResponseDto, TCreateDto, TUpdateDto>
 
 export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
   crudApi: CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
+  useGlobalLoadingIndication?: boolean,
 ): CategoryCrudComposable<TResponseDto, TCreateDto, TUpdateDto>
 
 export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
   crudApi:
     | EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>
     | CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
+  useGlobalLoadingIndication: boolean = true,
 ) {
   const isCrudForEntity = 'getById' in crudApi
 
@@ -34,66 +38,55 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
     const abortSignal = abortController.signal
 
     let isLoadingTimeout: number
-    // debouncing customRef
-    const isLoading = customRef((track, trigger) => {
-      let value = false
-      return {
-        get() {
-          track()
-          return value
-        },
-        // only set to false is debounced to prevent flashing
-        set(newValue: boolean) {
-          if (!newValue) {
-            clearTimeout(isLoadingTimeout)
-            isLoadingTimeout = setTimeout(() => {
-              value = newValue
-              trigger()
-            }, 200)
-          } else {
-            value = newValue
-            trigger()
-          }
-        },
-      }
-    })
+    const isLoading = ref(false)
+    // debounced on set `false` to prevent flashing of loading indicator
+    function setIsLoading(val: boolean) {
+      if (!val) {
+        clearTimeout(isLoadingTimeout)
+        isLoadingTimeout = setTimeout(() => {
+          isLoading.value = false
+        }, 200)
+      } else isLoading.value = true
+    }
+
+    const pendingRequestCounter = usePendingRequestCounter(setIsLoading, useGlobalLoadingIndication)
 
     const baseCrudMethods = {
       async fetchAll() {
-        isLoading.value = true
+        pendingRequestCounter.start()
         try {
           const { data } = await crudApi.getAll(abortSignal)
           if (data) items.value = data
         } finally {
-          isLoading.value = false
+          pendingRequestCounter.finish()
         }
       },
       async add(dto: TCreateDto) {
-        isLoading.value = true
+        pendingRequestCounter.start()
         try {
           const { data } = await crudApi.add(dto, abortSignal)
           if (data) items.value.push(data)
         } finally {
-          isLoading.value = false
+          pendingRequestCounter.finish()
         }
       },
       async update(id: number, dto: TUpdateDto) {
-        isLoading.value = true
+        pendingRequestCounter.start()
         try {
           await crudApi.update(id, dto, abortSignal)
         } finally {
-          isLoading.value = false
+          pendingRequestCounter.finish()
         }
       },
       async delete(id: number) {
-        isLoading.value = true
+        pendingRequestCounter.start()
         try {
           await crudApi.delete(id, abortSignal)
           items.value = toRaw(items.value).filter((i) => {
             return i.id !== id
           })
         } finally {
-          isLoading.value = false
+          pendingRequestCounter.finish()
         }
       },
     }
@@ -101,30 +94,32 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
     const specificMethods = isCrudForEntity
       ? {
           async fetchById(id: number) {
-            isLoading.value = true
+            pendingRequestCounter.start()
             try {
               const { data } = await crudApi.getById(id, abortSignal)
               if (data) return data
             } finally {
-              isLoading.value = false
+              pendingRequestCounter.finish()
             }
           },
         }
       : {
           async fetchAllWithEntities() {
-            isLoading.value = true
+            pendingRequestCounter.start()
             try {
               const { data } = await crudApi.getAllWithEntities(abortSignal)
               if (data) items.value = data
             } finally {
-              isLoading.value = false
+              pendingRequestCounter.finish()
             }
           },
         }
 
-    onUnmounted(() => {
+    onBeforeUnmount(() => {
       abortController.abort()
+      pendingRequestCounter.finishAll()
       if (isLoadingTimeout) clearTimeout(isLoadingTimeout)
+      // isLoading will be destroyed during unmounting
     })
 
     return {
@@ -133,6 +128,7 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
       // It is not "physically" read-only, as it needs to be modified when extending baseCrud with custom methods
       isLoading: isLoading,
       abortSignal,
+      pendingRequestCounter,
       ...baseCrudMethods,
       ...specificMethods,
     }
