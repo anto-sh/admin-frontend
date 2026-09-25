@@ -1,7 +1,4 @@
-// TODO: дополнить
 // словарь i18n для русификации editor.js
-// мало информации касательно подбора ключей перевода
-// поэтому перевод неполный и местами бесполезный
 
 // Один из хороших источников - https://github.com/codex-team/editor.js/blob/4ea9eb389847181ceb757735f8bd45cc8c2f1673/src/components/i18n/locales/en/messages.json
 export const i18n = {
