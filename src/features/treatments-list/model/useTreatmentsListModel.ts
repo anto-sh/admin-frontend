@@ -1,10 +1,6 @@
 import { useTreatmentModel } from '@/entities/treatment/model'
 import { onMounted, ref, toRaw, watch } from 'vue'
-import type {
-  CreateTreatmentDto,
-  TreatmentDto,
-  UpdateTreatmentDto,
-} from '@/entities/treatment/types'
+import type { TreatmentDto, UpdateTreatmentDto } from '@/entities/treatment/types'
 import { useConfirm } from 'primevue/useconfirm'
 
 export function useTreatmentsListModel() {
@@ -24,8 +20,9 @@ export function useTreatmentsListModel() {
     { deep: true },
   )
 
-  const addTreatment = async (dto: CreateTreatmentDto) => {
-    await treatmentModel.add(dto)
+  const addTreatment = async () => {
+    if (!newTreatmentName.value.trim()) return
+    await treatmentModel.add({ name: newTreatmentName.value })
     newTreatmentName.value = ''
     treatmentModel.fetchAll()
   }

@@ -49,13 +49,18 @@ const {
   <form @submit.prevent class="w-1/2 min-w-120 mt-10">
     <h3 class="text-xl mb-2">Добавить новый пункт</h3>
     <div class="flex gap-2">
-      <InputText v-model.trim="newTreatmentName" class="w-full" placeholder="Название" />
+      <InputText
+        v-model.trim="newTreatmentName"
+        class="w-full"
+        placeholder="Название"
+        @keydown.enter="addTreatment"
+      />
       <Button
         :disabled="!newTreatmentName || isLoading"
         :loading="isLoading"
         label="Добавить"
         icon="pi pi-plus"
-        @click="addTreatment({ name: newTreatmentName })"
+        @click="addTreatment"
       />
     </div>
   </form>
