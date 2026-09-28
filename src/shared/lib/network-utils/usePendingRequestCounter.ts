@@ -28,9 +28,10 @@ export function usePendingRequestCounter(
 
   function finishAll() {
     if (pendingCount.value) {
-      setIsLoading(false)
-      if (isAffectingLoadingGlobalState) loadingGlobalStore.finish(pendingCount.value)
+      const curPendingCount = pendingCount.value
       pendingCount.value = 0
+      setIsLoading(false)
+      if (isAffectingLoadingGlobalState) loadingGlobalStore.finish(curPendingCount)
     }
   }
 
