@@ -21,7 +21,7 @@ export function usePendingRequestCounter(
   function finish(num: number = 1) {
     if (pendingCount.value) {
       pendingCount.value = Math.max(0, pendingCount.value - num)
-      if (pendingCount.value === 0) setIsLoading(true)
+      if (pendingCount.value === 0) setIsLoading(false)
       if (isAffectingLoadingGlobalState) loadingGlobalStore.finish()
     }
   }
