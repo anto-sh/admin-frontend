@@ -21,7 +21,7 @@ export function usePricesListModel() {
     () => {
       priceEntities.value = structuredClone(toRaw(priceModel.entities.value))
     },
-    { deep: false },
+    { deep: true },
   )
 
   const addPrice = async () => {
