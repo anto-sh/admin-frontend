@@ -4,11 +4,16 @@ import { RouterView } from 'vue-router'
 import MainMenu from '@/features/main-menu/ui/MainMenu.vue'
 import { useToastWatcher } from '@/shared/composables/useToastWatcher'
 import Toast from 'primevue/toast'
+import AppSpinner from '@/shared/ui/app-spinner/AppSpinner.vue'
+import { useLoadingStateGlobalStore } from '@/shared/store/useLoadingStateGlobalStore'
+import { storeToRefs } from 'pinia'
 
 const pageTitle = ref('Админ-панель')
 provide('pageTitle', pageTitle)
 
 useToastWatcher()
+
+const { isLoading } = storeToRefs(useLoadingStateGlobalStore())
 </script>
 
 <template>
@@ -17,6 +22,7 @@ useToastWatcher()
       <MainMenu />
     </aside>
     <main class="main-content">
+      <AppSpinner :is-show="isLoading" />
       <Toast />
       <header class="bg-blue-200/20 p-2 mb-10">
         <h1 class="text-4xl font-bold">{{ pageTitle }}</h1>
@@ -46,6 +52,7 @@ useToastWatcher()
 }
 
 .main-content {
+  position: relative;
   max-width: 2000px;
   overflow: auto;
   padding: 1rem 2rem;
