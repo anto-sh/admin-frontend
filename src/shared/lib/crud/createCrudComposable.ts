@@ -37,13 +37,13 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
     const abortController = new AbortController()
     const abortSignal = abortController.signal
 
-    let isLoadingTimeout: number
+    let isLoadingUpdateTimeout: number
     const isLoading = ref(false)
     // debounced on set `false` to prevent flashing of loading indicator
     function setIsLoading(val: boolean) {
       if (!val) {
-        clearTimeout(isLoadingTimeout)
-        isLoadingTimeout = setTimeout(() => {
+        clearTimeout(isLoadingUpdateTimeout)
+        isLoadingUpdateTimeout = setTimeout(() => {
           isLoading.value = false
         }, 200)
       } else isLoading.value = true
@@ -119,7 +119,7 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
     onBeforeUnmount(() => {
       abortController.abort()
       pendingRequestCounter.finishAll()
-      if (isLoadingTimeout) clearTimeout(isLoadingTimeout)
+      if (isLoadingUpdateTimeout) clearTimeout(isLoadingUpdateTimeout)
       // isLoading will be destroyed during unmounting
     })
 

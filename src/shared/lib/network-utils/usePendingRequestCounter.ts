@@ -1,4 +1,4 @@
-import { useLoadingGlobalStore } from '@/shared/store/useLoadingGlobalStore'
+import { useLoadingStateGlobalStore } from '@/shared/store/useLoadingStateGlobalStore'
 import { ref } from 'vue'
 
 export function usePendingRequestCounter(
@@ -7,9 +7,9 @@ export function usePendingRequestCounter(
 ) {
   const pendingCount = ref(0)
 
-  let loadingGlobalStore: ReturnType<typeof useLoadingGlobalStore>
+  let loadingGlobalStore: ReturnType<typeof useLoadingStateGlobalStore>
   if (isAffectingLoadingGlobalState) {
-    loadingGlobalStore = useLoadingGlobalStore()
+    loadingGlobalStore = useLoadingStateGlobalStore()
   }
 
   function start() {
@@ -28,10 +28,10 @@ export function usePendingRequestCounter(
 
   function finishAll() {
     if (pendingCount.value) {
-      const curPendingCount = pendingCount.value
+      const countBefore = pendingCount.value
       pendingCount.value = 0
       setIsLoading(false)
-      if (isAffectingLoadingGlobalState) loadingGlobalStore.finish(curPendingCount)
+      if (isAffectingLoadingGlobalState) loadingGlobalStore.finish(countBefore)
     }
   }
 
