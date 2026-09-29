@@ -4,9 +4,9 @@ import { RouterView } from 'vue-router'
 import MainMenu from '@/features/main-menu/ui/MainMenu.vue'
 import { useToastWatcher } from '@/shared/composables/useToastWatcher'
 import Toast from 'primevue/toast'
-import AppSpinner from '@/shared/ui/app-spinner/AppSpinner.vue'
 import { useLoadingStateGlobalStore } from '@/shared/store/useLoadingStateGlobalStore'
 import { storeToRefs } from 'pinia'
+import AppLoadingIndicator from '@/shared/ui/app-loading-indicator/AppLoadingIndicator.vue'
 
 const pageTitle = ref('Админ-панель')
 provide('pageTitle', pageTitle)
@@ -35,7 +35,7 @@ watch(isLoading, async (newVal) => {
       <MainMenu />
     </aside>
     <main>
-      <AppSpinner :is-show="isLoading" />
+      <AppLoadingIndicator :is-show="isLoading" />
       <div class="main-content" :inert="isLoading">
         <Toast />
         <header class="bg-blue-200/20 p-2 mb-10">
