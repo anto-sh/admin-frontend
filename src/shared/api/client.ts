@@ -26,6 +26,7 @@ apiClient.interceptors.response.use(
       const resMessageCompiled = $t(i18nDictPrefix + (resData?.message?.code || 'common.success'), {
         ...resData.message?.params,
       })
+
       addToast({
         severity: 'success',
         summary: $t('networkMessages.common.successSummary'),

@@ -21,13 +21,15 @@ const { isLoading } = storeToRefs(useLoadingStateGlobalStore())
     <aside class="sidebar">
       <MainMenu />
     </aside>
-    <main class="main-content">
+    <main>
       <AppSpinner :is-show="isLoading" />
-      <Toast />
-      <header class="bg-blue-200/20 p-2 mb-10">
-        <h1 class="text-4xl font-bold">{{ pageTitle }}</h1>
-      </header>
-      <RouterView />
+      <div class="main-content" :inert="isLoading">
+        <Toast />
+        <header class="bg-blue-200/20 p-2 mb-10">
+          <h1 class="text-4xl font-bold">{{ pageTitle }}</h1>
+        </header>
+        <RouterView />
+      </div>
     </main>
   </div>
 </template>
@@ -40,21 +42,21 @@ const { isLoading } = storeToRefs(useLoadingStateGlobalStore())
 }
 
 .sidebar {
-  position: sticky;
-  top: 0;
-  height: 100vh;
   min-width: 250px;
-  max-width: 400px;
   z-index: 1;
   overflow-y: auto;
   background: var(--p-navigation-item-focus-background);
   padding: 1rem;
 }
 
-.main-content {
+main {
   position: relative;
-  max-width: 2000px;
-  overflow: auto;
-  padding: 1rem 2rem;
+  overflow: hidden;
+
+  .main-content {
+    height: 100%;
+    overflow: auto;
+    padding: 1rem 2rem;
+  }
 }
 </style>
