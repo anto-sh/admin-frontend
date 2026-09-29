@@ -8,24 +8,24 @@ const props = defineProps<{
   isShow: boolean
 }>()
 
-const spinnerClasses = computed(() => ({
-  'app-spinner--fullscreen': props.fullscreen,
+const indicatorClasses = computed(() => ({
+  'app-loading-indicator--fullscreen': props.fullscreen,
 }))
 </script>
 
 <template>
   <teleport :to="props.to" :disabled="!props.to">
     <Transition name="fade">
-      <div v-show="props.isShow" ref="spinner-root" class="app-spinner" :class="spinnerClasses">
-        <div tabindex="0" class="app-spinner__overlay" />
-        <div class="app-spinner__icon" />
+      <div v-show="props.isShow" class="app-loading-indicator" :class="indicatorClasses">
+        <div tabindex="0" class="app-loading-indicator__overlay" />
+        <div class="app-loading-indicator__icon" />
       </div>
     </Transition>
   </teleport>
 </template>
 
 <style lang="scss">
-.app-spinner {
+.app-loading-indicator {
   position: absolute;
   top: 0;
   left: 0;
