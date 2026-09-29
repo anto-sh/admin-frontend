@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, provide } from 'vue'
+import { ref, provide, watch, nextTick } from 'vue'
 import { RouterView } from 'vue-router'
 import MainMenu from '@/features/main-menu/ui/MainMenu.vue'
 import { useToastWatcher } from '@/shared/composables/useToastWatcher'
@@ -14,6 +14,19 @@ provide('pageTitle', pageTitle)
 useToastWatcher()
 
 const { isLoading } = storeToRefs(useLoadingStateGlobalStore())
+
+let prevFocusedEl: HTMLElement | null = null
+watch(isLoading, async (newVal) => {
+  if (newVal) {
+    prevFocusedEl = document.activeElement as HTMLElement
+  } else {
+    // wait dom update to guarantee that inert attr is disabled
+    await nextTick()
+    if (!prevFocusedEl?.isConnected) return
+    prevFocusedEl?.focus()
+    prevFocusedEl = null
+  }
+})
 </script>
 
 <template>

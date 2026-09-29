@@ -1,31 +1,12 @@
 <script setup lang="ts">
-import { computed, nextTick, useTemplateRef, watch } from 'vue'
-import { useFocusTrap } from '@vueuse/integrations/useFocusTrap'
-const props = withDefaults(
-  defineProps<{
-    to?: string
-    fullscreen?: boolean
-    shouldCatchFocus?: boolean
-    isShow: boolean
-  }>(),
-  {
-    isShow: false,
-  },
-)
+import { computed } from 'vue'
 
-const spinnerRootRef = useTemplateRef('spinner-root')
-const focusTrap = useFocusTrap(spinnerRootRef, { returnFocusOnDeactivate: true })
-watch(
-  () => props.isShow,
-  async (newVal) => {
-    if (newVal) {
-      await nextTick()
-      focusTrap.activate()
-    } else {
-      focusTrap.deactivate()
-    }
-  },
-)
+const props = defineProps<{
+  to?: string
+  fullscreen?: boolean
+  shouldCatchFocus?: boolean
+  isShow: boolean
+}>()
 
 const spinnerClasses = computed(() => ({
   'app-spinner--fullscreen': props.fullscreen,
