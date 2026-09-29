@@ -14,7 +14,7 @@ export const useLoadingStateGlobalStore = defineStore('loading-state-global', ()
     pendingCount.value = nextCount
   }
 
-  let isLoadingUpdateTimeout: number | undefined
+  let isLoadingUpdateTimeout: ReturnType<typeof setTimeout> | undefined
   const isLoading = ref(false)
   watch(pendingCount, (newVal) => {
     if (newVal === 0) {
