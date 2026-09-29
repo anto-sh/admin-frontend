@@ -17,11 +17,11 @@ export const useLoadingStateGlobalStore = defineStore('loading-state-global', ()
   let isLoadingUpdateTimeout: number | undefined
   const isLoading = ref(false)
   watch(pendingCount, (newVal) => {
-    if (newVal === 0)
-      setTimeout(() => {
+    if (newVal === 0) {
+      isLoadingUpdateTimeout = setTimeout(() => {
         isLoading.value = false
       }, 200)
-    else {
+    } else {
       clearTimeout(isLoadingUpdateTimeout)
       isLoading.value = true
     }
