@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { PanelMenu } from 'primevue'
-import { menuItems } from '../model/menuItems'
+import { menuItems } from './menuItems'
 </script>
 
 <template>

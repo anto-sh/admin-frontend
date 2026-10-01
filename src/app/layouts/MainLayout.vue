@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, provide, watch, nextTick } from 'vue'
 import { RouterView } from 'vue-router'
-import MainMenu from '@/features/main-menu/ui/MainMenu.vue'
+import MainMenu from '@/features/main-menu/MainMenu.vue'
 import { useToastWatcher } from '@/shared/composables/useToastWatcher'
 import Toast from 'primevue/toast'
 import { useLoadingStateGlobalStore } from '@/shared/store/useLoadingStateGlobalStore'

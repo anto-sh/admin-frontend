@@ -1,6 +1,6 @@
 <script lang="ts" setup>
 import type { OutputData } from '@editorjs/editorjs'
-import { useEditorJsWrapperModel } from '../model/useEditorJsWrapperModel'
+import { useEditorJsWrapperModel } from './model/useEditorJsWrapperModel'
 
 const props = defineProps<{
   initialData?: OutputData

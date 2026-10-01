@@ -2,7 +2,7 @@
 import { Button, InputText, Select, FloatLabel, FileUpload, Image } from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
 import { useExpertEditorPageModel } from './useExpertEditorPageModel'
-import EditorJsWrapper from '@/features/editorjs-wrapper/ui/EditorJsWrapper.vue'
+import EditorJsWrapper from '@/features/editorjs-wrapper/EditorJsWrapper.vue'
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 
 const {
