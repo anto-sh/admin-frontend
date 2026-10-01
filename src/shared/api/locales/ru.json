@@ -3,7 +3,8 @@
     "complexErrorMessage": "Сообщение: {message} \n Код: {statusCode} \n Ошибка: {statusText}",
     "common": {
       "success": "Операция успешно выполнена",
-      "successSummary": "Ура победа!"
+      "successSummary": "Ура победа!",
+      "unknown": "Неизвестно"
     },
     "commonErrors": {
       "unknown": "Неизвестная ошибка",

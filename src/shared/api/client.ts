@@ -55,8 +55,8 @@ apiClient.interceptors.response.use(
       summary: $t('networkMessages.commonErrors.summary'),
       detail: $t('networkMessages.complexErrorMessage', {
         message: resMessageCompiled,
-        statusCode,
-        statusText: errorRes?.statusText,
+        statusCode: statusCode || $t('networkMessages.common.unknown'),
+        statusText: errorRes?.statusText || $t('networkMessages.common.unknown'),
       }),
       life: 20e3,
     })
