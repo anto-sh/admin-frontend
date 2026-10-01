@@ -1,14 +1,14 @@
-import ExerciseCategoriesPage from '@/pages/exercises/ExerciseCategoriesPage.vue'
-import ExerciseEditorPage from '@/pages/exercises/ExerciseEditorPage.vue'
-import ExercisesListPage from '@/pages/exercises/ExercisesListPage.vue'
-import ExpertEditorPage from '@/pages/experts/ExpertEditorPage.vue'
-import ExpertsListPage from '@/pages/experts/ExpertsListPage.vue'
+import ExerciseCategoriesPage from '@/pages/exercises/exercise-categories/ExerciseCategoriesPage.vue'
+import ExerciseEditorPage from '@/pages/exercises/exercise-editor/ExerciseEditorPage.vue'
+import ExercisesListPage from '@/pages/exercises/exercises-list/ExercisesListPage.vue'
+import ExpertEditorPage from '@/pages/experts/expert-editor/ExpertEditorPage.vue'
+import ExpertsListPage from '@/pages/experts/experts-list/ExpertsListPage.vue'
 import IndexPage from '@/pages/index/IndexPage.vue'
-import PricesListPage from '@/pages/prices/PricesListPage.vue'
-import ServiceCategoriesPage from '@/pages/services/ServiceCategoriesPage.vue'
-import ServiceEditorPage from '@/pages/services/ServiceEditorPage.vue'
-import ServicesListPage from '@/pages/services/ServicesListPage.vue'
-import TreatmentsPage from '@/pages/treatments/TreatmentsPage.vue'
+import PricesListPage from '@/pages/prices/prices-list/PricesListPage.vue'
+import ServiceCategoriesPage from '@/pages/services/service-categories/ServiceCategoriesPage.vue'
+import ServiceEditorPage from '@/pages/services/service-editor/ServiceEditorPage.vue'
+import ServicesListPage from '@/pages/services/services-list/ServicesListPage.vue'
+import TreatmentsListPage from '@/pages/treatments/treatments-list/TreatmentsListPage.vue'
 import { createRouter, createWebHistory } from 'vue-router'
 
 export const router = createRouter({
@@ -22,7 +22,7 @@ export const router = createRouter({
     {
       path: '/treatments',
       name: 'treatments',
-      component: TreatmentsPage,
+      component: TreatmentsListPage,
     },
 
     {
