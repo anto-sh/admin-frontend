@@ -171,7 +171,7 @@ defineExpose({
     }
 
     .cdx-warning::before {
-      background-color: var(--p-danger-background);
+      background-color: var(--p-orange-400);
       border-radius: 3px;
     }
 
