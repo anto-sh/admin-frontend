@@ -12,7 +12,7 @@ export function useExpertsListPageModel() {
   const router = useRouter()
 
   const isLoading = computed(
-    () => expertCategoryModel.isLoading.value || expertCategoryModel.isLoading.value,
+    () => expertModel.isLoading.value || expertCategoryModel.isLoading.value,
   )
 
   onMounted(() => {
