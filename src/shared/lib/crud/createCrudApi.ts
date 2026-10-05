@@ -30,7 +30,7 @@ export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(options: Cre
     },
     update(id: number, dto: TUpdateDto, abortSignal?: AbortSignal): Promise<ApiResponse<never>> {
       return apiClient
-        .put(`${options.url}/${id}`, dto, { signal: abortSignal })
+        .patch(`${options.url}/${id}`, dto, { signal: abortSignal })
         .then((res) => res.data)
     },
     delete(id: number, abortSignal?: AbortSignal): Promise<ApiResponse<never>> {
