@@ -1,12 +1,10 @@
 import { useTreatmentModel } from '@/entities/treatment/model'
 import { onMounted, ref, toRaw, watch } from 'vue'
 import type { TreatmentDto, UpdateTreatmentDto } from '@/entities/treatment/types'
-import { useConfirm } from 'primevue/useconfirm'
 
 export function useTreatmentsListPageModel() {
   const treatmentModel = useTreatmentModel()
   const newTreatmentName = ref('')
-  const confirmService = useConfirm()
 
   const treatmentEntities = ref<TreatmentDto[]>([])
 
@@ -35,46 +33,15 @@ export function useTreatmentsListPageModel() {
     treatmentModel.fetchAll()
   }
 
-  const confirmCancelAll = (event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: 'Вы уверены, что хотите отменить все текущие изменения?',
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-        severity: 'danger',
-      },
-      accept: () => {
-        treatmentModel.fetchAll()
-      },
-    })
+  const cancelAllChanges = () => treatmentModel.fetchAll()
+
+  const saveAllChanges = async () => {
+    if (treatmentEntities.value.length) {
+      await treatmentModel.updateBatch(treatmentEntities.value)
+      treatmentModel.fetchAll()
+    }
   }
-  const confirmSaveAll = (event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: 'Сохранить все текущие изменения?',
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-      },
-      accept: async () => {
-        if (treatmentEntities.value) {
-          await treatmentModel.updateBatch(treatmentEntities.value)
-          treatmentModel.fetchAll()
-        }
-      },
-    })
-  }
+
   return {
     treatmentEntities,
     newTreatmentName,
@@ -82,7 +49,7 @@ export function useTreatmentsListPageModel() {
     addTreatment,
     updateTreatment,
     deleteTreatment,
-    confirmCancelAll,
-    confirmSaveAll,
+    cancelAllChanges,
+    saveAllChanges,
   }
 }

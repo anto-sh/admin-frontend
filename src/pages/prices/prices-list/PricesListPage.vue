@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
 import InputNumber from 'primevue/inputnumber'
 import { usePricesListPageModel } from './usePricesListPageModel'
 
@@ -13,9 +13,46 @@ const {
   addPrice,
   updatePrice,
   deletePrice,
-  confirmCancelAll,
-  confirmSaveAll,
+  cancelAllChanges,
+  saveAllChanges,
 } = usePricesListPageModel()
+
+const confirmService = useConfirm()
+
+const confirmCancelAll = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: 'Отменить все текущие изменения цен?',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: () => cancelAllChanges(),
+  })
+}
+
+const confirmSaveAll = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: 'Сохранить все текущие изменения цен?',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+    },
+    accept: () => saveAllChanges(),
+  })
+}
 </script>
 
 <template>

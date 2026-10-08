@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
 import { useExerciseCategoriesPageModel } from './useExerciseCategoriesPageModel'
 
 usePageTitle('Категории упражнений')
@@ -10,8 +10,35 @@ const {
   newExerciseCategory,
   addExerciseCategory,
   updateExerciseCategory,
-  confirmDeleteExerciseCategory,
+  deleteExerciseCategory,
 } = useExerciseCategoriesPageModel()
+
+const confirmService = useConfirm()
+const confirmDeleteExerciseCategory = async (
+  id: number,
+  relatedExercisesLength: number | undefined,
+  event: Event,
+) => {
+  if (relatedExercisesLength)
+    confirmService.require({
+      target: event.target as HTMLElement,
+      message: `При удалении категории удалятся и все входящие в неё упражнения.
+                Сейчас в этой категории ${relatedExercisesLength} упражнений.
+                Вы уверены в удалении этой категории?`,
+      icon: 'pi pi-exclamation-triangle',
+      rejectProps: {
+        label: 'Нет',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: 'Да',
+        severity: 'danger',
+      },
+      accept: () => deleteExerciseCategory(id),
+    })
+  else deleteExerciseCategory(id)
+}
 </script>
 
 <template>

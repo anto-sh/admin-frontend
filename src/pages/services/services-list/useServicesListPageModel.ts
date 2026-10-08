@@ -1,14 +1,12 @@
 import { useServiceCategoryModel } from '@/entities/service-category/model'
 import { useServiceModel } from '@/entities/service/model'
 import { computed, onMounted } from 'vue'
-import { useConfirm } from 'primevue'
 import { useRouter } from 'vue-router'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
 
 export function useServicesListPageModel() {
   const serviceCategoryModel = useServiceCategoryModel()
   const serviceModel = useServiceModel()
-  const confirmService = useConfirm()
   const router = useRouter()
 
   const isLoading = computed(
@@ -19,25 +17,9 @@ export function useServicesListPageModel() {
     serviceCategoryModel.fetchAllWithEntities()
   })
 
-  const confirmDeleteService = (id: number, event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: `Вы уверены?`,
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-        severity: 'danger',
-      },
-      accept: async () => {
-        await serviceModel.delete(id)
-        serviceCategoryModel.fetchAllWithEntities()
-      },
-    })
+  const deleteService = async (id: number) => {
+    serviceModel.delete(id)
+    await serviceCategoryModel.fetchAllWithEntities()
   }
 
   const goToServiceCreate = (categoryId?: number) => {
@@ -66,7 +48,7 @@ export function useServicesListPageModel() {
     categoriesWithServices: serviceCategoryModel.categories,
     isLoading,
     serviceCategoryModel,
-    confirmDeleteService,
+    deleteService,
     goToServiceCreate,
     goToServiceEdit,
     goToServiceView,

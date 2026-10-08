@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button } from 'primevue'
+import { Button, useConfirm } from 'primevue'
 import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionHeader from 'primevue/accordionheader'
@@ -12,11 +12,30 @@ usePageTitle('Услуги')
 
 const {
   categoriesWithServices,
-  confirmDeleteService,
+  deleteService,
   goToServiceCreate,
   goToServiceEdit,
   goToServiceView,
 } = useServicesListPageModel()
+
+const confirmService = useConfirm()
+const confirmDeleteService = (id: number, event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: `Вы уверены?`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: () => deleteService(id),
+  })
+}
 </script>
 
 <template>

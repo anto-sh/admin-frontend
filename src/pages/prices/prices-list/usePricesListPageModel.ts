@@ -1,10 +1,8 @@
 import { usePriceModel } from '@/entities/price/model'
 import { onMounted, ref, watch, toRaw } from 'vue'
-import { useConfirm } from 'primevue/useconfirm'
 import type { PriceDto, UpdatePriceDto } from '@/entities/price/types'
 
 export function usePricesListPageModel() {
-  const confirmService = useConfirm()
   const priceModel = usePriceModel()
 
   const newPriceDefaultValue = { name: '', price: 0 }
@@ -16,12 +14,9 @@ export function usePricesListPageModel() {
     priceModel.fetchAll()
   })
 
-  watch(
-    priceModel.entities,
-    (newVal) => {
-      priceEntities.value = structuredClone(toRaw(newVal))
-    },
-  )
+  watch(priceModel.entities, (newVal) => {
+    priceEntities.value = structuredClone(toRaw(newVal))
+  })
 
   const addPrice = async () => {
     await priceModel.add(newPrice.value)
@@ -39,46 +34,13 @@ export function usePricesListPageModel() {
     priceModel.fetchAll()
   }
 
-  const confirmCancelAll = (event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: 'Отменить все текущие изменения цен?',
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-        severity: 'danger',
-      },
-      accept: () => {
-        priceModel.fetchAll()
-      },
-    })
-  }
+  const cancelAllChanges = () => priceModel.fetchAll()
 
-  const confirmSaveAll = (event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: 'Сохранить все текущие изменения цен?',
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-      },
-      accept: async () => {
-        if (priceEntities.value) {
-          await priceModel.updateBatch(priceEntities.value)
-          priceModel.fetchAll()
-        }
-      },
-    })
+  const saveAllChanges = async () => {
+    if (priceEntities.value.length) {
+      await priceModel.updateBatch(priceEntities.value)
+      priceModel.fetchAll()
+    }
   }
 
   return {
@@ -88,7 +50,7 @@ export function usePricesListPageModel() {
     addPrice,
     updatePrice,
     deletePrice,
-    confirmCancelAll,
-    confirmSaveAll,
+    cancelAllChanges,
+    saveAllChanges,
   }
 }

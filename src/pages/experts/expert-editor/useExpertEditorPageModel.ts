@@ -75,6 +75,7 @@ export function useExpertEditorPageModel() {
     })
   }
 
+  // TODO: move to ui
   const confirmDeleteExpert = (event: MouseEvent) => {
     confirmService.require({
       target: event.target as HTMLElement,

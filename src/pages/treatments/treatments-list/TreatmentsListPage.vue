@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
 import { useTreatmentsListPageModel } from './useTreatmentsListPageModel'
 
 usePageTitle('Список "Что лечим"')
@@ -12,9 +12,46 @@ const {
   addTreatment,
   updateTreatment,
   deleteTreatment,
-  confirmCancelAll,
-  confirmSaveAll,
+  cancelAllChanges,
+  saveAllChanges,
 } = useTreatmentsListPageModel()
+
+const confirmService = useConfirm()
+
+const confirmCancelAll = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: 'Вы уверены, что хотите отменить все текущие изменения?',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: () => cancelAllChanges(),
+  })
+}
+
+const confirmSaveAll = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: 'Сохранить все текущие изменения?',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+    },
+    accept: async () => saveAllChanges(),
+  })
+}
 </script>
 
 <template>

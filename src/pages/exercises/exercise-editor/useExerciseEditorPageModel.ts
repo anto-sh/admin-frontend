@@ -65,6 +65,7 @@ export function useExerciseEditorPageModel() {
     })
   }
 
+  // TODO: move to ui
   const confirmDeleteExercise = (event: MouseEvent) => {
     confirmService.require({
       target: event.target as HTMLElement,

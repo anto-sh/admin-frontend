@@ -4,7 +4,7 @@
 // Будто бы не стоит, всего один дубль, объединять их - оверинжениринг
 
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
 import { useServiceCategoriesPageModel } from './useServiceCategoriesPageModel'
 
 usePageTitle('Категории услуг')
@@ -14,8 +14,35 @@ const {
   newServiceCategory,
   addServiceCategory,
   updateServiceCategory,
-  confirmDeleteServiceCategory,
+  deleteServiceCategory,
 } = useServiceCategoriesPageModel()
+
+const confirmService = useConfirm()
+const confirmDeleteServiceCategory = async (
+  id: number,
+  relatedServicesLength: number | undefined,
+  event: MouseEvent,
+) => {
+  if (relatedServicesLength)
+    confirmService.require({
+      target: event.target as HTMLElement,
+      message: `При удалении категории удалятся и все входящие в неё услуги.
+                Сейчас в этой категории ${relatedServicesLength} услуг.
+                Вы уверены в удалении этой категории?`,
+      icon: 'pi pi-exclamation-triangle',
+      rejectProps: {
+        label: 'Нет',
+        severity: 'secondary',
+        outlined: true,
+      },
+      acceptProps: {
+        label: 'Да',
+        severity: 'danger',
+      },
+      accept: () => deleteServiceCategory(id),
+    })
+  else deleteServiceCategory(id)
+}
 </script>
 
 <template>
