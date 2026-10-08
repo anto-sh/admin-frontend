@@ -17,11 +17,10 @@ export function usePricesListPageModel() {
   })
 
   watch(
-    () => priceModel.entities,
-    () => {
-      priceEntities.value = structuredClone(toRaw(priceModel.entities.value))
+    priceModel.entities,
+    (newVal) => {
+      priceEntities.value = structuredClone(toRaw(newVal))
     },
-    { deep: true },
   )
 
   const addPrice = async () => {

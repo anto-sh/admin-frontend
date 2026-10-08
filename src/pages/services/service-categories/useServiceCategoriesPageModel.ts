@@ -23,11 +23,10 @@ export function useServiceCategoriesPageModel() {
   })
 
   watch(
-    () => serviceCategoryModel.categories,
-    () => {
-      categoriesWithServices.value = structuredClone(toRaw(serviceCategoryModel.categories.value))
+    serviceCategoryModel.categories,
+    (newVal) => {
+      categoriesWithServices.value = structuredClone(toRaw(newVal))
     },
-    { deep: true },
   )
 
   const addServiceCategory = async (dto: CreateServiceCategoryDto) => {

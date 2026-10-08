@@ -15,9 +15,8 @@ export function useTreatmentsListPageModel() {
   })
 
   watch(
-    () => treatmentModel.entities,
-    () => (treatmentEntities.value = structuredClone(toRaw(treatmentModel.entities.value))),
-    { deep: true },
+    treatmentModel.entities,
+    (newVal) => (treatmentEntities.value = structuredClone(toRaw(newVal))),
   )
 
   const addTreatment = async () => {

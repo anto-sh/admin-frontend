@@ -8,13 +8,12 @@ export const useToastWatcher = () => {
   const toastStore = useToastStore()
 
   watch(
-    () => toastStore.toasts,
+    toastStore.toasts,
     () => {
       if (toastStore.toasts.length) {
         const toastToShow = toastStore.shiftToast()
         if (toastToShow) toastService.add(toastToShow)
       }
     },
-    { deep: true },
   )
 }

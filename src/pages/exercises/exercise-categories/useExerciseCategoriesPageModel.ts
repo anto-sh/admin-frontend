@@ -22,13 +22,9 @@ export function useExerciseCategoriesPageModel() {
     exerciseCategoryModel.fetchAllWithEntities()
   })
 
-  watch(
-    () => exerciseCategoryModel.categories,
-    () => {
-      categoriesWithExercises.value = structuredClone(toRaw(exerciseCategoryModel.categories.value))
-    },
-    { deep: true },
-  )
+  watch(exerciseCategoryModel.categories, (newVal) => {
+    categoriesWithExercises.value = structuredClone(toRaw(newVal))
+  })
 
   const addExerciseCategory = async (dto: CreateExerciseCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
@@ -42,6 +38,7 @@ export function useExerciseCategoriesPageModel() {
     exerciseCategoryModel.fetchAllWithEntities()
   }
 
+  // мб имеет смысл вынести в компонент, тк это скорее про UI
   const confirmDeleteExerciseCategory = async (
     id: number,
     relatedExercisesLength: number | undefined,
