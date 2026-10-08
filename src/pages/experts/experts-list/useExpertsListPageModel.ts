@@ -1,6 +1,5 @@
 import { useExpertCategoryModel } from '@/entities/expert-category/model'
 import { computed, onMounted } from 'vue'
-import { useConfirm } from 'primevue'
 import { useExpertModel } from '@/entities/expert/model'
 import { useRouter } from 'vue-router'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
@@ -8,7 +7,6 @@ import { STRING_BOOLEAN } from '@/shared/enums/common'
 export function useExpertsListPageModel() {
   const expertCategoryModel = useExpertCategoryModel()
   const expertModel = useExpertModel()
-  const confirmService = useConfirm()
   const router = useRouter()
 
   const isLoading = computed(
@@ -19,25 +17,9 @@ export function useExpertsListPageModel() {
     expertCategoryModel.fetchAllWithEntities()
   })
 
-  const confirmDeleteExpert = (id: number, event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: `Вы уверены, что хотите удалить специалиста?`,
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-        severity: 'danger',
-      },
-      accept: async () => {
-        await expertModel.delete(id)
-        expertCategoryModel.fetchAllWithEntities()
-      },
-    })
+  const deleteExpert = async (id: number) => {
+    expertModel.delete(id)
+    await expertCategoryModel.fetchAllWithEntities()
   }
 
   const goToExpertCreate = (categoryId?: number) => {
@@ -65,7 +47,7 @@ export function useExpertsListPageModel() {
   return {
     categoriesWithExperts: expertCategoryModel.categories,
     isLoading,
-    confirmDeleteExpert,
+    deleteExpert,
     goToExpertCreate,
     goToExpertEdit,
     goToExpertView,

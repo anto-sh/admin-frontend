@@ -67,6 +67,7 @@ export function useServiceEditorPageModel() {
     })
   }
 
+  // TODO: move to ui
   const confirmDeleteService = (event: MouseEvent) => {
     confirmService.require({
       target: event.target as HTMLElement,

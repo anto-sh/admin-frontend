@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button } from 'primevue'
+import { Button, useConfirm } from 'primevue'
 import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionHeader from 'primevue/accordionheader'
@@ -10,14 +10,32 @@ import { useExercisesListPageModel } from './useExercisesListPageModel'
 
 usePageTitle('Упражнения')
 
-
 const {
   categoriesWithExercises,
-  confirmDeleteExercise,
+  deleteExercise,
   goToExerciseCreate,
   goToExerciseEdit,
   goToExerciseView,
 } = useExercisesListPageModel()
+
+const confirmService = useConfirm()
+const confirmDeleteExercise = (id: number, event: Event) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: `Вы уверены?`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: () => deleteExercise(id),
+  })
+}
 </script>
 
 <template>

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button } from 'primevue'
+import { Button, useConfirm } from 'primevue'
 import Accordion from 'primevue/accordion'
 import AccordionPanel from 'primevue/accordionpanel'
 import AccordionHeader from 'primevue/accordionheader'
@@ -10,13 +10,27 @@ import { useExpertsListPageModel } from './useExpertsListPageModel'
 
 usePageTitle('Специалисты')
 
-const {
-  categoriesWithExperts,
-  confirmDeleteExpert,
-  goToExpertCreate,
-  goToExpertEdit,
-  goToExpertView,
-} = useExpertsListPageModel()
+const { categoriesWithExperts, deleteExpert, goToExpertCreate, goToExpertEdit, goToExpertView } =
+  useExpertsListPageModel()
+
+const confirmService = useConfirm()
+const confirmDeleteExpert = (id: number, event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: `Вы уверены, что хотите удалить этого специалиста?`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: () => deleteExpert(id),
+  })
+}
 </script>
 
 <template>

@@ -5,7 +5,6 @@ import type {
   ServiceCategoryDto,
 } from '@/entities/service-category/types'
 import { slugify } from 'transliteration'
-import { useConfirm } from 'primevue'
 
 export function useServiceCategoriesPageModel() {
   const serviceCategoryModel = useServiceCategoryModel()
@@ -14,7 +13,6 @@ export function useServiceCategoriesPageModel() {
     url: '',
   }
   const newServiceCategory = ref<CreateServiceCategoryDto>({ ...newServiceCategoryDefaultValue })
-  const confirmService = useConfirm()
 
   const categoriesWithServices = ref<ServiceCategoryDto[]>([])
 
@@ -22,12 +20,9 @@ export function useServiceCategoriesPageModel() {
     serviceCategoryModel.fetchAllWithEntities()
   })
 
-  watch(
-    serviceCategoryModel.categories,
-    (newVal) => {
-      categoriesWithServices.value = structuredClone(toRaw(newVal))
-    },
-  )
+  watch(serviceCategoryModel.categories, (newVal) => {
+    categoriesWithServices.value = structuredClone(toRaw(newVal))
+  })
 
   const addServiceCategory = async (dto: CreateServiceCategoryDto) => {
     if (!dto.url) dto.url = slugify(dto.name!)
@@ -41,32 +36,9 @@ export function useServiceCategoriesPageModel() {
     serviceCategoryModel.fetchAllWithEntities()
   }
 
-  const confirmDeleteServiceCategory = async (
-    id: number,
-    relatedServicesLength: number | undefined,
-    event: MouseEvent,
-  ) => {
-    if (relatedServicesLength)
-      confirmService.require({
-        target: event.target as HTMLElement,
-        message: `При удалении категории удалятся и все входящие в неё услуги.
-                  \n Сейчас в этой категории ${relatedServicesLength} услуг.
-                  \n Вы уверены в удалении этой категории?`,
-        icon: 'pi pi-exclamation-triangle',
-        rejectProps: {
-          label: 'Нет',
-          severity: 'secondary',
-          outlined: true,
-        },
-        acceptProps: {
-          label: 'Да',
-          severity: 'danger',
-        },
-        accept: async () => {
-          await serviceCategoryModel.delete(id)
-        },
-      })
-    else await serviceCategoryModel.delete(id)
+  const deleteServiceCategory = async (id: number) => {
+    await serviceCategoryModel.delete(id)
+    serviceCategoryModel.fetchAllWithEntities()
   }
 
   return {
@@ -74,6 +46,6 @@ export function useServiceCategoriesPageModel() {
     newServiceCategory,
     addServiceCategory,
     updateServiceCategory,
-    confirmDeleteServiceCategory,
+    deleteServiceCategory,
   }
 }
