@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, InputText, Select, FloatLabel } from 'primevue'
+import { Button, InputText, Select, FloatLabel, useConfirm } from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
 import { useExerciseEditorPageModel } from './useExerciseEditorPageModel'
 import EditorJsWrapper from '@/features/editorjs-wrapper/EditorJsWrapper.vue'
@@ -12,8 +12,8 @@ const {
   categoriesSelectOptions,
   isShowEditorJs,
   saveExercise,
+  deleteExercise,
   cancelEditor,
-  confirmDeleteExercise,
 } = useExerciseEditorPageModel()
 
 if (exerciseId) {
@@ -23,6 +23,25 @@ if (exerciseId) {
 
 // TODO: for what we exposing?
 defineExpose({ exerciseId, readonly })
+
+const confirmService = useConfirm()
+const confirmDeleteExercise = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: `Вы уверены?`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: deleteExercise,
+  })
+}
 </script>
 
 <template>
@@ -64,7 +83,7 @@ defineExpose({ exerciseId, readonly })
         <Button
           v-if="exerciseId"
           @click="confirmDeleteExercise($event)"
-          severity="secondary"
+          severity="danger"
           label="Удалить"
           icon="pi pi-trash"
           size="large"

@@ -1,6 +1,5 @@
 import { useExerciseCategoryModel } from '@/entities/exercise-category/model'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
-import { useConfirm } from 'primevue'
 import { useExerciseModel } from '@/entities/exercise/model'
 import type { OutputData } from '@editorjs/editorjs'
 import { useRoute, useRouter } from 'vue-router'
@@ -11,7 +10,6 @@ import { STRING_BOOLEAN } from '@/shared/enums/common'
 export function useExerciseEditorPageModel() {
   const exerciseCategoryModel = useExerciseCategoryModel()
   const exerciseModel = useExerciseModel()
-  const confirmService = useConfirm()
   const router = useRouter()
   const route = useRoute()
   // template ref to editorJsWrapper component
@@ -59,31 +57,14 @@ export function useExerciseEditorPageModel() {
     cancelEditor()
   }
 
+  const deleteExercise = async () => {
+    await exerciseModel.delete(exerciseId)
+    cancelEditor()
+  }
+
   const cancelEditor = () => {
     router.push({
       name: 'exercises',
-    })
-  }
-
-  // TODO: move to ui
-  const confirmDeleteExercise = (event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: `Вы уверены?`,
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-        severity: 'danger',
-      },
-      accept: async () => {
-        await exerciseModel.delete(exerciseId)
-        cancelEditor()
-      },
     })
   }
 
@@ -94,7 +75,7 @@ export function useExerciseEditorPageModel() {
     categoriesSelectOptions,
     isShowEditorJs,
     saveExercise,
-    cancelEditor,
-    confirmDeleteExercise,
+    deleteExercise,
+    cancelEditor
   }
 }

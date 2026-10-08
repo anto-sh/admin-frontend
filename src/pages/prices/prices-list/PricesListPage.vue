@@ -33,7 +33,7 @@ const confirmCancelAll = (event: MouseEvent) => {
       label: 'Да',
       severity: 'danger',
     },
-    accept: () => cancelAllChanges(),
+    accept: cancelAllChanges,
   })
 }
 
@@ -50,7 +50,7 @@ const confirmSaveAll = (event: MouseEvent) => {
     acceptProps: {
       label: 'Да',
     },
-    accept: () => saveAllChanges(),
+    accept: saveAllChanges,
   })
 }
 </script>

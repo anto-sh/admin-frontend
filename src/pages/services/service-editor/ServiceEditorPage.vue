@@ -1,5 +1,14 @@
 <script setup lang="ts">
-import { Button, InputText, Select, FloatLabel, InputNumber, FileUpload, Image } from 'primevue'
+import {
+  Button,
+  InputText,
+  Select,
+  FloatLabel,
+  InputNumber,
+  FileUpload,
+  Image,
+  useConfirm,
+} from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
 import { useServiceEditorPageModel } from './useServiceEditorPageModel'
 import { usePageTitle } from '@/shared/composables/usePageTitle'
@@ -13,8 +22,8 @@ const {
   removeProcedure,
   uploadServiceImage,
   saveService,
+  deleteService,
   cancelEditor,
-  confirmDeleteService,
 } = useServiceEditorPageModel()
 
 if (serviceId) {
@@ -24,6 +33,25 @@ if (serviceId) {
 
 // TODO: for what we are exposing?
 defineExpose({ serviceId, readonly })
+
+const confirmService = useConfirm()
+const confirmDeleteService = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: `Вы уверены?`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: deleteService,
+  })
+}
 </script>
 
 <template>
