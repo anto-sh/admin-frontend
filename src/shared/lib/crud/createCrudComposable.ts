@@ -73,7 +73,7 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
       async update(id: number, dto: TUpdateDto) {
         pendingRequestCounter.start()
         try {
-          // TODO: maybe need to update items
+          // TODO: maybe need to update local state (items) after request
           await crudApi.update(id, dto, abortSignal)
         } finally {
           pendingRequestCounter.finish()
@@ -125,9 +125,9 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
 
     return {
       [isCrudForEntity ? 'entities' : 'categories']: readonly(items),
-      // When using this model, consider isLoading to be a read-only property
-      // It is not "physically" read-only, as it needs to be modified when extending baseCrud with custom methods
-      isLoading,
+      isLoading: readonly(isLoading),
+      // use only to extend composable
+      setIsLoading,
       abortSignal,
       pendingRequestCounter,
       ...baseCrudMethods,
