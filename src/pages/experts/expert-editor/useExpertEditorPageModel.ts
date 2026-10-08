@@ -1,6 +1,6 @@
 import { useExpertCategoryModel } from '@/entities/expert-category/model'
 import { computed, onMounted, ref, useTemplateRef } from 'vue'
-import { useConfirm, type FileUploadSelectEvent } from 'primevue'
+import { type FileUploadSelectEvent } from 'primevue'
 import { useExpertModel } from '@/entities/expert/model'
 import type { OutputData } from '@editorjs/editorjs'
 import { useRoute, useRouter } from 'vue-router'
@@ -12,7 +12,6 @@ import { imageApi } from '@/shared/api/image'
 export function useExpertEditorPageModel() {
   const expertCategoryModel = useExpertCategoryModel()
   const expertModel = useExpertModel()
-  const confirmService = useConfirm()
   const router = useRouter()
   const route = useRoute()
   const editorjsRef = useTemplateRef<EditorJsWrapperExposed & ComponentPublicInstance>('editorjs')
@@ -69,31 +68,14 @@ export function useExpertEditorPageModel() {
     cancelEditor()
   }
 
+  const deleteExpert = async () => {
+    await expertModel.delete(expertId)
+    cancelEditor()
+  }
+
   const cancelEditor = () => {
     router.push({
       name: 'experts',
-    })
-  }
-
-  // TODO: move to ui
-  const confirmDeleteExpert = (event: MouseEvent) => {
-    confirmService.require({
-      target: event.target as HTMLElement,
-      message: `Вы уверены, что хотите удалить специалиста?`,
-      icon: 'pi pi-exclamation-triangle',
-      rejectProps: {
-        label: 'Нет',
-        severity: 'secondary',
-        outlined: true,
-      },
-      acceptProps: {
-        label: 'Да',
-        severity: 'danger',
-      },
-      accept: async () => {
-        await expertModel.delete(expertId)
-        cancelEditor()
-      },
     })
   }
 
@@ -103,10 +85,9 @@ export function useExpertEditorPageModel() {
     formData,
     categoriesSelectOptions,
     isShowEditorJs,
-
     uploadExpertImage,
     saveExpert,
+    deleteExpert,
     cancelEditor,
-    confirmDeleteExpert,
   }
 }

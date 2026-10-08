@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Button, InputText, Select, FloatLabel, FileUpload, Image } from 'primevue'
+import { Button, InputText, Select, FloatLabel, FileUpload, Image, useConfirm } from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
 import { useExpertEditorPageModel } from './useExpertEditorPageModel'
 import EditorJsWrapper from '@/features/editorjs-wrapper/EditorJsWrapper.vue'
@@ -13,8 +13,8 @@ const {
   isShowEditorJs,
   uploadExpertImage,
   saveExpert,
+  deleteExpert,
   cancelEditor,
-  confirmDeleteExpert,
 } = useExpertEditorPageModel()
 
 if (expertId) {
@@ -23,6 +23,25 @@ if (expertId) {
 } else usePageTitle('Добавление нового специалиста')
 
 defineExpose({ expertId, readonly })
+
+const confirmService = useConfirm()
+const confirmDeleteExpert = (event: MouseEvent) => {
+  confirmService.require({
+    target: event.target as HTMLElement,
+    message: `Вы уверены, что хотите удалить специалиста?`,
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: 'Нет',
+      severity: 'secondary',
+      outlined: true,
+    },
+    acceptProps: {
+      label: 'Да',
+      severity: 'danger',
+    },
+    accept: deleteExpert,
+  })
+}
 </script>
 
 <template>
