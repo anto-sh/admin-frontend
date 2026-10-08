@@ -28,7 +28,8 @@ export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>
 
 /* ───────────────── CRUD COMPOSABLE FACTORY ───────────────── */
 export interface BaseCrud<TCreateDto, TUpdateDto> {
-  isLoading: Ref<boolean>
+  isLoading: Readonly<Ref<boolean>>
+  setIsLoading: (val: boolean) => void
   abortSignal: AbortSignal
   pendingRequestCounter: ReturnType<typeof usePendingRequestCounter>
   fetchAll(): Promise<void>

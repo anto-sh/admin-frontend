@@ -8,11 +8,11 @@ export const useTreatmentModel = () => {
   const treatmentBase = useTreatmentBaseModel()
 
   async function updateBatch(dtoArr: UpdateTreatmentBatchDto[]) {
-    treatmentBase.isLoading.value = true
+    treatmentBase.pendingRequestCounter.start()
     try {
       await treatmentApi.updateBatch(dtoArr, treatmentBase.abortSignal)
     } finally {
-      treatmentBase.isLoading.value = false
+      treatmentBase.pendingRequestCounter.finish()
     }
   }
 

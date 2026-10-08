@@ -8,11 +8,11 @@ export const usePriceModel = () => {
   const priceBase = usePriceBaseModel()
 
   async function updateBatch(dtoArr: UpdatePriceBatchDto[]) {
-    priceBase.isLoading.value = true
+    priceBase.pendingRequestCounter.start()
     try {
       await priceApi.updateBatch(dtoArr, priceBase.abortSignal)
     } finally {
-      priceBase.isLoading.value = false
+      priceBase.pendingRequestCounter.finish()
     }
   }
 
