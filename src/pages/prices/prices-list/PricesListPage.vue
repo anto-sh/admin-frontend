@@ -63,6 +63,7 @@ const confirmSaveAll = (event: MouseEvent) => {
 /* ──────────────────── operations available checks ─────────────────── */
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
+// TODO: rename to items in all components
 const canUpdate = (price: PriceDto) =>
   Boolean(price.name && price.price != null && opsAvailableChecks.canUpdate(price.id))
 const canDelete = (price: PriceDto) =>
@@ -92,14 +93,14 @@ const addPriceSecured = () => {
       <h3>Стоимость</h3>
     </div>
     <div
-      v-for="price of priceEntities"
-      :key="price.id"
+      v-for="item of priceEntities"
+      :key="item.id"
       class="price-row"
-      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(price.id) }"
+      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
     >
-      <InputText v-model.trim="price.name" placeholder="Название" />
+      <InputText v-model.trim="item.name" placeholder="Название" />
       <InputNumber
-        v-model="price.price"
+        v-model="item.price"
         mode="currency"
         currency="RUB"
         locale="ru-RU"
@@ -110,21 +111,21 @@ const addPriceSecured = () => {
         :max="10_000_000"
       />
       <Button
-        :disabled="!canUpdate(price)"
+        :disabled="!canUpdate(item)"
         icon="pi pi-save"
-        @click="updatePrice(price.id, { name: price.name, price: price.price })"
+        @click="updatePrice(item.id, { name: item.name, price: item.price })"
       />
       <Button
-        :disabled="!canDelete(price)"
+        :disabled="!canDelete(item)"
         icon="pi pi-trash"
         severity="danger"
-        @click="deletePrice(price.id)"
+        @click="deletePrice(item.id)"
       />
       <Button
-        :disabled="!canCancel(price)"
+        :disabled="!canCancel(item)"
         icon="pi pi-undo"
         severity="contrast"
-        @click="cancelChange(price.id)"
+        @click="cancelChange(item.id)"
       />
     </div>
 
@@ -184,8 +185,8 @@ const addPriceSecured = () => {
         label="Добавить"
         icon="pi pi-plus"
         class="self-end"
-        :disabled="!canAdd()"
         :loading="isLoading"
+        :disabled="!canAdd()"
         @click="addPrice()"
       />
     </div>

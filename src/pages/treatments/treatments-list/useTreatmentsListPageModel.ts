@@ -1,6 +1,7 @@
 import { useTreatmentModel } from '@/entities/treatment/model'
 import { onMounted, ref, toRaw, watch } from 'vue'
 import type { TreatmentDto, UpdateTreatmentDto } from '@/entities/treatment/types'
+import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
 
 export function useTreatmentsListPageModel() {
   const treatmentModel = useTreatmentModel()
@@ -18,7 +19,6 @@ export function useTreatmentsListPageModel() {
   )
 
   const addTreatment = async () => {
-    if (!newTreatmentName.value.trim()) return
     await treatmentModel.add({ name: newTreatmentName.value })
     newTreatmentName.value = ''
     treatmentModel.fetchAll()
@@ -42,14 +42,22 @@ export function useTreatmentsListPageModel() {
     }
   }
 
+  const { dirtyIds, cancelChange } = useEntityArrDirtyTracker(
+    treatmentEntities,
+    () => treatmentModel.entities.value,
+    ['name'],
+  )
+
   return {
     treatmentEntities,
     newTreatmentName,
     isLoading: treatmentModel.isLoading,
+    dirtyIds,
     addTreatment,
     updateTreatment,
     deleteTreatment,
     cancelAllChanges,
     saveAllChanges,
+    cancelChange,
   }
 }
