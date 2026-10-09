@@ -53,8 +53,8 @@ export function useExerciseCategoriesPageModel() {
   return {
     categoriesWithExercises,
     newExerciseCategory,
-    dirtyIds,
     isLoading: exerciseCategoryModel.isLoading,
+    dirtyIds,
     addExerciseCategory,
     updateExerciseCategory,
     deleteExerciseCategory,

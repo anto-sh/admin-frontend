@@ -5,6 +5,7 @@ import type {
   ServiceCategoryDto,
 } from '@/entities/service-category/types'
 import { slugify } from 'transliteration'
+import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
 
 export function useServiceCategoriesPageModel() {
   const serviceCategoryModel = useServiceCategoryModel()
@@ -24,9 +25,10 @@ export function useServiceCategoriesPageModel() {
     categoriesWithServices.value = structuredClone(toRaw(newVal))
   })
 
-  const addServiceCategory = async (dto: CreateServiceCategoryDto) => {
-    if (!dto.url) dto.url = slugify(dto.name!)
-    await serviceCategoryModel.add(dto)
+  const addServiceCategory = async () => {
+    if (!newServiceCategory.value.url)
+      newServiceCategory.value.url = slugify(newServiceCategory.value.name!)
+    await serviceCategoryModel.add(newServiceCategory.value)
     newServiceCategory.value = { ...newServiceCategoryDefaultValue }
     serviceCategoryModel.fetchAllWithEntities()
   }
@@ -41,11 +43,20 @@ export function useServiceCategoriesPageModel() {
     serviceCategoryModel.fetchAllWithEntities()
   }
 
+  const { dirtyIds, cancelChange } = useEntityArrDirtyTracker(
+    categoriesWithServices,
+    () => serviceCategoryModel.categories.value,
+    ['name', 'url'],
+  )
+
   return {
     categoriesWithServices,
     newServiceCategory,
+    isLoading: serviceCategoryModel.isLoading,
+    dirtyIds,
     addServiceCategory,
     updateServiceCategory,
     deleteServiceCategory,
+    cancelChange,
   }
 }
