@@ -85,7 +85,7 @@ const addPriceSecured = () => {
 
 <template>
   <form v-if="priceEntities?.length" @submit.prevent class="w-2/3 min-w-150 space-y-2">
-    <div class="price-row text-xl font-medium">
+    <div class="price-row text-2xl font-medium">
       <h3>Название</h3>
       <h3 style="min-width: 13rem">Стоимость</h3>
     </div>
@@ -144,10 +144,10 @@ const addPriceSecured = () => {
     </div>
   </form>
   <form @submit.prevent class="w-2/3 min-w-150 mt-10">
-    <h3 class="text-xl mb-2">Добавить новую цену</h3>
+    <h3 class="text-3xl mb-2">Добавить новую цену</h3>
     <div class="new-price-row">
       <div class="flex flex-col gap-2">
-        <Label for="new-price-text">Название</Label>
+        <Label class="text-xl font-medium" for="new-price-text">Название</Label>
         <InputText
           id="new-price-text"
           v-model.trim="newPrice.name"
@@ -156,16 +156,15 @@ const addPriceSecured = () => {
           @keydown.enter="addPriceSecured"
         />
       </div>
-      <!-- TODO: видимо из-за этого решения не работают ограничения по экстремальным значениям в случае если добавление/апдейт происходят до блюра с поля -->
       <!--
       InputNumber почему-то работает только с модификатором .lazy для v-model, поэтому значение обновляется на блюре,
       в нашем случае такая обработка сделает UX менее приятным из-за атрибута disabled у кнопки добавления,
       поэтому пишем кастомный обработчик на событие input
       -->
       <div class="flex flex-col gap-2">
-        <Label for="new-price-text">Стоимость</Label>
+        <Label class="text-xl font-medium" for="new-price-text">Стоимость</Label>
         <InputNumber
-          :modelValue="newPrice.price"
+          v-model="newPrice.price"
           class="w-full"
           mode="currency"
           currency="RUB"
