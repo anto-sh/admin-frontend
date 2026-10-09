@@ -4,7 +4,7 @@ import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
 import InputNumber from 'primevue/inputnumber'
 import { usePricesListPageModel } from './usePricesListPageModel'
 import type { PriceDto } from '@/entities/price/types'
-import { useUiStateUtilsByDirtyCheck } from '@/shared/composables/editable-entity-list/useUiStateUtilsByDirtyCheck'
+import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
 
 usePageTitle('Цены')
 
@@ -20,6 +20,8 @@ const {
   saveAllChanges,
   cancelChange,
 } = usePricesListPageModel()
+
+/* ───────────────────────── confirms ───────────────────────── */
 
 const confirmService = useConfirm()
 
@@ -58,27 +60,27 @@ const confirmSaveAll = (event: MouseEvent) => {
   })
 }
 
+/* ──────────────────── operations available checks ─────────────────── */
+const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+
+const canUpdate = (price: PriceDto) =>
+  price.name && price.price != null && opsAvailableChecks.canUpdate(price.id)
+const canDelete = (price: PriceDto) =>
+  priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(price.id)
+const canCancel = (price: PriceDto) => opsAvailableChecks.isEntityChanged(price.id)
+const canSaveAll = () => priceEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation()
+const canCancelAll = () => opsAvailableChecks.canBatchOperation()
+const canAdd = () =>
+  newPrice.value.name &&
+  newPrice.value.price != null &&
+  !isLoading.value &&
+  opsAvailableChecks.canAdd()
+
+/* ──────────────────────── operations ──────────────────────── */
 const addPriceSecured = () => {
-  if (isAddBtnDisabled()) return
+  if (!canAdd()) return
   addPrice()
 }
-
-/* ──────────────────── ui state methods ─────────────────── */
-const uiStateUtils = useUiStateUtilsByDirtyCheck(dirtyIds)
-
-const isUpdateBtnDisabled = (price: PriceDto) =>
-  !price.name || price.price == null || uiStateUtils.isUpdateBtnDisabled(price.id)
-const isDeleteBtnDisabled = (price: PriceDto) =>
-  priceEntities.value.length === 1 || uiStateUtils.isDeleteBtnDisabled(price.id)
-const isCancelBtnDisabled = (price: PriceDto) => !uiStateUtils.isEntityChanged(price.id)
-const isSaveAllBtnDisabled = () =>
-  priceEntities.value.length === 1 || uiStateUtils.isBatchBtnDisabled()
-const isCancelAllBtnDisabled = () => uiStateUtils.isBatchBtnDisabled()
-const isAddBtnDisabled = () =>
-  !newPrice.value.name ||
-  newPrice.value.price == null ||
-  isLoading.value ||
-  uiStateUtils.isAddBtnDisabled()
 </script>
 
 <template>
@@ -91,7 +93,7 @@ const isAddBtnDisabled = () =>
       v-for="price of priceEntities"
       :key="price.id"
       class="price-row"
-      :class="{ 'input-group--highlighted': uiStateUtils.isEntityChanged(price.id) }"
+      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(price.id) }"
     >
       <InputText v-model.trim="price.name" placeholder="Название" />
       <InputNumber
@@ -106,18 +108,18 @@ const isAddBtnDisabled = () =>
         :max="10_000_000"
       />
       <Button
-        :disabled="isUpdateBtnDisabled(price)"
+        :disabled="!canUpdate(price)"
         icon="pi pi-save"
         @click="updatePrice(price.id, { name: price.name, price: price.price })"
       />
       <Button
-        :disabled="isDeleteBtnDisabled(price)"
+        :disabled="!canDelete(price)"
         icon="pi pi-trash"
         severity="danger"
         @click="deletePrice(price.id)"
       />
       <Button
-        :disabled="isCancelBtnDisabled(price)"
+        :disabled="!canCancel(price)"
         icon="pi pi-undo"
         severity="contrast"
         @click="cancelChange(price.id)"
@@ -126,14 +128,14 @@ const isAddBtnDisabled = () =>
 
     <div class="flex gap-2 mt-6">
       <Button
-        :disabled="isSaveAllBtnDisabled()"
+        :disabled="!canSaveAll()"
         label="Сохранить всё"
         icon="pi pi-save"
         severity="primary"
         @click="confirmSaveAll($event)"
       />
       <Button
-        :disabled="isCancelAllBtnDisabled()"
+        :disabled="!canCancelAll()"
         label="Сбросить изменения"
         icon="pi pi-times"
         severity="danger"
@@ -181,7 +183,7 @@ const isAddBtnDisabled = () =>
         label="Добавить"
         icon="pi pi-plus"
         class="self-end"
-        :disabled="isAddBtnDisabled()"
+        :disabled="!canAdd()"
         :loading="isLoading"
         @click="addPrice()"
       />
