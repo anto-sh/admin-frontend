@@ -2,7 +2,7 @@ import type { ComputedRef } from 'vue'
 
 export const useUiStateUtilsByDirtyCheck = (dirtyIds: ComputedRef<number[]>) => {
   const isEntityChanged = (id: number) => {
-    return isEntityChanged(id)
+    return dirtyIds.value.includes(id)
   }
 
   const isUpdateBtnDisabled = (id: number) => {
