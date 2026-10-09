@@ -5,6 +5,7 @@ import type {
   ExerciseCategoryDto,
 } from '@/entities/exercise-category/types'
 import { slugify } from 'transliteration'
+import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
 
 export function useExerciseCategoriesPageModel() {
   const exerciseCategoryModel = useExerciseCategoryModel()
@@ -24,9 +25,10 @@ export function useExerciseCategoriesPageModel() {
     categoriesWithExercises.value = structuredClone(toRaw(newVal))
   })
 
-  const addExerciseCategory = async (dto: CreateExerciseCategoryDto) => {
-    if (!dto.url) dto.url = slugify(dto.name!)
-    await exerciseCategoryModel.add(dto)
+  const addExerciseCategory = async () => {
+    if (!newExerciseCategory.value.url)
+      newExerciseCategory.value.url = slugify(newExerciseCategory.value.name!)
+    await exerciseCategoryModel.add(newExerciseCategory.value)
     newExerciseCategory.value = { ...newExerciseCategoryDefaultValue }
     exerciseCategoryModel.fetchAllWithEntities()
   }
@@ -42,11 +44,20 @@ export function useExerciseCategoriesPageModel() {
     exerciseCategoryModel.fetchAllWithEntities()
   }
 
+  const { dirtyIds, cancelChange } = useEntityArrDirtyTracker(
+    categoriesWithExercises,
+    () => exerciseCategoryModel.categories.value,
+    ['name', 'url'],
+  )
+
   return {
     categoriesWithExercises,
     newExerciseCategory,
+    dirtyIds,
+    isLoading: exerciseCategoryModel.isLoading,
     addExerciseCategory,
     updateExerciseCategory,
     deleteExerciseCategory,
+    cancelChange,
   }
 }

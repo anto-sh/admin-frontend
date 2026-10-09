@@ -1,18 +1,24 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import { useExerciseCategoriesPageModel } from './useExerciseCategoriesPageModel'
+import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import type { ExerciseCategoryDto } from '@/entities/exercise-category/types'
 
 usePageTitle('Категории упражнений')
 
 const {
   categoriesWithExercises,
   newExerciseCategory,
+  dirtyIds,
+  isLoading,
   addExerciseCategory,
   updateExerciseCategory,
   deleteExerciseCategory,
+  cancelChange,
 } = useExerciseCategoriesPageModel()
 
+/* ───────────────────────── confirms ───────────────────────── */
 const confirmService = useConfirm()
 const confirmDeleteExerciseCategory = async (
   id: number,
@@ -39,15 +45,49 @@ const confirmDeleteExerciseCategory = async (
     })
   else deleteExerciseCategory(id)
 }
+
+/* ──────────────────── operations available checks ─────────────────── */
+const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+
+const canUpdate = (category: ExerciseCategoryDto) =>
+  Boolean(category.name && opsAvailableChecks.canUpdate(category.id))
+const canDelete = (category: ExerciseCategoryDto) =>
+  categoriesWithExercises.value.length !== 1 && opsAvailableChecks.canDelete(category.id)
+const canCancel = (category: ExerciseCategoryDto) => opsAvailableChecks.isEntityChanged(category.id)
+const canAdd = () =>
+  Boolean(newExerciseCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd())
+
+const canEdit = (category: ExerciseCategoryDto) =>
+  (opsAvailableChecks.isEntityChanged(category.id) && dirtyIds.value.length <= 1) ||
+  dirtyIds.value.length === 0
+
+/* ──────────────────────── operations ──────────────────────── */
+const addCategorySecured = () => {
+  if (!canAdd()) return
+  addExerciseCategory()
+}
 </script>
 
 <template>
-  <form v-if="categoriesWithExercises.length" @submit.prevent>
-    <div v-for="item in categoriesWithExercises" :key="item.id" class="my-1">
-      <InputText v-model.trim="item.name" placeholder="Название" />
-      <InputText v-model.trim="item.url" class="ml-2" placeholder="Url (опционально)" />
+  <form v-if="categoriesWithExercises.length" @submit.prevent class="w-2/3 min-w-150 space-y-2">
+    <div class="category-row text-2xl font-medium">
+      <h3>Название</h3>
+      <h3>URL</h3>
+    </div>
+    <div
+      v-for="item in categoriesWithExercises"
+      :key="item.id"
+      class="category-row"
+      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
+    >
+      <InputText :disabled="!canEdit(item)" v-model.trim="item.name" placeholder="Название" />
+      <InputText
+        :disabled="!canEdit(item)"
+        v-model.trim="item.url"
+        placeholder="Url (опционально)"
+      />
       <Button
-        :disabled="!item.name"
+        :disabled="!canUpdate(item)"
         icon="pi pi-save"
         @click="
           updateExerciseCategory(item.id, {
@@ -55,34 +95,52 @@ const confirmDeleteExerciseCategory = async (
             url: item.url,
           })
         "
-        class="ml-2"
       />
       <Button
-        :disabled="categoriesWithExercises.length === 1"
+        :disabled="!canDelete(item)"
         icon="pi pi-trash"
         severity="danger"
         @click="confirmDeleteExerciseCategory(item.id, item.exercises?.length, $event)"
-        class="ml-1"
       />
-      <span class="ml-4 text-gray-400">Упражнений: {{ item.exercises?.length || 0 }}</span>
+      <Button
+        :disabled="!canCancel(item)"
+        icon="pi pi-undo"
+        severity="contrast"
+        @click="cancelChange(item.id)"
+      />
+      <span class="text-gray-400">Упражнений: {{ item.exercises?.length || 0 }}</span>
     </div>
   </form>
 
-  <form @submit.prevent class="mt-10">
-    <h3 class="text-xl mb-2">Добавить новую категорию</h3>
-    <InputText v-model.trim="newExerciseCategory.name" placeholder="Название" />
-    <InputText
-      v-model.trim="newExerciseCategory.url"
-      class="ml-2"
-      placeholder="Url (опционально)"
-    />
-    <Button
-      :disabled="!newExerciseCategory.name"
-      label="Добавить"
-      icon="pi pi-plus"
-      class="ml-2"
-      @click="addExerciseCategory(newExerciseCategory)"
-    />
+  <form @submit.prevent class="w-2/3 min-w-150 mt-10">
+    <h3 class="text-3xl mb-2">Добавить новую категорию</h3>
+    <div class="new-category-row">
+      <div class="flex flex-col gap-2">
+        <Label class="text-xl font-medium" for="new-category-text">Название</Label>
+        <InputText
+          id="new-category-text"
+          v-model.trim="newExerciseCategory.name"
+          placeholder="Название"
+          @keydown.enter="addCategorySecured"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label class="text-xl font-medium truncate" for="new-category-url">URL (опционально)</Label>
+        <InputText
+          id="new-category-url"
+          v-model.trim="newExerciseCategory.url"
+          placeholder="URL (опционально)"
+          @keydown.enter="addCategorySecured"
+        />
+      </div>
+      <Button
+        :disabled="!canAdd()"
+        label="Добавить"
+        icon="pi pi-plus"
+        class="self-end"
+        @click="addCategorySecured"
+      />
+    </div>
   </form>
 
   <ConfirmPopup
