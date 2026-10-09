@@ -2,21 +2,28 @@
 // TODO: подумать над выделением в общий компонент вместе с ExerciseCategoriesList
 // этот компонент один в один совпадает с компонентом категорий упражнений
 // Будто бы не стоит, всего один дубль, объединять их - оверинжениринг
+// Или всё-таки стоит?
 
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
 import { useServiceCategoriesPageModel } from './useServiceCategoriesPageModel'
+import type { ServiceCategoryDto } from '@/entities/service-category/types'
+import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
 
 usePageTitle('Категории услуг')
 
 const {
   categoriesWithServices,
   newServiceCategory,
+  isLoading,
+  dirtyIds,
   addServiceCategory,
   updateServiceCategory,
   deleteServiceCategory,
+  cancelChange,
 } = useServiceCategoriesPageModel()
 
+/* ───────────────────────── confirms ───────────────────────── */
 const confirmService = useConfirm()
 const confirmDeleteServiceCategory = async (
   id: number,
@@ -43,15 +50,49 @@ const confirmDeleteServiceCategory = async (
     })
   else deleteServiceCategory(id)
 }
+
+/* ──────────────────── operations available checks ─────────────────── */
+const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+
+const canUpdate = (category: ServiceCategoryDto) =>
+  Boolean(category.name && opsAvailableChecks.canUpdate(category.id))
+const canDelete = (category: ServiceCategoryDto) =>
+  categoriesWithServices.value.length !== 1 && opsAvailableChecks.canDelete(category.id)
+const canCancel = (category: ServiceCategoryDto) => opsAvailableChecks.isEntityChanged(category.id)
+const canAdd = () =>
+  Boolean(newServiceCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd())
+
+const canEdit = (category: ServiceCategoryDto) =>
+  (opsAvailableChecks.isEntityChanged(category.id) && dirtyIds.value.length <= 1) ||
+  dirtyIds.value.length === 0
+
+/* ──────────────────────── operations ──────────────────────── */
+const addCategorySecured = () => {
+  if (!canAdd()) return
+  addServiceCategory()
+}
 </script>
 
 <template>
-  <form v-if="categoriesWithServices.length" @submit.prevent>
-    <div v-for="item in categoriesWithServices" :key="item.id" class="my-1">
-      <InputText v-model.trim="item.name" placeholder="Название" />
-      <InputText v-model.trim="item.url" class="ml-2" placeholder="Url (опционально)" />
+  <form v-if="categoriesWithServices.length" @submit.prevent class="w-2/3 min-w-200 space-y-2">
+    <div class="category-row text-2xl font-medium">
+      <h3>Название</h3>
+      <h3>URL</h3>
+    </div>
+    <div
+      v-for="item in categoriesWithServices"
+      :key="item.id"
+      class="category-row"
+      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
+    >
+      <InputText :disabled="!canEdit(item)" v-model.trim="item.name" placeholder="Название" />
+      <InputText
+        :disabled="!canEdit(item)"
+        v-model.trim="item.url"
+        placeholder="URL (опционально)"
+      />
       <Button
-        :disabled="!item.name"
+        :disabled="!canUpdate(item)"
         icon="pi pi-save"
         @click="
           updateServiceCategory(item.id, {
@@ -59,30 +100,52 @@ const confirmDeleteServiceCategory = async (
             url: item.url,
           })
         "
-        class="ml-2"
       />
       <Button
-        :disabled="categoriesWithServices.length === 1"
+        :disabled="!canDelete(item)"
         icon="pi pi-trash"
         severity="danger"
         @click="confirmDeleteServiceCategory(item.id, item.services?.length, $event)"
-        class="ml-1"
       />
-      <span class="ml-4 text-gray-400">Услуг: {{ item.services?.length || 0 }}</span>
+      <Button
+        :disabled="!canCancel(item)"
+        icon="pi pi-undo"
+        severity="contrast"
+        @click="cancelChange(item.id)"
+      />
+      <span class="text-gray-400">Услуг: {{ item.services?.length || 0 }}</span>
     </div>
   </form>
 
-  <form class="mt-10" @submit.prevent>
-    <h3 class="text-xl mb-2">Добавить новую категорию</h3>
-    <InputText v-model.trim="newServiceCategory.name" placeholder="Название" />
-    <InputText v-model.trim="newServiceCategory.url" class="ml-2" placeholder="Url (опционально)" />
-    <Button
-      :disabled="!newServiceCategory.name"
-      label="Добавить"
-      icon="pi pi-plus"
-      class="ml-2"
-      @click="addServiceCategory(newServiceCategory)"
-    />
+  <form @submit.prevent class="w-2/3 min-w-200 mt-10">
+    <h3 class="text-3xl mb-2">Добавить новую категорию</h3>
+    <div class="new-category-row">
+      <div class="flex flex-col gap-2">
+        <Label class="text-xl font-medium" for="new-category-text">Название</Label>
+        <InputText
+          id="new-category-text"
+          v-model.trim="newServiceCategory.name"
+          placeholder="Название"
+          @keydown.enter="addCategorySecured"
+        />
+      </div>
+      <div class="flex flex-col gap-2">
+        <Label class="text-xl font-medium truncate" for="new-category-url">URL (опционально)</Label>
+        <InputText
+          id="new-category-url"
+          v-model.trim="newServiceCategory.url"
+          placeholder="URL (опционально)"
+          @keydown.enter="addCategorySecured"
+        />
+      </div>
+      <Button
+        :disabled="!canAdd()"
+        label="Добавить"
+        icon="pi pi-plus"
+        class="self-end"
+        @click="addCategorySecured"
+      />
+    </div>
   </form>
 
   <ConfirmPopup
