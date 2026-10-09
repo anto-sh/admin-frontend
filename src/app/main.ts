@@ -21,6 +21,8 @@ app.use(i18n)
 app.use(createPinia())
 app.use(router)
 app.use(PrimeVue, {
+  license:
+    'eyJpZCI6ImZjNDg3Njc3LWRlZWItNGYxZi1iOTBjLTA3OTVjZGU5NzZkNSIsInByb2R1Y3QiOiJwcmltZXVpIiwidGllciI6ImNvbW11bml0eSIsInR5cGUiOiJkZXYiLCJpYXQiOjE3OTE1NDI4MjksImV4cCI6MTgyMzA3ODgyOX0.10nOIosTujo_LbljVxSkja9KYv3_FBCy36e5n4EdhT4EAXKvTWGRwhaii7385a_ym5EnLoDgRJKoMqTGszxBBQ',
   // Default theme configuration
   theme: {
     preset: Aura,
