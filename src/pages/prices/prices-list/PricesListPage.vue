@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import InputNumber from 'primevue/inputnumber'
 import { usePricesListPageModel } from './usePricesListPageModel'
 import type { PriceDto } from '@/entities/price/types'
