@@ -1,6 +1,5 @@
 import type { ComputedRef } from 'vue'
 
-// TODO: будто не только про UI эти состояния, скорее про допустимые операции
 export const useOperationsAvailableChecks = (dirtyIds: ComputedRef<number[]>) => {
   const isEntityChanged = (id: number) => dirtyIds.value.includes(id)
 
