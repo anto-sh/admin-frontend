@@ -69,7 +69,7 @@ const addCategorySecured = () => {
 </script>
 
 <template>
-  <form v-if="categoriesWithExercises.length" @submit.prevent class="w-2/3 min-w-150 space-y-2">
+  <form v-if="categoriesWithExercises.length" @submit.prevent class="w-2/3 min-w-200 space-y-2">
     <div class="category-row text-2xl font-medium">
       <h3>Название</h3>
       <h3>URL</h3>
@@ -84,7 +84,7 @@ const addCategorySecured = () => {
       <InputText
         :disabled="!canEdit(item)"
         v-model.trim="item.url"
-        placeholder="Url (опционально)"
+        placeholder="URL (опционально)"
       />
       <Button
         :disabled="!canUpdate(item)"
@@ -112,7 +112,7 @@ const addCategorySecured = () => {
     </div>
   </form>
 
-  <form @submit.prevent class="w-2/3 min-w-150 mt-10">
+  <form @submit.prevent class="w-2/3 min-w-200 mt-10">
     <h3 class="text-3xl mb-2">Добавить новую категорию</h3>
     <div class="new-category-row">
       <div class="flex flex-col gap-2">

@@ -55,7 +55,7 @@ const confirmSaveAll = (event: MouseEvent) => {
 </script>
 
 <template>
-  <form v-if="treatmentEntities.length" @submit.prevent class="w-1/2 min-w-120 space-y-2">
+  <form v-if="treatmentEntities.length" @submit.prevent class="w-1/2 min-w-200 space-y-2">
     <div v-for="item in treatmentEntities" :key="item.id" class="flex items-center gap-2">
       <InputText v-model.trim="item.name" class="w-full" placeholder="Название" />
       <Button
@@ -86,7 +86,7 @@ const confirmSaveAll = (event: MouseEvent) => {
       />
     </div>
   </form>
-  <form @submit.prevent class="w-1/2 min-w-120 mt-10">
+  <form @submit.prevent class="w-1/2 min-w-200 mt-10">
     <h3 class="text-xl mb-2">Добавить новый пункт</h3>
     <div class="flex gap-2">
       <InputText
