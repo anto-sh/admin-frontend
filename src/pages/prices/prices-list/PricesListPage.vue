@@ -64,17 +64,19 @@ const confirmSaveAll = (event: MouseEvent) => {
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
 const canUpdate = (price: PriceDto) =>
-  price.name && price.price != null && opsAvailableChecks.canUpdate(price.id)
+  Boolean(price.name && price.price != null && opsAvailableChecks.canUpdate(price.id))
 const canDelete = (price: PriceDto) =>
   priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(price.id)
 const canCancel = (price: PriceDto) => opsAvailableChecks.isEntityChanged(price.id)
 const canSaveAll = () => priceEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation()
 const canCancelAll = () => opsAvailableChecks.canBatchOperation()
 const canAdd = () =>
-  newPrice.value.name &&
-  newPrice.value.price != null &&
-  !isLoading.value &&
-  opsAvailableChecks.canAdd()
+  Boolean(
+    newPrice.value.name &&
+      newPrice.value.price != null &&
+      !isLoading.value &&
+      opsAvailableChecks.canAdd(),
+  )
 
 /* ──────────────────────── operations ──────────────────────── */
 const addPriceSecured = () => {
@@ -87,7 +89,7 @@ const addPriceSecured = () => {
   <form v-if="priceEntities?.length" @submit.prevent class="w-2/3 min-w-150 space-y-2">
     <div class="price-row text-2xl font-medium">
       <h3>Название</h3>
-      <h3 style="min-width: 13rem">Стоимость</h3>
+      <h3>Стоимость</h3>
     </div>
     <div
       v-for="price of priceEntities"
@@ -204,5 +206,13 @@ const addPriceSecured = () => {
   grid-template-columns: 2fr 1fr 8.5rem;
   align-items: center;
   column-gap: 0.5rem;
+}
+
+.price-row,
+.new-price-row {
+  & > *,
+  & .p-inputnumber > :deep(input) {
+    min-width: 0;
+  }
 }
 </style>
