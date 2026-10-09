@@ -86,7 +86,7 @@ const addPriceSecured = () => {
 </script>
 
 <template>
-  <form v-if="priceEntities?.length" @submit.prevent class="w-2/3 min-w-150 space-y-2">
+  <form v-if="priceEntities?.length" @submit.prevent class="w-2/3 min-w-200 space-y-2">
     <div class="price-row text-2xl font-medium">
       <h3>Название</h3>
       <h3>Стоимость</h3>
@@ -145,7 +145,7 @@ const addPriceSecured = () => {
       />
     </div>
   </form>
-  <form @submit.prevent class="w-2/3 min-w-150 mt-10">
+  <form @submit.prevent class="w-2/3 min-w-200 mt-10">
     <h3 class="text-3xl mb-2">Добавить новую цену</h3>
     <div class="new-price-row">
       <div class="flex flex-col gap-2">
