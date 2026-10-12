@@ -2,10 +2,10 @@
 // TODO: подумать над выделением в общий компонент вместе с ExerciseCategoriesList
 // этот компонент один в один совпадает с компонентом категорий упражнений
 // Будто бы не стоит, всего один дубль, объединять их - оверинжениринг
-// Или всё-таки стоит?
+// Или всё-таки стоит? Мб дженерик компонент
 
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
+import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import { useServiceCategoriesPageModel } from './useServiceCategoriesPageModel'
 import type { ServiceCategoryDto } from '@/entities/service-category/types'
 import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'

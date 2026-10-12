@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
+import { Button, InputText, Label } from 'primevue'
 import InputNumber from 'primevue/inputnumber'
 import { usePricesListPageModel } from './usePricesListPageModel'
 import type { PriceDto } from '@/entities/price/types'
 import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import { computed } from 'vue'
+import BatchActionsBar from '@/features/batch-actions-bar/BatchActionsBar.vue'
 
 usePageTitle('Цены')
 
@@ -21,45 +23,6 @@ const {
   cancelChange,
 } = usePricesListPageModel()
 
-/* ───────────────────────── confirms ───────────────────────── */
-
-const confirmService = useConfirm()
-
-const confirmCancelAll = (event: MouseEvent) => {
-  confirmService.require({
-    target: event.target as HTMLElement,
-    message: 'Отменить все текущие изменения цен?',
-    icon: 'pi pi-exclamation-triangle',
-    rejectProps: {
-      label: 'Нет',
-      severity: 'secondary',
-      outlined: true,
-    },
-    acceptProps: {
-      label: 'Да',
-      severity: 'danger',
-    },
-    accept: cancelAllChanges,
-  })
-}
-
-const confirmSaveAll = (event: MouseEvent) => {
-  confirmService.require({
-    target: event.target as HTMLElement,
-    message: 'Сохранить все текущие изменения цен?',
-    icon: 'pi pi-exclamation-triangle',
-    rejectProps: {
-      label: 'Нет',
-      severity: 'secondary',
-      outlined: true,
-    },
-    acceptProps: {
-      label: 'Да',
-    },
-    accept: saveAllChanges,
-  })
-}
-
 /* ──────────────────── operations available checks ─────────────────── */
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
@@ -69,8 +32,6 @@ const canUpdate = (price: PriceDto) =>
 const canDelete = (price: PriceDto) =>
   priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(price.id)
 const canCancel = (price: PriceDto) => opsAvailableChecks.isEntityChanged(price.id)
-const canSaveAll = () => priceEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation()
-const canCancelAll = () => opsAvailableChecks.canBatchOperation()
 const canAdd = () =>
   Boolean(
     newPrice.value.name &&
@@ -78,6 +39,11 @@ const canAdd = () =>
       !isLoading.value &&
       opsAvailableChecks.canAdd(),
   )
+
+const canSaveAll = computed(
+  () => priceEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation(),
+)
+const canCancelAll = computed(() => opsAvailableChecks.canBatchOperation())
 
 /* ──────────────────────── operations ──────────────────────── */
 const addPriceSecured = () => {
@@ -129,22 +95,12 @@ const addPriceSecured = () => {
       />
     </div>
 
-    <div class="flex gap-2 mt-6">
-      <Button
-        :disabled="!canSaveAll()"
-        label="Сохранить всё"
-        icon="pi pi-save"
-        severity="primary"
-        @click="confirmSaveAll($event)"
-      />
-      <Button
-        :disabled="!canCancelAll()"
-        label="Сбросить изменения"
-        icon="pi pi-times"
-        severity="danger"
-        @click="confirmCancelAll($event)"
-      />
-    </div>
+    <BatchActionsBar
+      :can-save-all="canSaveAll"
+      :can-cancel-all="canCancelAll"
+      @save-all="saveAllChanges"
+      @cancel-all="cancelAllChanges"
+    />
   </form>
   <form @submit.prevent class="w-2/3 min-w-200 mt-10">
     <h3 class="text-3xl mb-2">Добавить новую цену</h3>
@@ -191,8 +147,6 @@ const addPriceSecured = () => {
       />
     </div>
   </form>
-
-  <ConfirmPopup class="w-[400px]" />
 </template>
 
 <style scoped lang="scss">

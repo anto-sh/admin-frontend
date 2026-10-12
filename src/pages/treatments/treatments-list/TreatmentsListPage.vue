@@ -1,10 +1,11 @@
 <script setup lang="ts">
 import { usePageTitle } from '@/shared/composables/usePageTitle'
-import { Button, InputText, ConfirmPopup, useConfirm } from 'primevue'
+import { Button, InputText, Label } from 'primevue'
 import { useTreatmentsListPageModel } from './useTreatmentsListPageModel'
 import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
 import type { TreatmentDto } from '@/entities/treatment/types'
-
+import { computed } from 'vue'
+import BatchActionsBar from '@/features/batch-actions-bar/BatchActionsBar.vue'
 usePageTitle('Список "Что лечим"')
 
 /* ───────────────────────── confirms ───────────────────────── */
@@ -21,45 +22,6 @@ const {
   cancelChange,
 } = useTreatmentsListPageModel()
 
-/* ───────────────────────── confirms ───────────────────────── */
-
-const confirmService = useConfirm()
-
-const confirmCancelAll = (event: MouseEvent) => {
-  confirmService.require({
-    target: event.target as HTMLElement,
-    message: 'Вы уверены, что хотите отменить все текущие изменения?',
-    icon: 'pi pi-exclamation-triangle',
-    rejectProps: {
-      label: 'Нет',
-      severity: 'secondary',
-      outlined: true,
-    },
-    acceptProps: {
-      label: 'Да',
-      severity: 'danger',
-    },
-    accept: cancelAllChanges,
-  })
-}
-
-const confirmSaveAll = (event: MouseEvent) => {
-  confirmService.require({
-    target: event.target as HTMLElement,
-    message: 'Сохранить все текущие изменения?',
-    icon: 'pi pi-exclamation-triangle',
-    rejectProps: {
-      label: 'Нет',
-      severity: 'secondary',
-      outlined: true,
-    },
-    acceptProps: {
-      label: 'Да',
-    },
-    accept: saveAllChanges,
-  })
-}
-
 /* ──────────────────── operations available checks ─────────────────── */
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
@@ -68,11 +30,13 @@ const canUpdate = (treatment: TreatmentDto) =>
 const canDelete = (treatment: TreatmentDto) =>
   treatmentEntities.value.length !== 1 && opsAvailableChecks.canDelete(treatment.id)
 const canCancel = (treatment: TreatmentDto) => opsAvailableChecks.isEntityChanged(treatment.id)
-const canSaveAll = () =>
-  treatmentEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation()
-const canCancelAll = () => opsAvailableChecks.canBatchOperation()
 const canAdd = () =>
   Boolean(newTreatmentName.value && !isLoading.value && opsAvailableChecks.canAdd())
+
+const canSaveAll = computed(
+  () => treatmentEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation(),
+)
+const canCancelAll = computed(() => opsAvailableChecks.canBatchOperation())
 
 /* ──────────────────────── operations ──────────────────────── */
 const addTreatmentSecured = () => {
@@ -111,23 +75,12 @@ const addTreatmentSecured = () => {
         @click="cancelChange(item.id)"
       />
     </div>
-    <!-- TODO: Вынести в отдельный компонент, на всех страницах заменить -->
-    <div class="flex gap-2 mt-6">
-      <Button
-        :disabled="!canSaveAll()"
-        label="Сохранить всё"
-        icon="pi pi-save"
-        severity="primary"
-        @click="confirmSaveAll($event)"
-      />
-      <Button
-        :disabled="!canCancelAll()"
-        label="Сбросить изменения"
-        icon="pi pi-times"
-        severity="danger"
-        @click="confirmCancelAll($event)"
-      />
-    </div>
+    <BatchActionsBar
+      :can-save-all="canSaveAll"
+      :can-cancel-all="canCancelAll"
+      @save-all="saveAllChanges"
+      @cancel-all="cancelAllChanges"
+    />
   </form>
   <form @submit.prevent class="w-2/3 min-w-200 mt-10">
     <h3 class="text-3xl mb-2">Добавить новый пункт</h3>
@@ -152,8 +105,6 @@ const addTreatmentSecured = () => {
       />
     </div>
   </form>
-
-  <ConfirmPopup class="w-[400px]" />
 </template>
 
 <style scoped lang="scss">
