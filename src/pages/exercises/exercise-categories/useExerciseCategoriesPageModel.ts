@@ -5,7 +5,7 @@ import type {
   ExerciseCategoryDto,
 } from '@/entities/exercise-category/types'
 import { slugify } from 'transliteration'
-import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
+import { useEntityArrDirtyTracker } from '@/shared/composables/entity-list-form/useEntityArrDirtyTracker'
 
 export function useExerciseCategoriesPageModel() {
   const exerciseCategoryModel = useExerciseCategoryModel()

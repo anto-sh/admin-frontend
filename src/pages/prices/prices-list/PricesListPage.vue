@@ -4,7 +4,7 @@ import { Button, InputText, Label } from 'primevue'
 import InputNumber from 'primevue/inputnumber'
 import { usePricesListPageModel } from './usePricesListPageModel'
 import type { PriceDto } from '@/entities/price/types'
-import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import { useActionsAvailableChecks } from '@/shared/composables/entity-list-form/useActionsAvailableChecks'
 import { computed } from 'vue'
 import BatchActionsBar from '@/features/batch-actions-bar/BatchActionsBar.vue'
 
@@ -24,27 +24,27 @@ const {
 } = usePricesListPageModel()
 
 /* ──────────────────── operations available checks ─────────────────── */
-const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+const actionsAvailableChecks = useActionsAvailableChecks(dirtyIds)
 
 // TODO: rename to items in all components
 const canUpdate = (item: PriceDto) =>
-  Boolean(item.name && item.price != null && opsAvailableChecks.canUpdate(item.id))
+  Boolean(item.name && item.price != null && actionsAvailableChecks.canUpdate(item.id))
 const canDelete = (item: PriceDto) =>
-  priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
-const canCancel = (item: PriceDto) => opsAvailableChecks.isEntityChanged(item.id)
+  priceEntities.value.length !== 1 && actionsAvailableChecks.canDelete(item.id)
+const canCancel = (item: PriceDto) => actionsAvailableChecks.isEntityChanged(item.id)
 
 const canAdd = computed(() =>
   Boolean(
     newPrice.value.name &&
       newPrice.value.price != null &&
       !isLoading.value &&
-      opsAvailableChecks.canAdd(),
+      actionsAvailableChecks.canAdd(),
   ),
 )
 const canSaveAll = computed(
-  () => priceEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation(),
+  () => priceEntities.value.length !== 1 && actionsAvailableChecks.canBatchOperation(),
 )
-const canCancelAll = computed(() => opsAvailableChecks.canBatchOperation())
+const canCancelAll = computed(() => actionsAvailableChecks.canBatchOperation())
 
 /* ──────────────────────── operations ──────────────────────── */
 const addPriceSecured = () => {
@@ -63,7 +63,7 @@ const addPriceSecured = () => {
       v-for="item of priceEntities"
       :key="item.id"
       class="price-row"
-      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
+      :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
     >
       <InputText v-model.trim="item.name" placeholder="Название" />
       <InputNumber

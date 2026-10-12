@@ -2,7 +2,7 @@
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import { useExerciseCategoriesPageModel } from './useExerciseCategoriesPageModel'
-import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import { useActionsAvailableChecks } from '@/shared/composables/entity-list-form/useActionsAvailableChecks'
 import type { ExerciseCategoryDto } from '@/entities/exercise-category/types'
 import { computed } from 'vue'
 
@@ -48,19 +48,19 @@ const confirmDeleteExerciseCategory = async (
 }
 
 /* ──────────────────── operations available checks ─────────────────── */
-const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+const actionsAvailableChecks = useActionsAvailableChecks(dirtyIds)
 
 const canUpdate = (item: ExerciseCategoryDto) =>
-  Boolean(item.name && opsAvailableChecks.canUpdate(item.id))
+  Boolean(item.name && actionsAvailableChecks.canUpdate(item.id))
 const canDelete = (item: ExerciseCategoryDto) =>
-  categoriesWithExercises.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
-const canCancel = (item: ExerciseCategoryDto) => opsAvailableChecks.isEntityChanged(item.id)
+  categoriesWithExercises.value.length !== 1 && actionsAvailableChecks.canDelete(item.id)
+const canCancel = (item: ExerciseCategoryDto) => actionsAvailableChecks.isEntityChanged(item.id)
 const canAdd = computed(() =>
-  Boolean(newExerciseCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd()),
+  Boolean(newExerciseCategory.value.name && !isLoading.value && actionsAvailableChecks.canAdd()),
 )
 
 const canEdit = (item: ExerciseCategoryDto) =>
-  (opsAvailableChecks.isEntityChanged(item.id) && dirtyIds.value.length <= 1) ||
+  (actionsAvailableChecks.isEntityChanged(item.id) && dirtyIds.value.length <= 1) ||
   dirtyIds.value.length === 0
 
 /* ──────────────────────── operations ──────────────────────── */
@@ -80,7 +80,7 @@ const addCategorySecured = () => {
       v-for="item of categoriesWithExercises"
       :key="item.id"
       class="category-row"
-      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
+      :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
     >
       <InputText :disabled="!canEdit(item)" v-model.trim="item.name" placeholder="Название" />
       <InputText

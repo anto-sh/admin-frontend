@@ -2,7 +2,7 @@
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 import { Button, InputText, Label } from 'primevue'
 import { useTreatmentsListPageModel } from './useTreatmentsListPageModel'
-import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import { useActionsAvailableChecks } from '@/shared/composables/entity-list-form/useActionsAvailableChecks'
 import type { TreatmentDto } from '@/entities/treatment/types'
 import { computed } from 'vue'
 import BatchActionsBar from '@/features/batch-actions-bar/BatchActionsBar.vue'
@@ -23,21 +23,21 @@ const {
 } = useTreatmentsListPageModel()
 
 /* ──────────────────── operations available checks ─────────────────── */
-const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+const actionsAvailableChecks = useActionsAvailableChecks(dirtyIds)
 
 const canUpdate = (item: TreatmentDto) =>
-  Boolean(item.name && opsAvailableChecks.canUpdate(item.id))
+  Boolean(item.name && actionsAvailableChecks.canUpdate(item.id))
 const canDelete = (item: TreatmentDto) =>
-  treatmentEntities.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
-const canCancel = (item: TreatmentDto) => opsAvailableChecks.isEntityChanged(item.id)
+  treatmentEntities.value.length !== 1 && actionsAvailableChecks.canDelete(item.id)
+const canCancel = (item: TreatmentDto) => actionsAvailableChecks.isEntityChanged(item.id)
 
 const canAdd = computed(() =>
-  Boolean(newTreatmentName.value && !isLoading.value && opsAvailableChecks.canAdd()),
+  Boolean(newTreatmentName.value && !isLoading.value && actionsAvailableChecks.canAdd()),
 )
 const canSaveAll = computed(
-  () => treatmentEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation(),
+  () => treatmentEntities.value.length !== 1 && actionsAvailableChecks.canBatchOperation(),
 )
-const canCancelAll = computed(() => opsAvailableChecks.canBatchOperation())
+const canCancelAll = computed(() => actionsAvailableChecks.canBatchOperation())
 
 /* ──────────────────────── operations ──────────────────────── */
 const addTreatmentSecured = () => {
@@ -55,7 +55,7 @@ const addTreatmentSecured = () => {
       v-for="item in treatmentEntities"
       :key="item.id"
       class="treatment-row"
-      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
+      :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
     >
       <InputText v-model.trim="item.name" class="w-full" placeholder="Название" />
       <Button

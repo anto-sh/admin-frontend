@@ -8,7 +8,7 @@ import { usePageTitle } from '@/shared/composables/usePageTitle'
 import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import { useServiceCategoriesPageModel } from './useServiceCategoriesPageModel'
 import type { ServiceCategoryDto } from '@/entities/service-category/types'
-import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import { useActionsAvailableChecks } from '@/shared/composables/entity-list-form/useActionsAvailableChecks'
 import { computed } from 'vue'
 
 usePageTitle('Категории услуг')
@@ -53,19 +53,19 @@ const confirmDeleteServiceCategory = async (
 }
 
 /* ──────────────────── operations available checks ─────────────────── */
-const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
+const actionsAvailableChecks = useActionsAvailableChecks(dirtyIds)
 
 const canUpdate = (item: ServiceCategoryDto) =>
-  Boolean(item.name && opsAvailableChecks.canUpdate(item.id))
+  Boolean(item.name && actionsAvailableChecks.canUpdate(item.id))
 const canDelete = (item: ServiceCategoryDto) =>
-  categoriesWithServices.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
-const canCancel = (item: ServiceCategoryDto) => opsAvailableChecks.isEntityChanged(item.id)
+  categoriesWithServices.value.length !== 1 && actionsAvailableChecks.canDelete(item.id)
+const canCancel = (item: ServiceCategoryDto) => actionsAvailableChecks.isEntityChanged(item.id)
 const canAdd = computed(() =>
-  Boolean(newServiceCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd()),
+  Boolean(newServiceCategory.value.name && !isLoading.value && actionsAvailableChecks.canAdd()),
 )
 
 const canEdit = (item: ServiceCategoryDto) =>
-  (opsAvailableChecks.isEntityChanged(item.id) && dirtyIds.value.length <= 1) ||
+  (actionsAvailableChecks.isEntityChanged(item.id) && dirtyIds.value.length <= 1) ||
   dirtyIds.value.length === 0
 
 /* ──────────────────────── operations ──────────────────────── */
@@ -85,7 +85,7 @@ const addCategorySecured = () => {
       v-for="item of categoriesWithServices"
       :key="item.id"
       class="category-row"
-      :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"
+      :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
     >
       <InputText :disabled="!canEdit(item)" v-model.trim="item.name" placeholder="Название" />
       <InputText

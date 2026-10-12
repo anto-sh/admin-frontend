@@ -1,6 +1,6 @@
 import type { ComputedRef } from 'vue'
 
-export const useOperationsAvailableChecks = (dirtyIds: ComputedRef<number[]>) => {
+export const useActionsAvailableChecks = (dirtyIds: ComputedRef<number[]>) => {
   const isEntityChanged = (id: number) => dirtyIds.value.includes(id)
 
   const canUpdate = (id: number) => isEntityChanged(id) && dirtyIds.value.length < 2

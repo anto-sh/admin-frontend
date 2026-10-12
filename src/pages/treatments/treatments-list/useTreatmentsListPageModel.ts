@@ -1,7 +1,7 @@
 import { useTreatmentModel } from '@/entities/treatment/model'
 import { onMounted, ref, toRaw, watch } from 'vue'
 import type { TreatmentDto, UpdateTreatmentDto } from '@/entities/treatment/types'
-import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
+import { useEntityArrDirtyTracker } from '@/shared/composables/entity-list-form/useEntityArrDirtyTracker'
 
 export function useTreatmentsListPageModel() {
   const treatmentModel = useTreatmentModel()

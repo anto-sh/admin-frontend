@@ -1,7 +1,7 @@
 import { usePriceModel } from '@/entities/price/model'
 import { onMounted, ref, watch, toRaw } from 'vue'
 import type { PriceDto, UpdatePriceDto } from '@/entities/price/types'
-import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
+import { useEntityArrDirtyTracker } from '@/shared/composables/entity-list-form/useEntityArrDirtyTracker'
 
 export function usePricesListPageModel() {
   const priceModel = usePriceModel()

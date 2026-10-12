@@ -5,7 +5,7 @@ import type {
   ServiceCategoryDto,
 } from '@/entities/service-category/types'
 import { slugify } from 'transliteration'
-import { useEntityArrDirtyTracker } from '@/shared/composables/editable-entity-list/useEntityArrDirtyTracker'
+import { useEntityArrDirtyTracker } from '@/shared/composables/entity-list-form/useEntityArrDirtyTracker'
 
 export function useServiceCategoriesPageModel() {
   const serviceCategoryModel = useServiceCategoryModel()
