@@ -50,17 +50,17 @@ const confirmDeleteExerciseCategory = async (
 /* ──────────────────── operations available checks ─────────────────── */
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
-const canUpdate = (category: ExerciseCategoryDto) =>
-  Boolean(category.name && opsAvailableChecks.canUpdate(category.id))
-const canDelete = (category: ExerciseCategoryDto) =>
-  categoriesWithExercises.value.length !== 1 && opsAvailableChecks.canDelete(category.id)
-const canCancel = (category: ExerciseCategoryDto) => opsAvailableChecks.isEntityChanged(category.id)
+const canUpdate = (item: ExerciseCategoryDto) =>
+  Boolean(item.name && opsAvailableChecks.canUpdate(item.id))
+const canDelete = (item: ExerciseCategoryDto) =>
+  categoriesWithExercises.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
+const canCancel = (item: ExerciseCategoryDto) => opsAvailableChecks.isEntityChanged(item.id)
 const canAdd = computed(() =>
   Boolean(newExerciseCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd()),
 )
 
-const canEdit = (category: ExerciseCategoryDto) =>
-  (opsAvailableChecks.isEntityChanged(category.id) && dirtyIds.value.length <= 1) ||
+const canEdit = (item: ExerciseCategoryDto) =>
+  (opsAvailableChecks.isEntityChanged(item.id) && dirtyIds.value.length <= 1) ||
   dirtyIds.value.length === 0
 
 /* ──────────────────────── operations ──────────────────────── */
@@ -77,7 +77,7 @@ const addCategorySecured = () => {
       <h3>URL</h3>
     </div>
     <div
-      v-for="item in categoriesWithExercises"
+      v-for="item of categoriesWithExercises"
       :key="item.id"
       class="category-row"
       :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"

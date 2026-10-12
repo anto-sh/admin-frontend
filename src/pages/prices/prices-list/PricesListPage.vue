@@ -27,11 +27,11 @@ const {
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
 // TODO: rename to items in all components
-const canUpdate = (price: PriceDto) =>
-  Boolean(price.name && price.price != null && opsAvailableChecks.canUpdate(price.id))
-const canDelete = (price: PriceDto) =>
-  priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(price.id)
-const canCancel = (price: PriceDto) => opsAvailableChecks.isEntityChanged(price.id)
+const canUpdate = (item: PriceDto) =>
+  Boolean(item.name && item.price != null && opsAvailableChecks.canUpdate(item.id))
+const canDelete = (item: PriceDto) =>
+  priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
+const canCancel = (item: PriceDto) => opsAvailableChecks.isEntityChanged(item.id)
 
 const canAdd = computed(() =>
   Boolean(

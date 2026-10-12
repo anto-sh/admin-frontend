@@ -55,17 +55,17 @@ const confirmDeleteServiceCategory = async (
 /* ──────────────────── operations available checks ─────────────────── */
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
-const canUpdate = (category: ServiceCategoryDto) =>
-  Boolean(category.name && opsAvailableChecks.canUpdate(category.id))
-const canDelete = (category: ServiceCategoryDto) =>
-  categoriesWithServices.value.length !== 1 && opsAvailableChecks.canDelete(category.id)
-const canCancel = (category: ServiceCategoryDto) => opsAvailableChecks.isEntityChanged(category.id)
+const canUpdate = (item: ServiceCategoryDto) =>
+  Boolean(item.name && opsAvailableChecks.canUpdate(item.id))
+const canDelete = (item: ServiceCategoryDto) =>
+  categoriesWithServices.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
+const canCancel = (item: ServiceCategoryDto) => opsAvailableChecks.isEntityChanged(item.id)
 const canAdd = computed(() =>
   Boolean(newServiceCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd()),
 )
 
-const canEdit = (category: ServiceCategoryDto) =>
-  (opsAvailableChecks.isEntityChanged(category.id) && dirtyIds.value.length <= 1) ||
+const canEdit = (item: ServiceCategoryDto) =>
+  (opsAvailableChecks.isEntityChanged(item.id) && dirtyIds.value.length <= 1) ||
   dirtyIds.value.length === 0
 
 /* ──────────────────────── operations ──────────────────────── */
@@ -82,7 +82,7 @@ const addCategorySecured = () => {
       <h3>URL</h3>
     </div>
     <div
-      v-for="item in categoriesWithServices"
+      v-for="item of categoriesWithServices"
       :key="item.id"
       class="category-row"
       :class="{ 'input-group--highlighted': opsAvailableChecks.isEntityChanged(item.id) }"

@@ -25,11 +25,11 @@ const {
 /* ──────────────────── operations available checks ─────────────────── */
 const opsAvailableChecks = useOperationsAvailableChecks(dirtyIds)
 
-const canUpdate = (treatment: TreatmentDto) =>
-  Boolean(treatment.name && opsAvailableChecks.canUpdate(treatment.id))
-const canDelete = (treatment: TreatmentDto) =>
-  treatmentEntities.value.length !== 1 && opsAvailableChecks.canDelete(treatment.id)
-const canCancel = (treatment: TreatmentDto) => opsAvailableChecks.isEntityChanged(treatment.id)
+const canUpdate = (item: TreatmentDto) =>
+  Boolean(item.name && opsAvailableChecks.canUpdate(item.id))
+const canDelete = (item: TreatmentDto) =>
+  treatmentEntities.value.length !== 1 && opsAvailableChecks.canDelete(item.id)
+const canCancel = (item: TreatmentDto) => opsAvailableChecks.isEntityChanged(item.id)
 
 const canAdd = computed(() =>
   Boolean(newTreatmentName.value && !isLoading.value && opsAvailableChecks.canAdd()),
