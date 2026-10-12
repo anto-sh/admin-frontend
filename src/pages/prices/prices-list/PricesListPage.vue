@@ -26,7 +26,6 @@ const {
 /* ──────────────────── operations available checks ─────────────────── */
 const actionsAvailableChecks = useActionsAvailableChecks(dirtyIds)
 
-// TODO: rename to items in all components
 const canUpdate = (item: PriceDto) =>
   Boolean(item.name && item.price != null && actionsAvailableChecks.canUpdate(item.id))
 const canDelete = (item: PriceDto) =>
