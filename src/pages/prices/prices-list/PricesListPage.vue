@@ -32,14 +32,15 @@ const canUpdate = (price: PriceDto) =>
 const canDelete = (price: PriceDto) =>
   priceEntities.value.length !== 1 && opsAvailableChecks.canDelete(price.id)
 const canCancel = (price: PriceDto) => opsAvailableChecks.isEntityChanged(price.id)
-const canAdd = () =>
+
+const canAdd = computed(() =>
   Boolean(
     newPrice.value.name &&
       newPrice.value.price != null &&
       !isLoading.value &&
       opsAvailableChecks.canAdd(),
-  )
-
+  ),
+)
 const canSaveAll = computed(
   () => priceEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation(),
 )
@@ -47,7 +48,7 @@ const canCancelAll = computed(() => opsAvailableChecks.canBatchOperation())
 
 /* ──────────────────────── operations ──────────────────────── */
 const addPriceSecured = () => {
-  if (!canAdd()) return
+  if (!canAdd.value) return
   addPrice()
 }
 </script>
@@ -142,7 +143,7 @@ const addPriceSecured = () => {
         icon="pi pi-plus"
         class="self-end"
         :loading="isLoading"
-        :disabled="!canAdd()"
+        :disabled="!canAdd"
         @click="addPrice()"
       />
     </div>

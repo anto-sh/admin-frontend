@@ -30,9 +30,10 @@ const canUpdate = (treatment: TreatmentDto) =>
 const canDelete = (treatment: TreatmentDto) =>
   treatmentEntities.value.length !== 1 && opsAvailableChecks.canDelete(treatment.id)
 const canCancel = (treatment: TreatmentDto) => opsAvailableChecks.isEntityChanged(treatment.id)
-const canAdd = () =>
-  Boolean(newTreatmentName.value && !isLoading.value && opsAvailableChecks.canAdd())
 
+const canAdd = computed(() =>
+  Boolean(newTreatmentName.value && !isLoading.value && opsAvailableChecks.canAdd()),
+)
 const canSaveAll = computed(
   () => treatmentEntities.value.length !== 1 && opsAvailableChecks.canBatchOperation(),
 )
@@ -40,7 +41,7 @@ const canCancelAll = computed(() => opsAvailableChecks.canBatchOperation())
 
 /* ──────────────────────── operations ──────────────────────── */
 const addTreatmentSecured = () => {
-  if (!canAdd()) return
+  if (!canAdd.value) return
   addTreatment()
 }
 </script>
@@ -100,7 +101,7 @@ const addTreatmentSecured = () => {
         class="self-end"
         icon="pi pi-plus"
         :loading="isLoading"
-        :disabled="!canAdd()"
+        :disabled="!canAdd"
         @click="addTreatmentSecured"
       />
     </div>

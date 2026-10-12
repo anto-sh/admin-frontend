@@ -9,6 +9,7 @@ import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import { useServiceCategoriesPageModel } from './useServiceCategoriesPageModel'
 import type { ServiceCategoryDto } from '@/entities/service-category/types'
 import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
+import { computed } from 'vue'
 
 usePageTitle('Категории услуг')
 
@@ -59,8 +60,9 @@ const canUpdate = (category: ServiceCategoryDto) =>
 const canDelete = (category: ServiceCategoryDto) =>
   categoriesWithServices.value.length !== 1 && opsAvailableChecks.canDelete(category.id)
 const canCancel = (category: ServiceCategoryDto) => opsAvailableChecks.isEntityChanged(category.id)
-const canAdd = () =>
-  Boolean(newServiceCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd())
+const canAdd = computed(() =>
+  Boolean(newServiceCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd()),
+)
 
 const canEdit = (category: ServiceCategoryDto) =>
   (opsAvailableChecks.isEntityChanged(category.id) && dirtyIds.value.length <= 1) ||
@@ -68,7 +70,7 @@ const canEdit = (category: ServiceCategoryDto) =>
 
 /* ──────────────────────── operations ──────────────────────── */
 const addCategorySecured = () => {
-  if (!canAdd()) return
+  if (!canAdd.value) return
   addServiceCategory()
 }
 </script>
@@ -139,7 +141,7 @@ const addCategorySecured = () => {
         />
       </div>
       <Button
-        :disabled="!canAdd()"
+        :disabled="!canAdd"
         label="Добавить"
         icon="pi pi-plus"
         class="self-end"

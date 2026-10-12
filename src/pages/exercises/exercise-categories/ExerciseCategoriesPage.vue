@@ -4,6 +4,7 @@ import { Button, InputText, ConfirmPopup, useConfirm, Label } from 'primevue'
 import { useExerciseCategoriesPageModel } from './useExerciseCategoriesPageModel'
 import { useOperationsAvailableChecks } from '@/shared/composables/editable-entity-list/useOperationsAvailableChecks'
 import type { ExerciseCategoryDto } from '@/entities/exercise-category/types'
+import { computed } from 'vue'
 
 usePageTitle('Категории упражнений')
 
@@ -54,8 +55,9 @@ const canUpdate = (category: ExerciseCategoryDto) =>
 const canDelete = (category: ExerciseCategoryDto) =>
   categoriesWithExercises.value.length !== 1 && opsAvailableChecks.canDelete(category.id)
 const canCancel = (category: ExerciseCategoryDto) => opsAvailableChecks.isEntityChanged(category.id)
-const canAdd = () =>
-  Boolean(newExerciseCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd())
+const canAdd = computed(() =>
+  Boolean(newExerciseCategory.value.name && !isLoading.value && opsAvailableChecks.canAdd()),
+)
 
 const canEdit = (category: ExerciseCategoryDto) =>
   (opsAvailableChecks.isEntityChanged(category.id) && dirtyIds.value.length <= 1) ||
@@ -63,7 +65,7 @@ const canEdit = (category: ExerciseCategoryDto) =>
 
 /* ──────────────────────── operations ──────────────────────── */
 const addCategorySecured = () => {
-  if (!canAdd()) return
+  if (!canAdd.value) return
   addExerciseCategory()
 }
 </script>
@@ -134,7 +136,7 @@ const addCategorySecured = () => {
         />
       </div>
       <Button
-        :disabled="!canAdd()"
+        :disabled="!canAdd"
         label="Добавить"
         icon="pi pi-plus"
         class="self-end"
