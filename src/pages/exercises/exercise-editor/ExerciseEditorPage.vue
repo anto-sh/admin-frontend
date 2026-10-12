@@ -21,8 +21,6 @@ if (exerciseId) {
   else usePageTitle(`Редактирование упражнения #${exerciseId}`)
 } else usePageTitle('Добавление нового упражнения')
 
-// TODO: for what we exposing?
-defineExpose({ exerciseId, readonly })
 
 const confirmService = useConfirm()
 const confirmDeleteExercise = (event: MouseEvent) => {

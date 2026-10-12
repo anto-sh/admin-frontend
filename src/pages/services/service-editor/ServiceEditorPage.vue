@@ -31,9 +31,6 @@ if (serviceId) {
   else usePageTitle(`Редактирование услуги #${serviceId}`)
 } else usePageTitle('Добавление новой услуги')
 
-// TODO: for what we are exposing?
-defineExpose({ serviceId, readonly })
-
 const confirmService = useConfirm()
 const confirmDeleteService = (event: MouseEvent) => {
   confirmService.require({

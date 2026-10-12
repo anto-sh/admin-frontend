@@ -22,8 +22,6 @@ if (expertId) {
   else usePageTitle(`Редактирование специалиста #${expertId}`)
 } else usePageTitle('Добавление нового специалиста')
 
-defineExpose({ expertId, readonly })
-
 const confirmService = useConfirm()
 const confirmDeleteExpert = (event: MouseEvent) => {
   confirmService.require({
