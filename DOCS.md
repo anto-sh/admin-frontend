@@ -66,7 +66,7 @@ Cancellation errors are filtered in the Axios interceptor (no toast, no propagat
 
 # 5. API contract, shared types, and client maintenance
 
-The current API contract is the implementation in the sibling `../admin-backend` repository. No OpenAPI specification or API-client generator is currently configured in this repository pair.
+The current API contract is the backend implementation, normally located at `../admin-backend`. No OpenAPI specification or API-client generator is currently configured in this repository pair.
 
 `@anto-sh/admin-network-shared` provides shared response envelopes, network-message types, and message codes. Entity-specific frontend DTOs are maintained manually in `src/entities/*/types.ts`; sharing the response envelope does not make these DTOs a generated or complete server contract.
 
