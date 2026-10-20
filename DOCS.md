@@ -62,7 +62,7 @@ To avoid visual flicker caused by rapid successive toggles inside individual asy
 
 All CRUD API methods accept an optional `AbortSignal`, which is passed as an argument directly to axios method on call.
 Each `createCrudComposable` instance creates its own `AbortController` and passes its signal to every API call; the controller is aborted in `onUnmounted` in this composable.
-Cancellation errors are filtered in the Axios interceptor (no toast, no propagation) and additionally suppressed globally via `unhandledrejection` to prevent console noise.
+The Axios interceptor skips toast notifications for cancellation errors and keeps the promise rejected so dependent code does not continue as if the request succeeded. The global `unhandledrejection` handler suppresses default console reporting for unhandled cancellations without changing the promise outcome.
 
 # 5. API contract, shared types, and client maintenance
 
