@@ -1,6 +1,17 @@
 # admin-frontend
 
-Simple admin interface
+Administrative interface for the Amplituda rehabilitation center website.
+
+## Primary repository
+
+`admin-frontend` is the project's primary repository and the home of shared documentation and agreements. See [manifesto.md](manifesto.md#primary-repository) for the governing principles.
+
+## Project documentation
+
+- [manifesto.md](manifesto.md): development principles and shared documentation ownership.
+- [DOCS.md](DOCS.md): current implementation and frontend/backend integration.
+- [TODO.md](TODO.md): frontend backlog and shared follow-up work.
+- Backend repository: `../admin-backend` (server implementation and repository-specific documentation).
 
 ## Recommended IDE Setup
 
