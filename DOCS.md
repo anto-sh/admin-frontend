@@ -1,3 +1,20 @@
+# 0. Architecture: adapted Feature-Sliced Design
+
+The frontend uses [Feature-Sliced Design (FSD)](https://fsd.how/ru/docs/) as its architectural foundation, adopting its core principles selectively rather than following the entire specification strictly.
+
+The current implementation retains these FSD principles:
+
+- Standard layer names and dependency hierarchy: `app`, `pages`, `features`, `entities`, and `shared`.
+- Slices organized around pages and business entities, with related page slices grouped by domain.
+- Application initialization and routing in `app`, screen composition in `pages`, domain data/API/state in `entities`, and reusable infrastructure and UI in `shared`.
+- Downward cross-layer source imports; `shared` has no dependencies on higher layers.
+
+## Project adaptations
+
+- Some entity DTOs directly reference DTOs from other entity slices without dedicated cross-reference APIs.
+- Single-file segments stay at the slice root; segments with two or more files use a directory.
+- Shared groups some code by kind (`composables`, `store`, `utils`, `types`, `enums`).
+
 # 1. API errors handling
 
 Every API error except `422` is handled in the Axios interceptor:
@@ -45,4 +62,14 @@ To avoid visual flicker caused by rapid successive toggles inside individual asy
 
 All CRUD API methods accept an optional `AbortSignal`, which is passed as an argument directly to axios method on call.
 Each `createCrudComposable` instance creates its own `AbortController` and passes its signal to every API call; the controller is aborted in `onUnmounted` in this composable.
-Cancellation errors are filtered in the Axios interceptor (no toast, no propagation) and additionally suppressed globally via `unhandledrejection` to prevent console noise.
+The Axios interceptor skips toast notifications for cancellation errors and keeps the promise rejected so dependent code does not continue as if the request succeeded. The global `unhandledrejection` handler suppresses default console reporting for unhandled cancellations without changing the promise outcome.
+
+# 5. API contract, shared types, and client maintenance
+
+The current API contract is the backend implementation, normally located at `../admin-backend`. No OpenAPI specification or API-client generator is currently configured in this repository pair.
+
+`@anto-sh/admin-network-shared` provides shared response envelopes, network-message types, and message codes. Entity-specific frontend DTOs are maintained manually in `src/entities/*/types.ts`; sharing the response envelope does not make these DTOs a generated or complete server contract.
+
+API clients are maintained manually in `src/entities/*/api.ts` and `src/shared/api`. Entity APIs reuse the CRUD factories described in section 3 and add entity-specific methods where needed. The common Axios client is configured in `src/shared/api/client.ts`.
+
+Without a generated contract, API compatibility relies on manually keeping frontend DTOs, clients, and consumers consistent with backend request payloads, HTTP methods, response/error shapes, and field optionality and nullability. A formal specification or generated client would change this maintenance model.

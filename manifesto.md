@@ -1,3 +1,10 @@
+# Primary repository
+
+- `admin-frontend` is the primary repository of the administration project.
+- Shared principles, decisions, and documentation are maintained here.
+- Each concern has one authoritative source; other documents link to it.
+- Shared documentation reflects changes across all project repositories.
+
 # My production rules
 
 - Production api url must be `/api`

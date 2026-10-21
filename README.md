@@ -1,6 +1,22 @@
 # admin-frontend
 
-Simple admin interface
+Administrative interface for the Amplituda rehabilitation center website.
+
+## Primary repository
+
+`admin-frontend` is the project's primary repository and the home of shared documentation and agreements. See [manifesto.md](manifesto.md#primary-repository) for the governing principles.
+
+## Repositories
+
+- Frontend: [anto-sh/admin-frontend](https://github.com/anto-sh/admin-frontend).
+- Backend: [anto-sh/admin-backend](https://github.com/anto-sh/admin-backend), normally at `../admin-backend` locally.
+- Shared package: [anto-sh/admin-network-shared](https://github.com/anto-sh/admin-network-shared), normally at `../admin-network-shared` locally.
+
+## Project documentation
+
+- [manifesto.md](manifesto.md): development principles and shared documentation ownership.
+- [DOCS.md](DOCS.md): current implementation and frontend/backend integration.
+- [TODO.md](TODO.md): frontend backlog and shared follow-up work.
 
 ## Recommended IDE Setup
 
