@@ -1,10 +1,10 @@
-import type { ServiceDto } from '../service/types'
+import type { Service } from '../service/types'
 
 export interface ServiceCategoryDto {
   id: number
   name?: string
   url?: string
-  services?: ServiceDto[]
+  services?: Service[]
 }
 
 export interface CreateServiceCategoryDto {

@@ -1,25 +1,33 @@
 import { useServiceCategoryModel } from '@/entities/service-category/model'
 import { useServiceModel } from '@/entities/service/model'
+import type { CreateServiceDto } from '@/entities/service/types'
 import { computed, onMounted, ref } from 'vue'
 import { type FileUploadSelectEvent } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
 import { imageApi } from '@/shared/api/image'
+import { useToastStore } from '@/shared/store/useToastStore'
+
+type ServiceFormData = Omit<CreateServiceDto, 'price' | 'categoryId'> & {
+  price: number | null
+  categoryId: number | null
+}
 
 export function useServiceEditorPageModel() {
   const serviceCategoryModel = useServiceCategoryModel()
   const serviceModel = useServiceModel()
   const router = useRouter()
   const route = useRoute()
+  const { addToast } = useToastStore()
 
   const serviceId = parseInt(route.params.id as string)
   const readonly = route.query.readonly === STRING_BOOLEAN.True
-  const formData = ref({
+  const formData = ref<ServiceFormData>({
     name: '',
     imageUrl: '',
-    price: undefined as number | undefined,
-    procedures: [] as string[],
-    categoryId: parseInt(route.query.categoryId as string) as number | undefined,
+    price: null,
+    procedures: [],
+    categoryId: Number(route.query.categoryId) || null,
   })
 
   const categoriesSelectOptions = computed(() =>
@@ -55,8 +63,20 @@ export function useServiceEditorPageModel() {
   }
 
   const saveService = async () => {
-    if (serviceId) await serviceModel.update(serviceId, formData.value)
-    else await serviceModel.add(formData.value)
+    const { price, categoryId } = formData.value
+    if (price == null || categoryId == null) {
+      addToast({
+        severity: 'warn',
+        summary: 'Недостаточно данных',
+        detail: 'Укажите стоимость и выберите категорию услуги.',
+        life: 4e3,
+      })
+      return
+    }
+
+    const dto: CreateServiceDto = { ...formData.value, price, categoryId }
+    if (serviceId) await serviceModel.update(serviceId, dto)
+    else await serviceModel.add(dto)
     cancelEditor()
   }
 

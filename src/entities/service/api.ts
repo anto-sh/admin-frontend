@@ -1,7 +1,7 @@
-import type { CreateServiceDto, ServiceDto, UpdateServiceDto } from './types'
+import type { CreateServiceDto, Service, UpdateServiceDto } from './types'
 import { createCrudApi } from '@/shared/lib/crud'
 
-export const serviceApi = createCrudApi<ServiceDto, CreateServiceDto, UpdateServiceDto>({
+export const serviceApi = createCrudApi<Service, CreateServiceDto, UpdateServiceDto, Service>({
   type: 'entity',
   url: '/services',
 })
