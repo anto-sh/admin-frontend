@@ -12,15 +12,17 @@ import { apiClient } from '@/shared/api/client'
  * @returns { EntityCrudApi | CategoryCrudApi } CRUD API
  */
 
-export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(
+export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse = never>(
   options: CreateCrudApiOptions<'entity'>,
-): EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>
+): EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse>
 
-export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(
+export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse = never>(
   options: CreateCrudApiOptions<'category'>,
-): CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>
+): CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse>
 
-export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(options: CreateCrudApiOptions) {
+export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse = never>(
+  options: CreateCrudApiOptions,
+) {
   const baseCrudMethods = {
     getAll(abortSignal?: AbortSignal): Promise<ApiResponse<TResponseDto[]>> {
       return apiClient.get(options.url, { signal: abortSignal }).then((res) => res.data)
@@ -28,7 +30,11 @@ export function createCrudApi<TResponseDto, TCreateDto, TUpdateDto>(options: Cre
     add(dto: TCreateDto, abortSignal?: AbortSignal): Promise<ApiResponse<TResponseDto>> {
       return apiClient.post(options.url, dto, { signal: abortSignal }).then((res) => res.data)
     },
-    update(id: number, dto: TUpdateDto, abortSignal?: AbortSignal): Promise<ApiResponse<never>> {
+    update(
+      id: number,
+      dto: TUpdateDto,
+      abortSignal?: AbortSignal,
+    ): Promise<ApiResponse<TUpdateResponse>> {
       return apiClient
         .patch(`${options.url}/${id}`, dto, { signal: abortSignal })
         .then((res) => res.data)

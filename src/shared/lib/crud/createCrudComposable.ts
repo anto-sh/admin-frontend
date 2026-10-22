@@ -14,20 +14,35 @@ import { usePendingRequestCounter } from '../network-utils/usePendingRequestCoun
  * @return { EntityCrudComposable | CategoryCrudComposable } CRUD Composable
  */
 
-export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
-  crudApi: EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
+export function createCrudComposable<
+  TResponseDto extends { id: number },
+  TCreateDto,
+  TUpdateDto,
+  TUpdateResponse extends TResponseDto = never,
+>(
+  crudApi: EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse>,
   useGlobalLoadingIndication?: boolean,
 ): EntityCrudComposable<TResponseDto, TCreateDto, TUpdateDto>
 
-export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
-  crudApi: CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
+export function createCrudComposable<
+  TResponseDto extends { id: number },
+  TCreateDto,
+  TUpdateDto,
+  TUpdateResponse extends TResponseDto = never,
+>(
+  crudApi: CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse>,
   useGlobalLoadingIndication?: boolean,
 ): CategoryCrudComposable<TResponseDto, TCreateDto, TUpdateDto>
 
-export function createCrudComposable<TResponseDto extends { id: number }, TCreateDto, TUpdateDto>(
+export function createCrudComposable<
+  TResponseDto extends { id: number },
+  TCreateDto,
+  TUpdateDto,
+  TUpdateResponse extends TResponseDto = never,
+>(
   crudApi:
-    | EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>
-    | CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>,
+    | EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse>
+    | CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse>,
   useGlobalLoadingIndication: boolean = true,
 ) {
   const isCrudForEntity = 'getById' in crudApi
@@ -73,8 +88,11 @@ export function createCrudComposable<TResponseDto extends { id: number }, TCreat
       async update(id: number, dto: TUpdateDto) {
         pendingRequestCounter.start()
         try {
-          // TODO: maybe need to update local state (items) after request
-          await crudApi.update(id, dto, abortSignal)
+          const { data } = await crudApi.update(id, dto, abortSignal)
+          if (data) {
+            const index = items.value.findIndex((item) => item.id === id)
+            if (index !== -1) items.value[index] = data
+          }
         } finally {
           pendingRequestCounter.finish()
         }

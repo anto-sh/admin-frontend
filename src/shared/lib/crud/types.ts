@@ -8,21 +8,25 @@ export interface CreateCrudApiOptions<T extends 'entity' | 'category' = 'entity'
   url: string
 }
 
-export interface BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
+export interface BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse = never> {
   url: string
   getAll(abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto[]>>
   add(dto: TCreateDto, abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto>>
-  update(id: number, dto: TUpdateDto, abortSignal: AbortSignal): Promise<ApiResponse<never>>
+  update(
+    id: number,
+    dto: TUpdateDto,
+    abortSignal: AbortSignal,
+  ): Promise<ApiResponse<TUpdateResponse>>
   delete(id: number, abortSignal: AbortSignal): Promise<ApiResponse<never>>
 }
 
-export interface EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto>
-  extends BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
+export interface EntityCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse = never>
+  extends BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse> {
   getById(id: number, abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto>>
 }
 
-export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto>
-  extends BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto> {
+export interface CategoryCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse = never>
+  extends BaseCrudApi<TResponseDto, TCreateDto, TUpdateDto, TUpdateResponse> {
   getAllWithEntities(abortSignal: AbortSignal): Promise<ApiResponse<TResponseDto[]>>
 }
 
