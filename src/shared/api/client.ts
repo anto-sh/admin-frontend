@@ -37,7 +37,7 @@ apiClient.interceptors.response.use(
 
     return response
   },
-  (error: AxiosError<ApiResponse<{ errors: ValidationError[] } | undefined>>) => {
+  (error: AxiosError<ApiResponse<{ validationErrors: ValidationError[] } | undefined>>) => {
     if (isAbortRequestError(error)) return Promise.reject(error)
 
     const { addToast } = useToastStore()
@@ -67,7 +67,7 @@ apiClient.interceptors.response.use(
         break
       case 422:
         // заглушка пока нет валидации
-        // const validationErrors = errorRes?.data?.data?.errors
+        // const validationErrors = errorRes?.data?.data?.validationErrors
         break
     }
 

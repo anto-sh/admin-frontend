@@ -7,9 +7,9 @@ export interface FileDataDto {
 }
 
 export interface ValidationError {
-  target: Record<string, unknown>
-  value: unknown
+  target?: Record<string, unknown>
+  value?: unknown
   property: string
-  children: unknown[]
-  constraints: Record<string, string>
+  children?: ValidationError[]
+  constraints?: Record<string, string>
 }
