@@ -87,7 +87,7 @@ const confirmDeleteService = (event: MouseEvent) => {
       <label for="price">Стоимость</label>
     </FloatLabel>
 
-    <div class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
+    <div v-if="!readonly" class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
       <FileUpload
         mode="basic"
         @select="uploadServiceImage"
@@ -128,7 +128,6 @@ const confirmDeleteService = (event: MouseEvent) => {
       />
       <Button
         v-if="!readonly"
-        :disabled="formData.procedures.length === 1"
         @click="removeProcedure(index)"
         severity="danger"
         icon="pi pi-trash"
@@ -151,7 +150,7 @@ const confirmDeleteService = (event: MouseEvent) => {
       />
       <div>
         <Button
-          v-if="serviceId"
+          v-if="serviceId && !readonly"
           @click="confirmDeleteService($event)"
           severity="danger"
           label="Удалить"
