@@ -73,3 +73,7 @@ The current API contract is the backend implementation, normally located at `../
 API clients are maintained manually in `src/entities/*/api.ts` and `src/shared/api`. Entity APIs reuse the CRUD factories described in section 3 and add entity-specific methods where needed. The common Axios client is configured in `src/shared/api/client.ts`.
 
 Without a generated contract, API compatibility relies on manually keeping frontend DTOs, clients, and consumers consistent with backend request payloads, HTTP methods, response/error shapes, and field optionality and nullability. A formal specification or generated client would change this maintenance model.
+
+# 6. Local Zod adapter for vee-validate
+
+The local `toTypedSchema` adapter connects Zod 4 and vee-validate 4. See the [module README](src/shared/lib/vee-validate-zod/README.md) for dependency versions, a `useForm` example, validation and error behavior, limitations, and test commands.
