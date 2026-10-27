@@ -9,6 +9,8 @@ Guidance for coding agents working in this repository. Project type: Vue 3 + Typ
 
 Use Node.js 22.16.0 (`.node-version`) and pnpm 10.11.0 (`package.json`). Run frontend commands from this repository.
 
+- Use the standalone pnpm CLI installed with `npm install --global pnpm@10.11.0`.
+
 | Purpose | Command |
 | --- | --- |
 | Install dependencies | `pnpm install --frozen-lockfile` |
@@ -21,9 +23,9 @@ Use Node.js 22.16.0 (`.node-version`) and pnpm 10.11.0 (`package.json`). Run fro
 | Type-check and build | `pnpm build` |
 | Preview a local build | `pnpm preview` |
 
+- Use the pnpm commands listed above for standard project tasks.
 - Focus unit tests by appending the affected test file path or a `-t` name filter to `pnpm test:unit --run`; Vitest uses `src` as its root and `jsdom` as its environment.
 - No end-to-end test command is configured.
-- Use installed local binaries for Prettier and ESLint instead of invoking them through pnpm/Corepack. In Windows PowerShell, use `.\node_modules\.bin\prettier.cmd --write <affected-files>` and `.\node_modules\.bin\eslint.cmd <affected-files>` (add `--fix` for lint fixes). Do not download pnpm solely to run these installed tools.
 - `pnpm format` rewrites all of `src`; keep formatting scoped to affected files.
 - Choose checks for the affected code. Include the build when changing build configuration or bundling; documentation-only changes need text and link review.
 

@@ -1,0 +1,23 @@
+default_permissions = "amplituda"
+approval_policy = "on-request"
+approvals_reviewer = "user"
+
+[features]
+network_proxy = true
+
+[permissions.amplituda]
+extends = ":workspace"
+
+[permissions.amplituda.filesystem.":workspace_roots"]
+"." = "write"
+".git" = "read"
+".agents" = "read"
+".codex" = "read"
+".aws" = "read"
+
+[permissions.amplituda.network]
+enabled = true
+allow_local_binding = true
+
+[permissions.amplituda.network.domains]
+"registry.npmjs.org" = "allow"
