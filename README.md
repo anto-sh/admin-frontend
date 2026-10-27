@@ -24,7 +24,10 @@ Administrative interface for the Amplituda rehabilitation center website.
 
 ## Project Setup
 
+Use Node.js 22.16.0 and pnpm 10.11.0.
+
 ```sh
+npm install --global pnpm@10.11.0
 pnpm install
 ```
 
