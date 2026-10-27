@@ -11,17 +11,17 @@ Use Node.js 22.16.0 (`.node-version`) and pnpm 10.11.0 (`package.json`). Run fro
 
 - Use the standalone pnpm CLI installed with `npm install --global pnpm@10.11.0`.
 
-| Purpose | Command |
-| --- | --- |
-| Install dependencies | `pnpm install --frozen-lockfile` |
-| Start development server | `pnpm dev` |
-| Type-check | `pnpm type-check` |
-| Lint TypeScript and Vue | `pnpm lint` / `pnpm lint:fix` |
-| Lint CSS and SCSS | `pnpm lint:css` / `pnpm lint:css-fix` |
-| Format source files | `pnpm format` |
-| Run unit tests once | `pnpm test:unit --run` |
-| Type-check and build | `pnpm build` |
-| Preview a local build | `pnpm preview` |
+| Purpose                  | Command                               |
+| ------------------------ | ------------------------------------- |
+| Install dependencies     | `pnpm install --frozen-lockfile`      |
+| Start development server | `pnpm dev`                            |
+| Type-check               | `pnpm type-check`                     |
+| Lint TypeScript and Vue  | `pnpm lint` / `pnpm lint:fix`         |
+| Lint CSS and SCSS        | `pnpm lint:css` / `pnpm lint:css-fix` |
+| Format source files      | `pnpm format`                         |
+| Run unit tests once      | `pnpm test:unit --run`                |
+| Type-check and build     | `pnpm build`                          |
+| Preview a local build    | `pnpm preview`                        |
 
 - Use the pnpm commands listed above for standard project tasks.
 - Focus unit tests by appending the affected test file path or a `-t` name filter to `pnpm test:unit --run`; Vitest uses `src` as its root and `jsdom` as its environment.
@@ -32,7 +32,7 @@ Use Node.js 22.16.0 (`.node-version`) and pnpm 10.11.0 (`package.json`). Run fro
 ## Project conventions
 
 - Before changing application code, read `manifesto.md` for coding conventions.
-- Read only the `DOCS.md` sections relevant to the mechanism being changed: architecture (section 0), API errors (1), i18n (2), CRUD/refetching/loading (3), cancellation (4), and API contracts/types/clients (5). Consult `TODO.md` when planning related backlog work.
+- Read only the [DOCS.md](DOCS.md) sections relevant to the mechanism being changed: architecture (section 0), API errors (1), i18n (2), CRUD/refetching/loading (3), cancellation (4), API contracts/types/clients (5), and frontend validation ([section 6](DOCS.md#6-local-zod-adapter-for-vee-validate)). Consult `TODO.md` when planning related backlog work.
 - Keep app wiring, routing, and layouts in `src/app`; page components and page models in `src/pages`; reusable features in `src/features`; entity APIs, DTO types, and models in `src/entities`; shared infrastructure and UI in `src/shared`.
 - Follow the existing Vue Composition API and `<script setup lang="ts">` patterns. Reuse existing components, features, widgets, and `src/shared/ui` primitives before adding new implementations.
 - Preserve the Russian UI language.
