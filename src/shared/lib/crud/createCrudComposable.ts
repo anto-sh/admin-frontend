@@ -56,8 +56,8 @@ export function createCrudComposable<
     const isLoading = ref(false)
     // debounced on set `false` to prevent flashing of loading indicator
     function setIsLoading(val: boolean) {
+      clearTimeout(isLoadingUpdateTimeout)
       if (!val) {
-        clearTimeout(isLoadingUpdateTimeout)
         isLoadingUpdateTimeout = setTimeout(() => {
           isLoading.value = false
         }, 200)
