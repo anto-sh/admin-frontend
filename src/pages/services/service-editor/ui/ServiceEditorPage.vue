@@ -10,7 +10,7 @@ import {
   useConfirm,
 } from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
-import { useServiceEditorPageModel } from './useServiceEditorPageModel'
+import { useServiceEditorPageModel } from '../model/useServiceEditorPageModel'
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 
 const {
@@ -116,7 +116,7 @@ const confirmDeleteService = (event: MouseEvent) => {
 
     <p class="text-xl mb-2">Список входящих в услугу процедур</p>
     <div
-      v-for="(procedure, index) in formData.procedures"
+      v-for="(_procedure, index) in formData.procedures"
       :key="index"
       class="flex items-center gap-2 mb-2"
     >

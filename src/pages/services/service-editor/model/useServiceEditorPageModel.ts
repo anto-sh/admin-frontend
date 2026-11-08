@@ -55,7 +55,7 @@ export function useServiceEditorPageModel() {
   const addNewProcedure = () => formData.value.procedures.push('')
 
   const removeProcedure = (index: number) =>
-    (formData.value.procedures = formData.value.procedures.filter((p, i) => i !== index))
+    (formData.value.procedures = formData.value.procedures.filter((_p, i) => i !== index))
 
   const uploadServiceImage = async (event: FileUploadSelectEvent) => {
     const { data: fileData } = await imageApi.upload(event.files[0])
