@@ -112,7 +112,8 @@ const confirmDeleteService = (event: MouseEvent) => {
         <InputNumber
           currency="RUB"
           locale="ru-RU"
-          :min="0"
+          :min="formFields.price.min"
+          :max="formFields.price.max"
           :disabled="editorDisabled"
           inputId="price"
           v-model="formFields.price.field"

@@ -42,10 +42,15 @@ export function useServiceEditorPageModel() {
     const [field, attrs] = form.defineField(name, fieldOptions)
     return { field, attrs }
   }
+  const priceSchema = serviceFormSchema.shape.price.in.unwrap()
   const formFields = reactive({
     name: defineFormField('name'),
     categoryId: defineFormField('categoryId'),
-    price: defineFormField('price'),
+    price: {
+      ...defineFormField('price'),
+      min: priceSchema.minValue ?? undefined,
+      max: priceSchema.maxValue ?? undefined,
+    },
     imageUrl: defineFormField('imageUrl'),
     procedures: useFieldArray<string>('procedures'),
   })
