@@ -4,7 +4,6 @@ import { computed } from 'vue'
 const props = defineProps<{
   to?: string
   fullscreen?: boolean
-  shouldCatchFocus?: boolean
   isShow: boolean
 }>()
 
