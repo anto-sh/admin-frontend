@@ -1,18 +1,8 @@
-export interface Service {
-  id: number
-  name: string
-  imageUrl: string
-  price: number
-  procedures: string[]
-  categoryId: number
-}
+import type { z } from 'zod'
+import type { serviceSchema } from './schema'
 
-export interface CreateServiceDto {
-  name: string
-  imageUrl: string
-  price: number
-  procedures: string[]
-  categoryId: number
-}
+export type Service = z.output<typeof serviceSchema>
+
+export type CreateServiceDto = Omit<Service, 'id'>
 
 export type UpdateServiceDto = Partial<CreateServiceDto>
