@@ -1,14 +1,17 @@
 <script setup lang="ts">
-import { Button, InputText, Select, FloatLabel, InputNumber, useConfirm } from 'primevue'
+import { Button, InputText, Select, FloatLabel, InputNumber, Message, useConfirm } from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
 import { FieldImageUpload } from '@/features/field-image-upload'
 import { useServiceEditorPageModel } from '../model/useServiceEditorPageModel'
+import ServiceProcedureField from './ServiceProcedureField.vue'
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 
 const {
   serviceId,
   readonly,
-  formData,
+  form,
+  formFields,
+  editorDisabled,
   categoriesSelectOptions,
   addNewProcedure,
   removeProcedure,
@@ -43,69 +46,131 @@ const confirmDeleteService = (event: MouseEvent) => {
 </script>
 
 <template>
-  <form @submit.prevent class="mt-4 space-y-8">
-    <FloatLabel>
-      <InputText :disabled="readonly" id="name" v-model.trim="formData.name" class="w-full" />
-      <label for="name">Название услуги</label>
-    </FloatLabel>
+  <form @submit.prevent novalidate class="mt-4 space-y-8">
+    <div>
+      <FloatLabel>
+        <InputText
+          :disabled="editorDisabled"
+          id="name"
+          v-model="formFields.name.field"
+          v-bind="formFields.name.attrs"
+          :invalid="form.submitCount > 0 && !!form.errorBag.name?.length"
+          aria-required="true"
+          aria-describedby="name-errors"
+          class="w-full"
+        />
+        <label for="name">Название услуги</label>
+      </FloatLabel>
+      <Message
+        v-if="form.submitCount > 0 && form.errorBag.name?.length"
+        id="name-errors"
+        severity="error"
+        variant="simple"
+        size="small"
+        class="mt-1"
+      >
+        <span v-for="message in form.errorBag.name" :key="message" class="block">{{
+          message
+        }}</span>
+      </Message>
+    </div>
 
-    <FloatLabel>
-      <Select
-        :disabled="readonly"
-        id="category"
-        v-model="formData.categoryId"
-        :options="categoriesSelectOptions"
-        optionLabel="name"
-        optionValue="id"
-        class="w-full"
-      />
-      <label for="category">Категория</label>
-    </FloatLabel>
+    <div>
+      <FloatLabel>
+        <Select
+          :disabled="editorDisabled"
+          inputId="category"
+          v-model="formFields.categoryId.field"
+          v-bind="formFields.categoryId.attrs"
+          :options="categoriesSelectOptions"
+          optionLabel="name"
+          optionValue="id"
+          :invalid="form.submitCount > 0 && !!form.errorBag.categoryId?.length"
+          aria-required="true"
+          aria-describedby="category-errors"
+          class="w-full"
+        />
+        <label for="category">Категория</label>
+      </FloatLabel>
+      <Message
+        v-if="form.submitCount > 0 && form.errorBag.categoryId?.length"
+        id="category-errors"
+        severity="error"
+        variant="simple"
+        size="small"
+        class="mt-1"
+      >
+        <span v-for="message in form.errorBag.categoryId" :key="message" class="block">{{
+          message
+        }}</span>
+      </Message>
+    </div>
 
-    <FloatLabel>
-      <InputNumber
-        currency="RUB"
-        locale="ru-RU"
-        :minFractionDigits="0"
-        :disabled="readonly"
-        id="price"
-        v-model="formData.price"
-        class="w-full"
-        type="number"
-        :min="0"
-        :step="1"
-      />
-      <label for="price">Стоимость</label>
-    </FloatLabel>
+    <div>
+      <FloatLabel>
+        <InputNumber
+          currency="RUB"
+          locale="ru-RU"
+          :min="0"
+          :disabled="editorDisabled"
+          inputId="price"
+          v-model="formFields.price.field"
+          v-bind="formFields.price.attrs"
+          :invalid="form.submitCount > 0 && !!form.errorBag.price?.length"
+          aria-required="true"
+          aria-describedby="price-errors"
+          class="w-full"
+          :step="1"
+        />
+        <label for="price">Стоимость</label>
+      </FloatLabel>
+      <Message
+        v-if="form.submitCount > 0 && form.errorBag.price?.length"
+        id="price-errors"
+        severity="error"
+        variant="simple"
+        size="small"
+        class="mt-1"
+      >
+        <span v-for="message in form.errorBag.price" :key="message" class="block">{{
+          message
+        }}</span>
+      </Message>
+    </div>
 
     <FieldImageUpload
-      v-model="formData.imageUrl"
-      :disabled="readonly"
+      v-model="formFields.imageUrl.field"
+      :disabled="editorDisabled"
       :readonly="readonly"
+      :errors="form.submitCount > 0 ? form.errorBag.imageUrl : undefined"
       alt="Изображение услуги"
     />
 
     <p class="text-xl mb-2">Список входящих в услугу процедур</p>
-    <div
-      v-for="(_procedure, index) in formData.procedures"
-      :key="index"
-      class="flex items-center gap-2 mb-2"
+    <Message
+      v-if="form.submitCount > 0 && form.errorBag.procedures?.length"
+      severity="error"
+      variant="simple"
+      size="small"
     >
-      <InputText
-        :disabled="readonly"
-        v-model.trim="formData.procedures[index]"
-        placeholder="Введите название процедуры"
-        class="w-full"
-      />
-      <Button
-        v-if="!readonly"
-        @click="removeProcedure(index)"
-        severity="danger"
-        icon="pi pi-trash"
-      />
-    </div>
+      <span v-for="message in form.errorBag.procedures" :key="message" class="block">{{
+        message
+      }}</span>
+    </Message>
+    <ServiceProcedureField
+      v-for="(procedure, index) in formFields.procedures.fields"
+      :key="procedure.key"
+      :name="`procedures[${index}]`"
+      :index="index"
+      :disabled="editorDisabled"
+      :readonly="readonly"
+      :submitted="form.submitCount > 0"
+      :errors="form.errorBag[`procedures[${index}]`]"
+      @remove="removeProcedure(index)"
+    />
     <Button
       v-if="!readonly"
+      :disabled="editorDisabled"
       @click="addNewProcedure()"
       label="Добавить процедуру"
       icon="pi pi-plus"
@@ -122,6 +187,7 @@ const confirmDeleteService = (event: MouseEvent) => {
       <div>
         <Button
           v-if="serviceId && !readonly"
+          :disabled="editorDisabled"
           @click="confirmDeleteService($event)"
           severity="danger"
           label="Удалить"
@@ -130,8 +196,8 @@ const confirmDeleteService = (event: MouseEvent) => {
           class="mr-7"
         />
         <Button
-          @click="saveService()"
-          :disabled="readonly"
+          @click="saveService"
+          :disabled="editorDisabled"
           label="Сохранить"
           icon="pi pi-check"
           size="large"

@@ -1,7 +1,6 @@
 import axios, { AxiosError, type AxiosResponse } from 'axios'
-import type { ValidationError } from './types'
 import { useToastStore } from '../store/useToastStore'
-import type { ApiResponse } from '@anto-sh/admin-network-shared'
+import type { ApiResponse, ValidationErrorData } from '@anto-sh/admin-network-shared'
 import i18n from '@/shared/lib/i18n'
 import { isAbortRequestError } from '../lib/network-utils/isAbortRequestError'
 
@@ -37,8 +36,10 @@ apiClient.interceptors.response.use(
 
     return response
   },
-  (error: AxiosError<ApiResponse<{ validationErrors: ValidationError[] } | undefined>>) => {
+  (error: AxiosError<ApiResponse<ValidationErrorData | undefined>>) => {
     if (isAbortRequestError(error)) return Promise.reject(error)
+    // validation errors - always should be catched locally
+    if (error.response?.status === 422) return Promise.reject(error)
 
     const { addToast } = useToastStore()
 
@@ -64,10 +65,6 @@ apiClient.interceptors.response.use(
     switch (statusCode) {
       case 401:
         // заглушка пока нет авторизации
-        break
-      case 422:
-        // заглушка пока нет валидации
-        // const validationErrors = errorRes?.data?.data?.validationErrors
         break
     }
 
