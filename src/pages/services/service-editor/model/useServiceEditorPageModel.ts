@@ -1,7 +1,7 @@
 import { useServiceCategoryModel } from '@/entities/service-category/model'
 import { useServiceModel } from '@/entities/service/model'
 import type { CreateServiceDto } from '@/entities/service/types'
-import { computed, onMounted, reactive } from 'vue'
+import { computed, onMounted, reactive, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useFieldArray, useForm } from 'vee-validate'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
@@ -19,6 +19,7 @@ export function useServiceEditorPageModel() {
 
   const serviceId = Number(route.params.id) || null
   const readonly = route.query.readonly === STRING_BOOLEAN.True
+  const isDeleting = ref(false)
   const form = reactive(
     useForm<ServiceFormInput, CreateServiceDto>({
       validationSchema: toTypedSchema(serviceFormSchema),
@@ -48,7 +49,14 @@ export function useServiceEditorPageModel() {
     imageUrl: defineFormField('imageUrl'),
     procedures: useFieldArray<string>('procedures'),
   })
-  const editorDisabled = computed(() => readonly || form.isSubmitting)
+  const editorDisabled = computed(
+    () =>
+      readonly ||
+      serviceModel.isLoading.value ||
+      serviceCategoryModel.isLoading.value ||
+      form.isSubmitting ||
+      isDeleting.value,
+  )
 
   const categoriesSelectOptions = computed(() =>
     serviceCategoryModel.categories.value.map((sc) => ({
@@ -74,9 +82,15 @@ export function useServiceEditorPageModel() {
     }
   })
 
-  const addNewProcedure = () => formFields.procedures.push('')
+  const addNewProcedure = () => {
+    if (editorDisabled.value) return
+    formFields.procedures.push('')
+  }
 
-  const removeProcedure = (index: number) => formFields.procedures.remove(index)
+  const removeProcedure = (index: number) => {
+    if (editorDisabled.value) return
+    formFields.procedures.remove(index)
+  }
 
   const submitService = form.handleSubmit(async (dto) => {
     try {
@@ -105,9 +119,14 @@ export function useServiceEditorPageModel() {
   }
 
   const deleteService = async () => {
-    if (!serviceId) return
-    await serviceModel.delete(serviceId)
-    cancelEditor()
+    if (editorDisabled.value || !serviceId) return
+    isDeleting.value = true
+    try {
+      await serviceModel.delete(serviceId)
+      cancelEditor()
+    } finally {
+      isDeleting.value = false
+    }
   }
 
   const cancelEditor = () => {
@@ -121,6 +140,7 @@ export function useServiceEditorPageModel() {
     readonly,
     form,
     formFields,
+    isDeleting,
     editorDisabled,
     categoriesSelectOptions,
     addNewProcedure,

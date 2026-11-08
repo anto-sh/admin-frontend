@@ -11,6 +11,7 @@ const {
   readonly,
   form,
   formFields,
+  isDeleting,
   editorDisabled,
   categoriesSelectOptions,
   addNewProcedure,
@@ -188,6 +189,7 @@ const confirmDeleteService = (event: MouseEvent) => {
         <Button
           v-if="serviceId && !readonly"
           :disabled="editorDisabled"
+          :loading="isDeleting"
           @click="confirmDeleteService($event)"
           severity="danger"
           label="Удалить"
@@ -196,8 +198,10 @@ const confirmDeleteService = (event: MouseEvent) => {
           class="mr-7"
         />
         <Button
+          v-if="!readonly"
           @click="saveService"
           :disabled="editorDisabled"
+          :loading="form.isSubmitting"
           label="Сохранить"
           icon="pi pi-check"
           size="large"
