@@ -1,15 +1,7 @@
 <script setup lang="ts">
-import {
-  Button,
-  InputText,
-  Select,
-  FloatLabel,
-  InputNumber,
-  FileUpload,
-  Image,
-  useConfirm,
-} from 'primevue'
+import { Button, InputText, Select, FloatLabel, InputNumber, useConfirm } from 'primevue'
 import ConfirmPopup from 'primevue/confirmpopup'
+import { FieldImageUpload } from '@/features/field-image-upload'
 import { useServiceEditorPageModel } from '../model/useServiceEditorPageModel'
 import { usePageTitle } from '@/shared/composables/usePageTitle'
 
@@ -20,7 +12,6 @@ const {
   categoriesSelectOptions,
   addNewProcedure,
   removeProcedure,
-  uploadServiceImage,
   saveService,
   deleteService,
   cancelEditor,
@@ -87,31 +78,11 @@ const confirmDeleteService = (event: MouseEvent) => {
       <label for="price">Стоимость</label>
     </FloatLabel>
 
-    <div v-if="!readonly" class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
-      <FileUpload
-        mode="basic"
-        @select="uploadServiceImage"
-        customUpload
-        auto
-        accept="image/*"
-        :maxFileSize="200 * 1024 * 1024"
-        :chooseLabel="
-          formData.imageUrl
-            ? 'Выбрать другое изображение для услуги'
-            : 'Выбрать изображение для услуги'
-        "
-        chooseIcon="pi pi-image"
-        class="mb-0"
-      />
-    </div>
-
-    <Image
-      v-if="formData.imageUrl"
-      :src="formData.imageUrl"
+    <FieldImageUpload
+      v-model="formData.imageUrl"
+      :disabled="readonly"
+      :readonly="readonly"
       alt="Изображение услуги"
-      width="250"
-      preview
-      class="mb-10"
     />
 
     <p class="text-xl mb-2">Список входящих в услугу процедур</p>

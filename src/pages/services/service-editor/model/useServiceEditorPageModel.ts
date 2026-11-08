@@ -2,10 +2,8 @@ import { useServiceCategoryModel } from '@/entities/service-category/model'
 import { useServiceModel } from '@/entities/service/model'
 import type { CreateServiceDto } from '@/entities/service/types'
 import { computed, onMounted, ref } from 'vue'
-import { type FileUploadSelectEvent } from 'primevue'
 import { useRoute, useRouter } from 'vue-router'
 import { STRING_BOOLEAN } from '@/shared/enums/common'
-import { imageApi } from '@/shared/api/image'
 import { useToastStore } from '@/shared/store/useToastStore'
 
 type ServiceFormData = Omit<CreateServiceDto, 'price' | 'categoryId'> & {
@@ -57,11 +55,6 @@ export function useServiceEditorPageModel() {
   const removeProcedure = (index: number) =>
     (formData.value.procedures = formData.value.procedures.filter((_p, i) => i !== index))
 
-  const uploadServiceImage = async (event: FileUploadSelectEvent) => {
-    const { data: fileData } = await imageApi.upload(event.files[0])
-    formData.value.imageUrl = fileData?.url || ''
-  }
-
   const saveService = async () => {
     const { price, categoryId } = formData.value
     if (price == null || categoryId == null) {
@@ -98,7 +91,6 @@ export function useServiceEditorPageModel() {
     categoriesSelectOptions,
     addNewProcedure,
     removeProcedure,
-    uploadServiceImage,
     saveService,
     deleteService,
     cancelEditor,
