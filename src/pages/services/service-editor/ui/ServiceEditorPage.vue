@@ -148,35 +148,37 @@ const confirmDeleteService = (event: MouseEvent) => {
       alt="Изображение услуги"
     />
 
-    <p class="text-xl mb-2">Список входящих в услугу процедур</p>
-    <Message
-      v-if="form.submitCount > 0 && form.errorBag.procedures?.length"
-      severity="error"
-      variant="simple"
-      size="small"
-    >
-      <span v-for="message in form.errorBag.procedures" :key="message" class="block">{{
-        message
-      }}</span>
-    </Message>
-    <ServiceProcedureField
-      v-for="(procedure, index) in formFields.procedures.fields"
-      :key="procedure.key"
-      :name="`procedures[${index}]`"
-      :index="index"
-      :disabled="editorDisabled"
-      :readonly="readonly"
-      :submitted="form.submitCount > 0"
-      :errors="form.errorBag[`procedures[${index}]`]"
-      @remove="removeProcedure(index)"
-    />
-    <Button
-      v-if="!readonly"
-      :disabled="editorDisabled"
-      @click="addNewProcedure()"
-      label="Добавить процедуру"
-      icon="pi pi-plus"
-    />
+    <div class="space-y-2">
+      <p class="text-xl">Список входящих в услугу процедур</p>
+      <Message
+        v-if="form.submitCount > 0 && form.errorBag.procedures?.length"
+        severity="error"
+        variant="simple"
+        size="small"
+      >
+        <span v-for="message in form.errorBag.procedures" :key="message" class="block">{{
+          message
+        }}</span>
+      </Message>
+      <ServiceProcedureField
+        v-for="(procedure, index) in formFields.procedures.fields"
+        :key="procedure.key"
+        :name="`procedures[${index}]`"
+        :index="index"
+        :disabled="editorDisabled"
+        :readonly="readonly"
+        :submitted="form.submitCount > 0"
+        :errors="form.errorBag[`procedures[${index}]`]"
+        @remove="removeProcedure(index)"
+      />
+      <Button
+        v-if="!readonly"
+        :disabled="editorDisabled"
+        @click="addNewProcedure()"
+        label="Добавить процедуру"
+        icon="pi pi-plus"
+      />
+    </div>
 
     <div class="flex justify-between mt-10">
       <Button
