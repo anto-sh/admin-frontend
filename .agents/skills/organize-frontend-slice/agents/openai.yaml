@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Slice Organization"
+  short_description: "Organize an FSD slice and its public API"
+  default_prompt: "Use $organize-frontend-slice to organize the requested frontend slice, its component names, public API, and consumer imports."

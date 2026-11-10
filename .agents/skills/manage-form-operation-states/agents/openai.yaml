@@ -1,0 +1,4 @@
+interface:
+  display_name: "Form Operation States"
+  short_description: "Manage form loading states and readonly actions"
+  default_prompt: "Use $manage-form-operation-states to separate the requested form's operation states, loading indicators, guards, and readonly behavior."

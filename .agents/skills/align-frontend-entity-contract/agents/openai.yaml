@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Entity Contract"
+  short_description: "Align entity schemas, types, and API contracts"
+  default_prompt: "Use $align-frontend-entity-contract to align the requested entity's complete schema, inferred types, API integration, and form representations with its established backend contract."

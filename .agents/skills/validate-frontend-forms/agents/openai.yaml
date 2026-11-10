@@ -1,0 +1,4 @@
+interface:
+  display_name: "Frontend Form Validation"
+  short_description: "Add schema-based validation to frontend forms"
+  default_prompt: "Use $validate-frontend-forms to implement client-side validation for the requested form using the project's existing validation modules."

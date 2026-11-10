@@ -31,8 +31,9 @@ Use Node.js 22.16.0 (`.node-version`) and pnpm 10.11.0 (`package.json`). Run fro
 
 ## Project conventions
 
-- Before changing application code, read `manifesto.md` for coding conventions.
-- Read only the [DOCS.md](DOCS.md) sections relevant to the mechanism being changed: architecture (section 0), API errors (1), i18n (2), CRUD/refetching/loading (3), cancellation (4), API contracts/types/clients (5), and frontend validation ([section 6](DOCS.md#6-local-zod-adapter-for-vee-validate)). Consult `TODO.md` when planning related backlog work.
+- Before changing application code, read [manifesto.md](manifesto.md) for coding conventions, including [component naming](manifesto.md#component-naming) and [slice public API](manifesto.md#slice-public-api).
+- Read only the [DOCS.md](DOCS.md) sections relevant to the mechanism being changed: architecture (section 0), API errors (1), i18n (2), CRUD/refetching/loading (3), cancellation (4), API contracts/schemas/types/clients (5), and form validation ([section 6](DOCS.md#6-frontend-form-validation)). Consult `TODO.md` when planning related backlog work.
+- Use the relevant local workflow: [form validation](.agents/skills/validate-frontend-forms/SKILL.md), [entity contracts](.agents/skills/align-frontend-entity-contract/SKILL.md), [slice organization](.agents/skills/organize-frontend-slice/SKILL.md), or [form operation states](.agents/skills/manage-form-operation-states/SKILL.md).
 - Keep app wiring, routing, and layouts in `src/app`; page components and page models in `src/pages`; reusable features in `src/features`; entity APIs, DTO types, and models in `src/entities`; shared infrastructure and UI in `src/shared`.
 - Follow the existing Vue Composition API and `<script setup lang="ts">` patterns. Reuse existing components, features, widgets, and `src/shared/ui` primitives before adding new implementations.
 - Preserve the Russian UI language.
