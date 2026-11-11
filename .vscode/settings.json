@@ -9,6 +9,10 @@
   },
   "stylelint.validate": ["css", "scss"],
   "scss.lint.unknownAtRules": "ignore",
-  "i18n-ally.localesPaths": ["src/app/i18n", "src/shared/api/locales"],
+  "i18n-ally.localesPaths": [
+    "src/shared/api/locales",
+    "src/shared/lib/i18n",
+    "src/shared/lib/validation/locales"
+],
   "i18n-ally.keystyle": "nested"
 }
