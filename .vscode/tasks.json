@@ -1,0 +1,60 @@
+{
+  "version": "2.0.0",
+  "options": {
+    "cwd": "${workspaceFolder}"
+  },
+  "presentation": {
+    "reveal": "always",
+    "revealProblems": "onProblem",
+    "panel": "dedicated",
+    "clear": true
+  },
+  "tasks": [
+    {
+      "label": "Prepare for commit",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["precommit"],
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      },
+      "problemMatcher": [
+        {
+          "base": "$tsc",
+          "owner": "commit-types",
+          "applyTo": "allDocuments"
+        },
+        "$eslint-stylish"
+      ]
+    },
+    {
+      "label": "Check types",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["type-check", "--pretty", "false"],
+      "problemMatcher": [
+        {
+          "base": "$tsc",
+          "owner": "commit-types",
+          "applyTo": "allDocuments"
+        }
+      ]
+    },
+    {
+      "label": "Run unit tests",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["test:unit", "--run", "--passWithNoTests"],
+      "group": "test",
+      "problemMatcher": []
+    },
+    {
+      "label": "Lint and format staged files",
+      "type": "shell",
+      "command": "pnpm",
+      "args": ["exec", "lint-staged", "--concurrent", "false", "--verbose"],
+      "problemMatcher": ["$eslint-stylish"]
+    }
+  ]
+}

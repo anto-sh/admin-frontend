@@ -1,0 +1,1 @@
+pnpm check:message --edit "$1"
