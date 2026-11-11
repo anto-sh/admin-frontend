@@ -1,0 +1,5 @@
+{
+  "*.{ts,mts,tsx,vue}": ["prettier --write", "node scripts/format-eslint.mjs"],
+  "*.{css,scss}": ["stylelint --fix", "prettier --write"],
+  "!(*.{ts,mts,tsx,vue,css,scss})": "prettier --write --ignore-unknown"
+}
