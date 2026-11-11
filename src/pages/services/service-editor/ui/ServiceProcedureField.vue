@@ -23,10 +23,10 @@ const { value, handleChange, handleBlur } = useField<string>(() => props.name, u
   <div>
     <div class="flex items-center gap-2">
       <InputText
-        :disabled="disabled"
-        :modelValue="value"
-        @update:modelValue="handleChange($event, submitted)"
+        @update:model-value="handleChange($event, submitted)"
         @blur="handleBlur($event, submitted)"
+        :disabled="disabled"
+        :model-value="value"
         :invalid="submitted && !!errors?.length"
         :aria-label="`Название процедуры ${index + 1}`"
         :aria-describedby="errorsId"
@@ -36,10 +36,10 @@ const { value, handleChange, handleBlur } = useField<string>(() => props.name, u
       />
       <Button
         v-if="!readonly"
-        type="button"
-        :disabled="disabled"
         @click="emit('remove')"
+        :disabled="disabled"
         :aria-label="`Удалить процедуру ${index + 1}`"
+        type="button"
         severity="danger"
         icon="pi pi-trash"
       />
@@ -52,7 +52,12 @@ const { value, handleChange, handleBlur } = useField<string>(() => props.name, u
       size="small"
       class="mt-1"
     >
-      <span v-for="message in errors" :key="message" class="block">{{ message }}</span>
+      <span
+        v-for="message in errors"
+        :key="message"
+        class="block"
+        >{{ message }}</span
+      >
     </Message>
   </div>
 </template>

@@ -47,62 +47,77 @@ const addTreatmentSecured = () => {
 </script>
 
 <template>
-  <form v-if="treatmentEntities.length" @submit.prevent class="w-2/3 min-w-200 space-y-2">
+  <form
+    v-if="treatmentEntities.length"
+    @submit.prevent
+    class="w-2/3 min-w-200 space-y-2"
+  >
     <div class="treatment-row text-2xl font-medium">
       <h3>Название</h3>
     </div>
     <div
       v-for="item in treatmentEntities"
       :key="item.id"
-      class="treatment-row"
       :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
+      class="treatment-row"
     >
-      <InputText v-model.trim="item.name" class="w-full" placeholder="Название" />
-      <Button
-        :disabled="!canUpdate(item)"
-        icon="pi pi-save"
-        @click="updateTreatment(item.id, { name: item.name })"
+      <InputText
+        v-model.trim="item.name"
+        class="w-full"
+        placeholder="Название"
       />
       <Button
+        @click="updateTreatment(item.id, { name: item.name })"
+        :disabled="!canUpdate(item)"
+        icon="pi pi-save"
+      />
+      <Button
+        @click="deleteTreatment(item.id)"
         :disabled="!canDelete(item)"
         icon="pi pi-trash"
         severity="danger"
-        @click="deleteTreatment(item.id)"
       />
       <Button
+        @click="cancelChange(item.id)"
         :disabled="!canCancel(item)"
         icon="pi pi-undo"
         severity="contrast"
-        @click="cancelChange(item.id)"
       />
     </div>
     <BatchActionsBar
-      :can-save-all="canSaveAll"
-      :can-cancel-all="canCancelAll"
       @save-all="saveAllChanges"
       @cancel-all="cancelAllChanges"
+      :can-save-all="canSaveAll"
+      :can-cancel-all="canCancelAll"
     />
   </form>
-  <form @submit.prevent class="w-2/3 min-w-200 mt-10">
+  <form
+    @submit.prevent
+    class="w-2/3 min-w-200 mt-10"
+  >
     <h3 class="text-3xl mb-2">Добавить новый пункт</h3>
     <div class="new-treatment-row">
       <div class="flex flex-col gap-2">
-        <Label class="text-xl font-medium" for="new-treatment-text">Название</Label>
+        <Label
+          class="text-xl font-medium"
+          for="new-treatment-text"
+          >Название</Label
+        >
         <InputText
           id="new-treatment-text"
           v-model.trim="newTreatmentName"
+          @keydown.enter="addTreatmentSecured"
           placeholder="Название"
           class="w-full"
-          @keydown.enter="addTreatmentSecured"
         />
       </div>
       <Button
+        @click="addTreatmentSecured"
+        :loading="isLoading"
+        :disabled="!canAdd"
         label="Добавить"
         class="self-end"
         icon="pi pi-plus"
-        :loading="isLoading"
-        :disabled="!canAdd"
-        @click="addTreatmentSecured"
       />
     </div>
   </form>

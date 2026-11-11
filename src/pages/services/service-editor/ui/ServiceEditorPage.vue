@@ -47,13 +47,17 @@ const confirmDeleteService = (event: MouseEvent) => {
 </script>
 
 <template>
-  <form @submit.prevent novalidate class="mt-4 space-y-8">
+  <form
+    @submit.prevent
+    novalidate
+    class="mt-4 space-y-8"
+  >
     <div>
       <FloatLabel>
         <InputText
-          :disabled="editorDisabled"
           id="name"
           v-model="formFields.name.field"
+          :disabled="editorDisabled"
           v-bind="formFields.name.attrs"
           :invalid="form.submitCount > 0 && !!form.errorBag.name?.length"
           aria-required="true"
@@ -70,23 +74,26 @@ const confirmDeleteService = (event: MouseEvent) => {
         size="small"
         class="mt-1"
       >
-        <span v-for="message in form.errorBag.name" :key="message" class="block">{{
-          message
-        }}</span>
+        <span
+          v-for="message in form.errorBag.name"
+          :key="message"
+          class="block"
+          >{{ message }}</span
+        >
       </Message>
     </div>
 
     <div>
       <FloatLabel>
         <Select
-          :disabled="editorDisabled"
-          inputId="category"
           v-model="formFields.categoryId.field"
+          :disabled="editorDisabled"
           v-bind="formFields.categoryId.attrs"
           :options="categoriesSelectOptions"
-          optionLabel="name"
-          optionValue="id"
           :invalid="form.submitCount > 0 && !!form.errorBag.categoryId?.length"
+          input-id="category"
+          option-label="name"
+          option-value="id"
           aria-required="true"
           aria-describedby="category-errors"
           class="w-full"
@@ -101,28 +108,31 @@ const confirmDeleteService = (event: MouseEvent) => {
         size="small"
         class="mt-1"
       >
-        <span v-for="message in form.errorBag.categoryId" :key="message" class="block">{{
-          message
-        }}</span>
+        <span
+          v-for="message in form.errorBag.categoryId"
+          :key="message"
+          class="block"
+          >{{ message }}</span
+        >
       </Message>
     </div>
 
     <div>
       <FloatLabel>
         <InputNumber
-          currency="RUB"
-          locale="ru-RU"
+          v-model="formFields.price.field"
           :min="formFields.price.min"
           :max="formFields.price.max"
           :disabled="editorDisabled"
-          inputId="price"
-          v-model="formFields.price.field"
           v-bind="formFields.price.attrs"
           :invalid="form.submitCount > 0 && !!form.errorBag.price?.length"
+          :step="1"
+          currency="RUB"
+          locale="ru-RU"
+          input-id="price"
           aria-required="true"
           aria-describedby="price-errors"
           class="w-full"
-          :step="1"
         />
         <label for="price">Стоимость</label>
       </FloatLabel>
@@ -134,9 +144,12 @@ const confirmDeleteService = (event: MouseEvent) => {
         size="small"
         class="mt-1"
       >
-        <span v-for="message in form.errorBag.price" :key="message" class="block">{{
-          message
-        }}</span>
+        <span
+          v-for="message in form.errorBag.price"
+          :key="message"
+          class="block"
+          >{{ message }}</span
+        >
       </Message>
     </div>
 
@@ -156,25 +169,28 @@ const confirmDeleteService = (event: MouseEvent) => {
         variant="simple"
         size="small"
       >
-        <span v-for="message in form.errorBag.procedures" :key="message" class="block">{{
-          message
-        }}</span>
+        <span
+          v-for="message in form.errorBag.procedures"
+          :key="message"
+          class="block"
+          >{{ message }}</span
+        >
       </Message>
       <ServiceProcedureField
         v-for="(procedure, index) in formFields.procedures.fields"
         :key="procedure.key"
+        @remove="removeProcedure(index)"
         :name="`procedures[${index}]`"
         :index="index"
         :disabled="editorDisabled"
         :readonly="readonly"
         :submitted="form.submitCount > 0"
         :errors="form.errorBag[`procedures[${index}]`]"
-        @remove="removeProcedure(index)"
       />
       <Button
         v-if="!readonly"
-        :disabled="editorDisabled"
         @click="addNewProcedure()"
+        :disabled="editorDisabled"
         label="Добавить процедуру"
         icon="pi pi-plus"
       />
@@ -191,9 +207,9 @@ const confirmDeleteService = (event: MouseEvent) => {
       <div>
         <Button
           v-if="serviceId && !readonly"
+          @click="confirmDeleteService($event)"
           :disabled="editorDisabled"
           :loading="isDeleting"
-          @click="confirmDeleteService($event)"
           severity="danger"
           label="Удалить"
           icon="pi pi-trash"
@@ -214,9 +230,9 @@ const confirmDeleteService = (event: MouseEvent) => {
   </form>
 
   <ConfirmPopup
-    class="w-[200px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[200px]"
   />
 </template>

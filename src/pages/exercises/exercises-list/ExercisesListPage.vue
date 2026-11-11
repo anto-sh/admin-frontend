@@ -46,7 +46,11 @@ const confirmDeleteExercise = (id: number, event: Event) => {
     icon="pi pi-plus"
   />
   <template v-if="categoriesWithExercises.length">
-    <Accordion :value="['0']" multiple class="mt-10">
+    <Accordion
+      :value="['0']"
+      multiple
+      class="mt-10"
+    >
       <AccordionPanel
         v-for="ec in categoriesWithExercises"
         :key="ec.id"
@@ -104,10 +108,10 @@ const confirmDeleteExercise = (id: number, event: Event) => {
   </template>
 
   <ConfirmPopup
-    class="w-[200px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[200px]"
   />
 </template>
 

@@ -53,18 +53,18 @@ const confirmCancelAll = (event: MouseEvent) => {
 <template>
   <div class="flex gap-2 mt-6">
     <Button
+      @click="confirmSaveAll($event)"
       :disabled="!props.canSaveAll"
       label="Сохранить всё"
       icon="pi pi-save"
       severity="primary"
-      @click="confirmSaveAll($event)"
     />
     <Button
+      @click="confirmCancelAll($event)"
       :disabled="!props.canCancelAll"
       label="Сбросить изменения"
       icon="pi pi-times"
       severity="danger"
-      @click="confirmCancelAll($event)"
     />
   </div>
   <ConfirmPopup class="w-[400px]" />

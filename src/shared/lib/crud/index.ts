@@ -1,3 +1,3 @@
-export * from './createCrudApi';
-export * from './createCrudComposable';
-export * from './types';
+export * from './createCrudApi'
+export * from './createCrudComposable'
+export * from './types'

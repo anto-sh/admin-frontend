@@ -41,8 +41,17 @@ const confirmDeleteExpert = (id: number, event: MouseEvent) => {
     icon="pi pi-plus"
   />
   <template v-if="categoriesWithExperts.length">
-    <Accordion :value="['0']" multiple class="mt-10">
-      <AccordionPanel v-for="ec in categoriesWithExperts" :key="ec.id" :value="ec.id" class="my-3">
+    <Accordion
+      :value="['0']"
+      multiple
+      class="mt-10"
+    >
+      <AccordionPanel
+        v-for="ec in categoriesWithExperts"
+        :key="ec.id"
+        :value="ec.id"
+        class="my-3"
+      >
         <AccordionHeader>
           <div>
             <span class="text-2xl">{{ ec.name }}</span>
@@ -59,7 +68,11 @@ const confirmDeleteExpert = (id: number, event: MouseEvent) => {
 
         <AccordionContent>
           <ul v-if="ec.experts?.length">
-            <li v-for="expert in ec.experts" :key="expert.id" class="accordion-entity-list-item">
+            <li
+              v-for="expert in ec.experts"
+              :key="expert.id"
+              class="accordion-entity-list-item"
+            >
               <span class="accordion-entity-list-item__name">{{ expert.fullName }}</span>
               <span class="accordion-entity-list-item__actions">
                 <Button
@@ -90,10 +103,10 @@ const confirmDeleteExpert = (id: number, event: MouseEvent) => {
   </template>
 
   <ConfirmPopup
-    class="w-[200px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[200px]"
   />
 </template>
 

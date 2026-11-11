@@ -43,12 +43,15 @@ const confirmDeleteExpert = (event: MouseEvent) => {
 </script>
 
 <template>
-  <form @submit.prevent class="mt-4 space-y-8">
+  <form
+    @submit.prevent
+    class="mt-4 space-y-8"
+  >
     <FloatLabel>
       <InputText
-        :disabled="readonly"
         id="fullName"
         v-model.trim="formData.fullName"
+        :disabled="readonly"
         class="w-full"
       />
       <label for="fullName">ФИО специалиста</label>
@@ -56,9 +59,9 @@ const confirmDeleteExpert = (event: MouseEvent) => {
 
     <FloatLabel>
       <InputText
-        :disabled="readonly"
         id="description"
         v-model.trim="formData.description"
+        :disabled="readonly"
         class="w-full"
       />
       <label for="description">Описание</label>
@@ -66,29 +69,32 @@ const confirmDeleteExpert = (event: MouseEvent) => {
 
     <FloatLabel>
       <Select
-        :disabled="readonly"
         id="category"
         v-model="formData.categoryId"
+        :disabled="readonly"
         :options="categoriesSelectOptions"
-        optionLabel="name"
-        optionValue="id"
+        option-label="name"
+        option-value="id"
         class="w-full"
       />
       <label for="category">Категория</label>
     </FloatLabel>
 
-    <div class="flex justify-start" :class="formData.imageUrl ? 'mb-2' : 'mb-10'">
+    <div
+      :class="formData.imageUrl ? 'mb-2' : 'mb-10'"
+      class="flex justify-start"
+    >
       <FileUpload
-        mode="basic"
         @select="uploadExpertImage"
-        customUpload
-        auto
-        accept="image/*"
-        :maxFileSize="200 * 1024 * 1024"
-        :chooseLabel="
+        :max-file-size="200 * 1024 * 1024"
+        :choose-label="
           formData.imageUrl ? 'Выбрать другое фото специалиста' : 'Выбрать фото специалиста'
         "
-        chooseIcon="pi pi-image"
+        mode="basic"
+        custom-upload
+        auto
+        accept="image/*"
+        choose-icon="pi pi-image"
         class="mb-0"
       />
     </div>
@@ -137,9 +143,9 @@ const confirmDeleteExpert = (event: MouseEvent) => {
     </div>
   </form>
   <ConfirmPopup
-    class="w-[200px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[200px]"
   />
 </template>

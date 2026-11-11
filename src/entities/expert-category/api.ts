@@ -8,4 +8,3 @@ export const expertCategoryApi = createCrudApi<ExpertCategoryDto, unknown, unkno
   type: 'category',
   url: '/expert-categories',
 })
-

@@ -53,7 +53,11 @@ const addPriceSecured = () => {
 </script>
 
 <template>
-  <form v-if="priceEntities?.length" @submit.prevent class="w-2/3 min-w-200 space-y-2">
+  <form
+    v-if="priceEntities?.length"
+    @submit.prevent
+    class="w-2/3 min-w-200 space-y-2"
+  >
     <div class="price-row text-2xl font-medium">
       <h3>Название</h3>
       <h3>Стоимость</h3>
@@ -61,58 +65,68 @@ const addPriceSecured = () => {
     <div
       v-for="item of priceEntities"
       :key="item.id"
-      class="price-row"
       :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
+      class="price-row"
     >
-      <InputText v-model.trim="item.name" placeholder="Название" />
+      <InputText
+        v-model.trim="item.name"
+        placeholder="Название"
+      />
       <InputNumber
         v-model="item.price"
+        :min="0"
+        :step="1"
+        :min-fraction-digits="0"
+        :max="10_000_000"
         mode="currency"
         currency="RUB"
         locale="ru-RU"
         placeholder="Стоимость"
-        :min="0"
-        :step="1"
-        :minFractionDigits="0"
-        :max="10_000_000"
       />
       <Button
+        @click="updatePrice(item.id, { name: item.name, price: item.price })"
         :disabled="!canUpdate(item)"
         icon="pi pi-save"
-        @click="updatePrice(item.id, { name: item.name, price: item.price })"
       />
       <Button
+        @click="deletePrice(item.id)"
         :disabled="!canDelete(item)"
         icon="pi pi-trash"
         severity="danger"
-        @click="deletePrice(item.id)"
       />
       <Button
+        @click="cancelChange(item.id)"
         :disabled="!canCancel(item)"
         icon="pi pi-undo"
         severity="contrast"
-        @click="cancelChange(item.id)"
       />
     </div>
 
     <BatchActionsBar
-      :can-save-all="canSaveAll"
-      :can-cancel-all="canCancelAll"
       @save-all="saveAllChanges"
       @cancel-all="cancelAllChanges"
+      :can-save-all="canSaveAll"
+      :can-cancel-all="canCancelAll"
     />
   </form>
-  <form @submit.prevent class="w-2/3 min-w-200 mt-10">
+  <form
+    @submit.prevent
+    class="w-2/3 min-w-200 mt-10"
+  >
     <h3 class="text-3xl mb-2">Добавить новую цену</h3>
     <div class="new-price-row">
       <div class="flex flex-col gap-2">
-        <Label class="text-xl font-medium" for="new-price-text">Название</Label>
+        <Label
+          class="text-xl font-medium"
+          for="new-price-text"
+          >Название</Label
+        >
         <InputText
           id="new-price-text"
           v-model.trim="newPrice.name"
+          @keydown.enter="addPriceSecured"
           placeholder="Название"
           class="w-full"
-          @keydown.enter="addPriceSecured"
         />
       </div>
       <!--
@@ -121,29 +135,33 @@ const addPriceSecured = () => {
       поэтому пишем кастомный обработчик на событие input
       -->
       <div class="flex flex-col gap-2">
-        <Label class="text-xl font-medium" for="new-price-text">Стоимость</Label>
+        <Label
+          class="text-xl font-medium"
+          for="new-price-text"
+          >Стоимость</Label
+        >
         <InputNumber
           v-model="newPrice.price"
+          @input="(e) => (newPrice.price = e.value as number)"
+          @keydown.enter="addPriceSecured"
+          :min-fraction-digits="0"
+          :min="0"
+          :max="10_000_000"
+          :step="1"
           class="w-full"
           mode="currency"
           currency="RUB"
           locale="ru-RU"
           placeholder="Стоимость"
-          :minFractionDigits="0"
-          :min="0"
-          :max="10_000_000"
-          :step="1"
-          @input="(e) => (newPrice.price = e.value as number)"
-          @keydown.enter="addPriceSecured"
         />
       </div>
       <Button
+        @click="addPrice()"
+        :loading="isLoading"
+        :disabled="!canAdd"
         label="Добавить"
         icon="pi pi-plus"
         class="self-end"
-        :loading="isLoading"
-        :disabled="!canAdd"
-        @click="addPrice()"
       />
     </div>
   </form>

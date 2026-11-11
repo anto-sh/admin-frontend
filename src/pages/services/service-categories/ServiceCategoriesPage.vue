@@ -76,7 +76,11 @@ const addCategorySecured = () => {
 </script>
 
 <template>
-  <form v-if="categoriesWithServices.length" @submit.prevent class="w-2/3 min-w-200 space-y-2">
+  <form
+    v-if="categoriesWithServices.length"
+    @submit.prevent
+    class="w-2/3 min-w-200 space-y-2"
+  >
     <div class="category-row text-2xl font-medium">
       <h3>Название</h3>
       <h3>URL</h3>
@@ -84,76 +88,91 @@ const addCategorySecured = () => {
     <div
       v-for="item of categoriesWithServices"
       :key="item.id"
-      class="category-row"
       :class="{ 'input-group--highlighted': actionsAvailableChecks.isEntityChanged(item.id) }"
+      class="category-row"
     >
-      <InputText :disabled="!canEdit(item)" v-model.trim="item.name" placeholder="Название" />
       <InputText
+        v-model.trim="item.name"
         :disabled="!canEdit(item)"
+        placeholder="Название"
+      />
+      <InputText
         v-model.trim="item.url"
+        :disabled="!canEdit(item)"
         placeholder="URL (опционально)"
       />
       <Button
-        :disabled="!canUpdate(item)"
-        icon="pi pi-save"
         @click="
           updateServiceCategory(item.id, {
             name: item.name,
             url: item.url,
           })
         "
+        :disabled="!canUpdate(item)"
+        icon="pi pi-save"
       />
       <Button
+        @click="confirmDeleteServiceCategory(item.id, item.services?.length, $event)"
         :disabled="!canDelete(item)"
         icon="pi pi-trash"
         severity="danger"
-        @click="confirmDeleteServiceCategory(item.id, item.services?.length, $event)"
       />
       <Button
+        @click="cancelChange(item.id)"
         :disabled="!canCancel(item)"
         icon="pi pi-undo"
         severity="contrast"
-        @click="cancelChange(item.id)"
       />
       <span class="text-gray-400">Услуг: {{ item.services?.length || 0 }}</span>
     </div>
   </form>
 
-  <form @submit.prevent class="w-2/3 min-w-200 mt-10">
+  <form
+    @submit.prevent
+    class="w-2/3 min-w-200 mt-10"
+  >
     <h3 class="text-3xl mb-2">Добавить новую категорию</h3>
     <div class="new-category-row">
       <div class="flex flex-col gap-2">
-        <Label class="text-xl font-medium" for="new-category-text">Название</Label>
+        <Label
+          class="text-xl font-medium"
+          for="new-category-text"
+          >Название</Label
+        >
         <InputText
           id="new-category-text"
           v-model.trim="newServiceCategory.name"
-          placeholder="Название"
           @keydown.enter="addCategorySecured"
+          placeholder="Название"
         />
       </div>
       <div class="flex flex-col gap-2">
-        <Label class="text-xl font-medium truncate" for="new-category-url">URL (опционально)</Label>
+        <Label
+          class="text-xl font-medium truncate"
+          for="new-category-url"
+          >URL (опционально)</Label
+        >
         <InputText
           id="new-category-url"
           v-model.trim="newServiceCategory.url"
-          placeholder="URL (опционально)"
           @keydown.enter="addCategorySecured"
+          placeholder="URL (опционально)"
         />
       </div>
       <Button
+        @click="addCategorySecured"
         :disabled="!canAdd"
         label="Добавить"
         icon="pi pi-plus"
         class="self-end"
-        @click="addCategorySecured"
       />
     </div>
   </form>
 
   <ConfirmPopup
-    class="w-[400px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[400px]"
   />
 </template>

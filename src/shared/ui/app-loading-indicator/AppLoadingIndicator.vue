@@ -13,10 +13,20 @@ const indicatorClasses = computed(() => ({
 </script>
 
 <template>
-  <teleport :to="props.to" :disabled="!props.to">
+  <teleport
+    :to="props.to"
+    :disabled="!props.to"
+  >
     <Transition name="fade">
-      <div v-show="props.isShow" class="app-loading-indicator" :class="indicatorClasses">
-        <div tabindex="0" class="app-loading-indicator__overlay" />
+      <div
+        v-show="props.isShow"
+        :class="indicatorClasses"
+        class="app-loading-indicator"
+      >
+        <div
+          tabindex="0"
+          class="app-loading-indicator__overlay"
+        />
         <div class="app-loading-indicator__icon" />
       </div>
     </Transition>

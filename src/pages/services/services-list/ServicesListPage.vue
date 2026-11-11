@@ -46,8 +46,17 @@ const confirmDeleteService = (id: number, event: MouseEvent) => {
     icon="pi pi-plus"
   />
   <template v-if="categoriesWithServices.length">
-    <Accordion :value="['0']" multiple class="mt-10">
-      <AccordionPanel v-for="sc in categoriesWithServices" :key="sc.id" :value="sc.id" class="my-3">
+    <Accordion
+      :value="['0']"
+      multiple
+      class="mt-10"
+    >
+      <AccordionPanel
+        v-for="sc in categoriesWithServices"
+        :key="sc.id"
+        :value="sc.id"
+        class="my-3"
+      >
         <AccordionHeader>
           <div>
             <span class="text-2xl">{{ sc.name }}</span>
@@ -64,7 +73,11 @@ const confirmDeleteService = (id: number, event: MouseEvent) => {
 
         <AccordionContent>
           <ul v-if="sc.services?.length">
-            <li v-for="service in sc.services" :key="service.id" class="accordion-entity-list-item">
+            <li
+              v-for="service in sc.services"
+              :key="service.id"
+              class="accordion-entity-list-item"
+            >
               <span class="accordion-entity-list-item__name">{{ service.name }}</span>
               <span class="accordion-entity-list-item__actions">
                 <Button
@@ -95,9 +108,9 @@ const confirmDeleteService = (id: number, event: MouseEvent) => {
   </template>
 
   <ConfirmPopup
-    class="w-[200px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[200px]"
   />
 </template>

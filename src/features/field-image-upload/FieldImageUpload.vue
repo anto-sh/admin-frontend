@@ -22,24 +22,37 @@ const { isUploading, uploadImage } = useFieldImageUploadModel(imageUrl, props)
 
 <template>
   <div class="relative w-max">
-    <div v-if="!readonly" class="flex justify-start mb-2">
+    <div
+      v-if="!readonly"
+      class="flex justify-start mb-2"
+    >
       <FileUpload
-        mode="basic"
-        :disabled="disabled"
-        :chooseButtonProps="{ loading: isUploading }"
         @select="uploadImage"
-        customUpload
+        :disabled="disabled"
+        :choose-button-props="{ loading: isUploading }"
+        :max-file-size="200 * 1024 * 1024"
+        :choose-label="imageUrl ? 'Выбрать другое изображение' : 'Выбрать изображение'"
+        mode="basic"
+        custom-upload
         auto
         accept="image/*"
-        :maxFileSize="200 * 1024 * 1024"
-        :chooseLabel="imageUrl ? 'Выбрать другое изображение' : 'Выбрать изображение'"
-        chooseIcon="pi pi-image"
+        choose-icon="pi pi-image"
         class="mb-0"
       />
     </div>
 
-    <Message v-if="errors?.length" severity="error" variant="simple" size="small">
-      <span v-for="message in errors" :key="message" class="block">{{ message }}</span>
+    <Message
+      v-if="errors?.length"
+      severity="error"
+      variant="simple"
+      size="small"
+    >
+      <span
+        v-for="message in errors"
+        :key="message"
+        class="block"
+        >{{ message }}</span
+      >
     </Message>
 
     <Gallery
@@ -49,10 +62,17 @@ const { isUploading, uploadImage } = useFieldImageUploadModel(imageUrl, props)
     >
       <GalleryContent>
         <GalleryItem class="h-full w-full">
-          <img :src="imageUrl" :alt="alt" class="h-full w-full object-contain" />
+          <img
+            :src="imageUrl"
+            :alt="alt"
+            class="h-full w-full object-contain"
+          />
         </GalleryItem>
       </GalleryContent>
-      <GalleryFullScreen v-slot="{ isFullscreen }" class="absolute right-2 top-2 z-10">
+      <GalleryFullScreen
+        v-slot="{ isFullscreen }"
+        class="absolute right-2 top-2 z-10"
+      >
         <i
           :class="isFullscreen ? 'pi pi-window-minimize' : 'pi pi-window-maximize'"
           aria-hidden="true"

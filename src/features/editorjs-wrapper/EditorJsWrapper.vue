@@ -15,7 +15,11 @@ defineExpose({
 </script>
 
 <template>
-  <div id="editorjs" class="editorjs-container" :class="'editorjs-container--dark'" />
+  <div
+    id="editorjs"
+    :class="'editorjs-container--dark'"
+    class="editorjs-container"
+  />
 </template>
 
 <style lang="scss">

@@ -76,6 +76,6 @@ export function useExerciseEditorPageModel() {
     isShowEditorJs,
     saveExercise,
     deleteExercise,
-    cancelEditor
+    cancelEditor,
   }
 }

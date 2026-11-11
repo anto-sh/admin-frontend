@@ -36,7 +36,10 @@ watch(isLoading, async (newVal) => {
     </aside>
     <main>
       <AppLoadingIndicator :is-show="isLoading" />
-      <div class="main-content" :inert="isLoading">
+      <div
+        :inert="isLoading"
+        class="main-content"
+      >
         <Toast />
         <header class="bg-blue-200/20 p-2 mb-10">
           <h1 class="text-4xl font-bold">{{ pageTitle }}</h1>

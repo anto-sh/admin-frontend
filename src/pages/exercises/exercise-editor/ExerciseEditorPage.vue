@@ -21,7 +21,6 @@ if (exerciseId) {
   else usePageTitle(`Редактирование упражнения #${exerciseId}`)
 } else usePageTitle('Добавление нового упражнения')
 
-
 const confirmService = useConfirm()
 const confirmDeleteExercise = (event: MouseEvent) => {
   confirmService.require({
@@ -43,20 +42,28 @@ const confirmDeleteExercise = (event: MouseEvent) => {
 </script>
 
 <template>
-  <form @submit.prevent class="mt-4 space-y-8">
+  <form
+    @submit.prevent
+    class="mt-4 space-y-8"
+  >
     <FloatLabel>
-      <InputText :disabled="readonly" id="name" v-model.trim="formData.name" class="w-full" />
+      <InputText
+        id="name"
+        v-model.trim="formData.name"
+        :disabled="readonly"
+        class="w-full"
+      />
       <label for="name">Название упражнения</label>
     </FloatLabel>
 
     <FloatLabel>
       <Select
-        :disabled="readonly"
         id="category"
         v-model="formData.categoryId"
+        :disabled="readonly"
         :options="categoriesSelectOptions"
-        optionLabel="name"
-        optionValue="id"
+        option-label="name"
+        option-value="id"
         class="w-full"
       />
       <label for="category">Категория</label>
@@ -99,9 +106,9 @@ const confirmDeleteExercise = (event: MouseEvent) => {
   </form>
 
   <ConfirmPopup
-    class="w-[200px]"
     :pt="{
       message: { style: 'white-space: pre-line;' },
     }"
+    class="w-[200px]"
   />
 </template>
