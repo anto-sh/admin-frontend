@@ -1,0 +1,14 @@
+{
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "eslint.format.enable": true,
+  "[vue]": {
+    "editor.defaultFormatter": "dbaeumer.vscode-eslint"
+  },
+  "editor.codeActionsOnSave": {
+    "source.fixAll.stylelint": "always"
+  },
+  "stylelint.validate": ["css", "scss"],
+  "scss.lint.unknownAtRules": "ignore",
+  "i18n-ally.localesPaths": ["src/app/i18n", "src/shared/api/locales"],
+  "i18n-ally.keystyle": "nested"
+}
