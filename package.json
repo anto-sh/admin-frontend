@@ -5,6 +5,9 @@
   "private": true,
   "type": "module",
   "scripts": {
+    "prepare": "husky",
+    "precommit": "node scripts/precommit.mjs",
+    "check:message": "commitlint --verbose",
     "dev": "vite",
     "build": "run-p type-check \"build-only {@}\" --",
     "preview": "vite preview",
@@ -50,6 +53,8 @@
     "vue-router": "^4.6.4"
   },
   "devDependencies": {
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
     "@tailwindcss/postcss": "^4.3.3",
     "@tsconfig/node22": "^22.0.6",
     "@types/jsdom": "^21.1.7",
@@ -65,8 +70,10 @@
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.6",
     "eslint-plugin-vue": "~10.0.1",
+    "husky": "9.1.7",
     "jiti": "^2.7.0",
     "jsdom": "^26.1.0",
+    "lint-staged": "16.4.0",
     "npm-run-all2": "^7.0.2",
     "postcss": "^8.5.29",
     "prettier": "3.5.3",
