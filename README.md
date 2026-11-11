@@ -24,8 +24,50 @@ Administrative interface for the Amplituda rehabilitation center website.
 
 ## Project Setup
 
+Use Node.js **22.16.0** (see [.node-version](.node-version)) and pnpm **10.11.0** (see the `packageManager` field in [package.json](package.json)). Run the following commands from the root of a Git checkout:
+
 ```sh
-pnpm install
+pnpm install --frozen-lockfile
+```
+
+Installation includes development dependencies and runs `prepare` (`husky`), which initializes the project's Git hooks automatically. Lifecycle scripts must be enabled, and `HUSKY` must not be set to `0`.
+
+### Git Hooks
+
+If dependencies are already installed and you need to initialize the hooks again, run:
+
+```sh
+pnpm prepare
+```
+
+Verify the hook directory:
+
+```sh
+git config --get core.hooksPath
+```
+
+The expected value is `.husky/_`. Git, Node.js, and pnpm must also be available to the IDE's Git process when committing through an IDE.
+
+The `pre-commit` hook runs `pnpm precommit` in this order:
+
+1. `pnpm build`: type-check and build the whole project.
+2. `pnpm test:unit --run --passWithNoTests`: run unit tests once; an empty test suite is allowed.
+3. `lint-staged`: lint and format staged files, then stage the resulting fixes automatically.
+
+The `commit-msg` hook validates the message against [.commitlintrc.json](.commitlintrc.json), including the custom `ai` type. Errors block the commit; warnings do not.
+
+To run the preparation workflow manually, stage the intended changes and run:
+
+```sh
+pnpm precommit
+```
+
+This command can modify and restage files. In VS Code, `Ctrl+Shift+B` runs the same workflow through the **Prepare for commit** task; individual tasks are available through **Tasks: Run Task**.
+
+To check a message manually in PowerShell:
+
+```powershell
+'build: configure Git hooks' | pnpm check:message
 ```
 
 ### Compile and Hot-Reload for Development
