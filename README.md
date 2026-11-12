@@ -24,10 +24,11 @@ Administrative interface for the Amplituda rehabilitation center website.
 
 ## Project Setup
 
-Use Node.js **22.16.0** (see [.node-version](.node-version)) and pnpm **10.11.0** (see the `packageManager` field in [package.json](package.json)). Run the following commands from the root of a Git checkout:
+Use Node.js **22.16.0** (see [.node-version](.node-version)) and pnpm **10.11.0** (see the `packageManager` field in [package.json](package.json)).
 
 ```sh
-pnpm install --frozen-lockfile
+npm install --global pnpm@10.11.0
+pnpm install
 ```
 
 Installation includes development dependencies and runs `prepare` (`husky`), which initializes the project's Git hooks automatically. Lifecycle scripts must be enabled, and `HUSKY` must not be set to `0`.
